@@ -20,13 +20,13 @@ namespace GeneticsArtifact
         private void Awake()
         {
             if (Instance == null) Instance = this;
-            //RegisterAssetBundleProvider();
+            RegisterAssetBundleProvider();
             ArtifactOfGenetics.Init();
         }
 
         private static void RegisterAssetBundleProvider()
         {
-            using (System.IO.Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("GeneticsArtifact.genetics"))
+            using (System.IO.Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("GeneticsArtifact.ArtifactResources.genetics"))
             {
                 AssetBundle bundle = AssetBundle.LoadFromStream(stream);
                 AssetBundleResourcesProvider provider = new AssetBundleResourcesProvider("@Genetics", bundle);

@@ -5,6 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="genetics" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="ArtifactResources\genetics" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="Assembly-CSharp">
       <HintPath>..\..\..\Documents\Libs\Assembly-CSharp.dll</HintPath>
     </Reference>
