@@ -67,7 +67,7 @@ namespace GeneticsArtifact
             if(damageReport.victimBody == body)
             {
                 GeneticMasterController.deadTrackers.Add(tracker);
-                Chat.AddMessage("Death of a " + body.baseNameToken + " with " + tracker.score.ToString() + " points.");
+                //Chat.AddMessage("Death of a " + body.baseNameToken + " with " + tracker.score.ToString() + " points.");
             }
         }
 

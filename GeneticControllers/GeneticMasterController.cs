@@ -66,7 +66,7 @@ namespace GeneticsArtifact
                 if (trackerPerMonsterID && masterTrackers.Find(x => x.index == body.bodyIndex) == null)
                 {
                     masterTrackers.Add(new GeneTracker(body.bodyIndex, true));
-                    Chat.AddMessage("A new Master was made for bodyIndex: " + body.baseNameToken);
+                    //Chat.AddMessage("A new Master was made for bodyIndex: " + body.baseNameToken);
                 }
                 //Always add a behaviour to the body
                 body.gameObject.AddComponent<GeneBehaviour>();
