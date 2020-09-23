@@ -43,8 +43,4 @@
     </Reference>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="ThunderStore Stuff\" />
-  </ItemGroup>
-
 </Project>
