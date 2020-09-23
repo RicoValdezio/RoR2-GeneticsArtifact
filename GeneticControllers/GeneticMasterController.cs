@@ -11,6 +11,8 @@ namespace GeneticsArtifact
         internal static int maxTrackers = 1;
         internal static bool trackerPerMonsterID = true;
 
+        internal static float timeBetweenUpdates = 10f, updateTimer = 0f;
+
         internal static void Init()
         {
             masterTrackers = new List<GeneTracker>();
@@ -18,6 +20,7 @@ namespace GeneticsArtifact
 
             On.RoR2.Run.BeginStage += Run_BeginStage;
             On.RoR2.CharacterMaster.SpawnBody += CharacterMaster_SpawnBody;
+            On.RoR2.Run.Update += Run_Update;
         }
 
         private static void BuildMasters()
@@ -62,13 +65,25 @@ namespace GeneticsArtifact
                 //If using a master per monster type and there isn't already a master for this type, add a master for this type
                 if (trackerPerMonsterID && masterTrackers.Find(x => x.index == body.bodyIndex) == null)
                 {
-                    masterTrackers.Add(new GeneTracker(body.bodyIndex));
+                    masterTrackers.Add(new GeneTracker(body.bodyIndex, true));
                     Chat.AddMessage("A new Master was made for bodyIndex: " + body.baseNameToken);
                 }
                 //Always add a behaviour to the body
                 body.gameObject.AddComponent<GeneBehaviour>();
             }
             return body;
+        }
+
+        private static void Run_Update(On.RoR2.Run.orig_Update orig, Run self)
+        {
+            updateTimer += Time.deltaTime;
+            orig(self);
+            if(updateTimer >= timeBetweenUpdates)
+            {
+                updateTimer = 0f;
+                //Clean up the deaths, will process these later
+                deadTrackers.Clear();
+            }
         }
     }
 }
