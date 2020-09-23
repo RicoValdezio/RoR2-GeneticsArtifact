@@ -6,7 +6,7 @@ namespace GeneticsArtifact
     internal class GeneTracker
     {
         internal int index;
-        private GeneTracker masterTracker;
+        internal GeneTracker masterTracker;
 
         internal float healthMultiplier = 1f,
             regenMultiplier = 1f,
@@ -27,7 +27,7 @@ namespace GeneticsArtifact
             //If not a master, get values from a master
             if (!isMaster)
             {
-                GeneTracker masterTracker = GeneticMasterController.masterTrackers.Find(x => x.index == index);
+                masterTracker = GeneticMasterController.masterTrackers.Find(x => x.index == index);
                 MutateFromParent();
             }
         }
@@ -49,6 +49,11 @@ namespace GeneticsArtifact
             {
                 sizeMultiplier = absoluteCeil;
             }
+
+        }
+
+        private void MutateFromChildren()
+        {
 
         }
     }

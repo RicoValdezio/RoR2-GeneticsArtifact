@@ -7,6 +7,7 @@ namespace GeneticsArtifact
     {
         internal GeneTracker tracker;
         internal CharacterBody body;
+        internal float timePulse;
 
         private void OnEnable()
         {
@@ -22,6 +23,8 @@ namespace GeneticsArtifact
             ApplyMutation();
             
             On.RoR2.GlobalEventManager.OnCharacterDeath += GlobalEventManager_OnCharacterDeath;
+            On.RoR2.CharacterBody.Update += CharacterBody_Update;
+            On.RoR2.HealthComponent.TakeDamage += HealthComponent_TakeDamage;
         }
 
         private void OnDisable()
@@ -64,6 +67,37 @@ namespace GeneticsArtifact
             if(damageReport.victimBody == body)
             {
                 GeneticMasterController.deadTrackers.Add(tracker);
+                Chat.AddMessage("Death of a " + body.baseNameToken + " with " + tracker.score.ToString() + " points.");
+            }
+        }
+
+        private void CharacterBody_Update(On.RoR2.CharacterBody.orig_Update orig, CharacterBody self)
+        {
+            
+            orig(self);
+            //Every second its alive, give it a point
+            if(self == body)
+            {
+                timePulse += Time.deltaTime;
+                if (timePulse >= 1f)
+                {
+                    tracker.score += timePulse;
+                    timePulse = 0f;
+                }
+            }
+        }
+
+        private void HealthComponent_TakeDamage(On.RoR2.HealthComponent.orig_TakeDamage orig, HealthComponent self, DamageInfo damageInfo)
+        {
+            orig(self, damageInfo);
+            //Give tracker points equal to the damage it dealth
+            if(damageInfo.attacker && damageInfo.attacker.GetComponent<CharacterBody>() == body)
+            {
+                tracker.score += damageInfo.damage;
+            }
+            else if (damageInfo.inflictor && damageInfo.inflictor.GetComponent<CharacterBody>() == body)
+            {
+                tracker.score += damageInfo.damage;
             }
         }
     }

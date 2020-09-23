@@ -76,13 +76,16 @@ namespace GeneticsArtifact
 
         private static void Run_Update(On.RoR2.Run.orig_Update orig, Run self)
         {
-            updateTimer += Time.deltaTime;
             orig(self);
-            if(updateTimer >= timeBetweenUpdates)
+            if (RunArtifactManager.instance.IsArtifactEnabled(ArtifactOfGenetics.def.artifactIndex))
             {
-                updateTimer = 0f;
-                //Clean up the deaths, will process these later
-                deadTrackers.Clear();
+                updateTimer += Time.deltaTime;
+                if (updateTimer >= timeBetweenUpdates)
+                {
+                    updateTimer = 0f;
+                    //Clean up the deaths, will process these later
+                    deadTrackers.Clear();
+                }
             }
         }
     }
