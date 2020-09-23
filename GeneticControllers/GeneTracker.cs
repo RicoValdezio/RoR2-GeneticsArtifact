@@ -1,6 +1,4 @@
-﻿using EntityStates.BrotherMonster;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using UnityEngine;
 
 namespace GeneticsArtifact
@@ -41,11 +39,11 @@ namespace GeneticsArtifact
             #region Size Health and MoveSpeed/Accel
             //Start by calculating size, since health and moveSpeed are tied to it
             tempValue = masterTracker.sizeMultiplier *= Random.Range(relativeFloor, relativeCeil);
-            if(absoluteFloor <= tempValue && tempValue <= absoluteCeil)
+            if (absoluteFloor <= tempValue && tempValue <= absoluteCeil)
             {
                 sizeMultiplier = tempValue;
             }
-            else if(absoluteFloor > tempValue)
+            else if (absoluteFloor > tempValue)
             {
                 sizeMultiplier = absoluteFloor;
             }
@@ -72,18 +70,16 @@ namespace GeneticsArtifact
             if (absoluteFloor <= tempValue && tempValue <= absoluteCeil)
             {
                 moveSpeedMultiplier = tempValue;
-                accelMultiplier = tempValue;
             }
             else if (absoluteFloor > tempValue)
             {
                 moveSpeedMultiplier = absoluteFloor;
-                accelMultiplier = absoluteFloor;
             }
             else
             {
                 moveSpeedMultiplier = absoluteCeil;
-                accelMultiplier = absoluteCeil;
             }
+            accelMultiplier = 1f / moveSpeedMultiplier;
             #endregion
             #region Armor and Regen
             //Armor and Regen work against eachother, higher armor means lower regen
@@ -133,7 +129,7 @@ namespace GeneticsArtifact
                 sizeWeight = 0f,
                 scoreWeight = 0f;
             //Use a modified weighted average to update master
-            foreach(GeneTracker childTracker in GeneticMasterController.deadTrackers.Where(x => x.index == index))
+            foreach (GeneTracker childTracker in GeneticMasterController.deadTrackers.Where(x => x.index == index))
             {
                 healthWeight += childTracker.healthMultiplier * childTracker.score;
                 regenWeight += childTracker.regenMultiplier * childTracker.score;
@@ -143,9 +139,9 @@ namespace GeneticsArtifact
                 attackSpeedWeight += childTracker.attackSpeedMultiplier * childTracker.score;
                 armorWeight += childTracker.armorMultiplier * childTracker.score;
                 sizeWeight += childTracker.sizeMultiplier * childTracker.score;
-                scoreWeight +=  childTracker.score;
+                scoreWeight += childTracker.score;
             }
-            if(scoreWeight > 0)
+            if (scoreWeight > 0)
             {
                 healthMultiplier = healthWeight / scoreWeight;
                 regenMultiplier = regenWeight / scoreWeight;

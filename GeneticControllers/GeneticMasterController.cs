@@ -83,6 +83,7 @@ namespace GeneticsArtifact
                 {
                     //If the specified time has passed, update the masters and purge the dead
                     updateTimer = 0f;
+                    //Chat.AddMessage("Dead Masters Count : " + deadTrackers.Count.ToString());
                     foreach(GeneTracker masterTracker in masterTrackers)
                     {
                         masterTracker.MutateFromChildren();

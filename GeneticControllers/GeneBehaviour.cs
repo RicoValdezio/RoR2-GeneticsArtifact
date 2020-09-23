@@ -21,8 +21,8 @@ namespace GeneticsArtifact
             }
             body = gameObject.GetComponent<CharacterBody>();
             ApplyMutation();
-            
-            On.RoR2.GlobalEventManager.OnCharacterDeath += GlobalEventManager_OnCharacterDeath;
+
+            //On.RoR2.GlobalEventManager.OnCharacterDeath += GlobalEventManager_OnCharacterDeath;
             On.RoR2.CharacterBody.Update += CharacterBody_Update;
             On.RoR2.HealthComponent.TakeDamage += HealthComponent_TakeDamage;
         }
@@ -52,7 +52,7 @@ namespace GeneticsArtifact
             body.baseAttackSpeed *= tracker.attackSpeedMultiplier;
             body.levelAttackSpeed *= tracker.attackSpeedMultiplier;
 
-            body.baseArmor *= tracker.armorMultiplier; 
+            body.baseArmor *= tracker.armorMultiplier;
             body.levelArmor *= tracker.armorMultiplier;
 
             body.transform.localScale *= tracker.sizeMultiplier;
@@ -60,23 +60,25 @@ namespace GeneticsArtifact
             body.RecalculateStats();
         }
 
-        private void GlobalEventManager_OnCharacterDeath(On.RoR2.GlobalEventManager.orig_OnCharacterDeath orig, GlobalEventManager self, DamageReport damageReport)
-        {
-            orig(self, damageReport);
-            //If body is dead, add to the dead list
-            if(damageReport.victimBody == body)
-            {
-                GeneticMasterController.deadTrackers.Add(tracker);
-                //Chat.AddMessage("Death of a " + body.baseNameToken + " with " + tracker.score.ToString() + " points.");
-            }
-        }
+        //Removed due to OnDisable being triggered by the body death sequence and this causing duplicate copies
+        //private void GlobalEventManager_OnCharacterDeath(On.RoR2.GlobalEventManager.orig_OnCharacterDeath orig, GlobalEventManager self, DamageReport damageReport)
+        //{
+        //    orig(self, damageReport);
+        //    //If body is dead, add to the dead list
+        //    if(damageReport.victimBody == body)
+        //    {
+        //        //GeneticMasterController.deadTrackers.Add(tracker);
+        //        //Chat.AddMessage("Death of a " + body.baseNameToken + " with " + tracker.score.ToString() + " points.");
+        //        enabled = false;
+        //    }
+        //}
 
         private void CharacterBody_Update(On.RoR2.CharacterBody.orig_Update orig, CharacterBody self)
         {
-            
+
             orig(self);
             //Every second its alive, give it a point
-            if(self == body)
+            if (self == body)
             {
                 timePulse += Time.deltaTime;
                 if (timePulse >= 1f)
@@ -91,7 +93,7 @@ namespace GeneticsArtifact
         {
             orig(self, damageInfo);
             //Give tracker points equal to the damage it dealth
-            if(damageInfo.attacker && damageInfo.attacker.GetComponent<CharacterBody>() == body)
+            if (damageInfo.attacker && damageInfo.attacker.GetComponent<CharacterBody>() == body)
             {
                 tracker.score += damageInfo.damage;
             }

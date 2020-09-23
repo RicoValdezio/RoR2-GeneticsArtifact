@@ -2,6 +2,7 @@
 ------------
 This mod adds a genetics system to the monsters, with every stat being able to mutate in specific ways.
 Health, Size, and Move Speed are all directly related, with bigger monsters having more health and moving faster.
+Acceleration is inversely tied to Move Speed, with faster monsters being less able to turn quickly.
 Armor and Regen are inversely related, with heavily armored monsters having reduced regen rates.
 Damage and Attack Speed are also inversely related, with heavy hitters attacking less often and slower than normal.
 
@@ -18,6 +19,7 @@ Known Issues/Planned Updates
 
 Changelog
 ------------
+1.0.1 - Minor optimization due to bug report, should almost halve the computations required
 1.0.0 - Initial upload, expect day one bugs
 
 Installation
