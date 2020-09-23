@@ -21,7 +21,7 @@ namespace GeneticsArtifact
             score = 0f;
 
         //Config these later
-        internal static float absoluteFloor = 0.2f, absoluteCeil = 5f, relativeFloor = 0.9f, relativeCeil = 1.1f;
+        internal static float absoluteFloor, absoluteCeil, relativeFloor = 0.9f, relativeCeil = 1.1f;
 
         public GeneTracker(int refIndex, bool isMaster = false)
         {
@@ -32,6 +32,7 @@ namespace GeneticsArtifact
                 masterTracker = GeneticMasterController.masterTrackers.Find(x => x.index == index);
                 MutateFromParent();
             }
+            absoluteFloor = 1f / absoluteCeil;
         }
 
         private void MutateFromParent()

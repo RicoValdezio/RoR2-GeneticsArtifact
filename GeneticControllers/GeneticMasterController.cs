@@ -8,11 +8,11 @@ namespace GeneticsArtifact
     {
         internal static List<GeneTracker> masterTrackers;
         internal static List<GeneTracker> deadTrackers;
-        internal static int maxTrackers = 1;
-        internal static bool trackerPerMonsterID = true;
+        internal static int maxTrackers;
+        internal static bool trackerPerMonsterID;
 
         //Configure the timeBetweenUpdates
-        internal static float timeBetweenUpdates = 10f, updateTimer = 0f;
+        internal static float timeBetweenUpdates, updateTimer = 0f;
 
         internal static void Init()
         {
@@ -32,11 +32,9 @@ namespace GeneticsArtifact
             }
             else
             {
-                int currentIndex = 0;
-                while (masterTrackers.Count < maxTrackers)
+                for(int x = 0; x < maxTrackers; x++)
                 {
-                    masterTrackers.Add(new GeneTracker(currentIndex));
-                    currentIndex++;
+                    masterTrackers.Add(new GeneTracker(x, true));
                 }
             }
         }
