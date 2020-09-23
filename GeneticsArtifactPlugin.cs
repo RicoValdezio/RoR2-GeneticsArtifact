@@ -21,6 +21,7 @@ namespace GeneticsArtifact
         {
             if (Instance == null) Instance = this;
             RegisterAssetBundleProvider();
+            ConfigMaster.Init();
             ArtifactOfGenetics.Init();
             GeneticMasterController.Init();
         }

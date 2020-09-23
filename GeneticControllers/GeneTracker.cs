@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using EntityStates.BrotherMonster;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace GeneticsArtifact
@@ -118,9 +120,41 @@ namespace GeneticsArtifact
             #endregion
         }
 
-        private void MutateFromChildren()
+        internal void MutateFromChildren()
         {
-
+            float healthWeight = 0f,
+                regenWeight = 0f,
+                moveSpeedWeight = 0f,
+                accelWeight = 0f,
+                damageWeight = 0f,
+                attackSpeedWeight = 0f,
+                armorWeight = 0f,
+                sizeWeight = 0f,
+                scoreWeight = 0f;
+            //Use a modified weighted average to update master
+            foreach(GeneTracker childTracker in GeneticMasterController.deadTrackers.Where(x => x.index == index))
+            {
+                healthWeight += childTracker.healthMultiplier * childTracker.score;
+                regenWeight += childTracker.regenMultiplier * childTracker.score;
+                moveSpeedWeight += childTracker.moveSpeedMultiplier * childTracker.score;
+                accelWeight += childTracker.accelMultiplier * childTracker.score;
+                damageWeight += childTracker.damageMultiplier * childTracker.score;
+                attackSpeedWeight += childTracker.attackSpeedMultiplier * childTracker.score;
+                armorWeight += childTracker.armorMultiplier * childTracker.score;
+                sizeWeight += childTracker.sizeMultiplier * childTracker.score;
+                scoreWeight +=  childTracker.score;
+            }
+            if(scoreWeight > 0)
+            {
+                healthMultiplier = healthWeight / scoreWeight;
+                regenMultiplier = regenWeight / scoreWeight;
+                moveSpeedMultiplier = moveSpeedWeight / scoreWeight;
+                accelMultiplier = accelWeight / scoreWeight;
+                damageMultiplier = damageWeight / scoreWeight;
+                attackSpeedMultiplier = attackSpeedWeight / scoreWeight;
+                armorMultiplier = armorWeight / scoreWeight;
+                sizeMultiplier = sizeWeight / scoreWeight;
+            }
         }
     }
 }

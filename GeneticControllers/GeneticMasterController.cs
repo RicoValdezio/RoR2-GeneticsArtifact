@@ -11,6 +11,7 @@ namespace GeneticsArtifact
         internal static int maxTrackers = 1;
         internal static bool trackerPerMonsterID = true;
 
+        //Configure the timeBetweenUpdates
         internal static float timeBetweenUpdates = 10f, updateTimer = 0f;
 
         internal static void Init()
@@ -82,8 +83,12 @@ namespace GeneticsArtifact
                 updateTimer += Time.deltaTime;
                 if (updateTimer >= timeBetweenUpdates)
                 {
+                    //If the specified time has passed, update the masters and purge the dead
                     updateTimer = 0f;
-                    //Clean up the deaths, will process these later
+                    foreach(GeneTracker masterTracker in masterTrackers)
+                    {
+                        masterTracker.MutateFromChildren();
+                    }
                     deadTrackers.Clear();
                 }
             }
