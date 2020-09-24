@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace GeneticsArtifact
@@ -8,22 +9,21 @@ namespace GeneticsArtifact
         internal int index;
         internal GeneTracker masterTracker;
 
-        internal float healthMultiplier = 1f,
-            regenMultiplier = 1f,
-            moveSpeedMultiplier = 1f,
-            accelMultiplier = 1f,
-            damageMultiplier = 1f,
-            attackSpeedMultiplier = 1f,
-            armorMultiplier = 1f,
-            sizeMultiplier = 1f,
-            score = 0f;
+        //Order is Health, Regen, MoveSpeed, Accel, Damage, AttackSpeed, Armor, (Size was removed)
+        internal List<float> genes = new List<float>();
+        internal float score = 0f;
 
         //Config these later
         internal static float absoluteFloor, absoluteCeil, relativeFloor = 0.9f, relativeCeil = 1.1f;
+        internal static bool useBalancePenalty = true;
 
         public GeneTracker(int refIndex, bool isMaster = false)
         {
             index = refIndex;
+            for (int i = 0; i < 7; i++)
+            {
+                genes.Add(1);
+            }
             //If not a master, get values from a master
             if (!isMaster)
             {
@@ -35,86 +35,29 @@ namespace GeneticsArtifact
 
         private void MutateFromParent()
         {
-            float tempValue;
-            #region Size Health and MoveSpeed/Accel
-            //Start by calculating size, since health and moveSpeed are tied to it
-            tempValue = masterTracker.sizeMultiplier *= Random.Range(relativeFloor, relativeCeil);
-            if (absoluteFloor <= tempValue && tempValue <= absoluteCeil)
+            float tempValue, penaltyMultiplier = 1f;
+            for (int i = 0; i < genes.Count; i++)
             {
-                sizeMultiplier = tempValue;
+                tempValue = masterTracker.genes[i] * Random.Range(relativeFloor, relativeCeil);
+                //Check if inside absolute bounds
+                if (tempValue > absoluteCeil)
+                {
+                    tempValue = absoluteCeil;
+                }
+                else if (tempValue < absoluteFloor)
+                {
+                    tempValue = absoluteFloor;
+                }
+                //Apply the change and prepare the balance penalty
+                genes[i] = tempValue;
+                penaltyMultiplier *= 1f / tempValue;
             }
-            else if (absoluteFloor > tempValue)
+            //Apply the balance penalty to health, this ignores the absolute cap and should be corrected by scoring system
+            if (useBalancePenalty)
             {
-                sizeMultiplier = absoluteFloor;
+                genes[0] *= penaltyMultiplier;
             }
-            else
-            {
-                sizeMultiplier = absoluteCeil;
-            }
-            //Calculate health using the size modifer
-            tempValue = sizeMultiplier *= Random.Range(relativeFloor, relativeCeil);
-            if (absoluteFloor <= tempValue && tempValue <= absoluteCeil)
-            {
-                healthMultiplier = tempValue;
-            }
-            else if (absoluteFloor > tempValue)
-            {
-                healthMultiplier = absoluteFloor;
-            }
-            else
-            {
-                healthMultiplier = absoluteCeil;
-            }
-            //Calculate moveSpeed and accel using size
-            tempValue = sizeMultiplier *= Random.Range(relativeFloor, relativeCeil);
-            if (absoluteFloor <= tempValue && tempValue <= absoluteCeil)
-            {
-                moveSpeedMultiplier = tempValue;
-            }
-            else if (absoluteFloor > tempValue)
-            {
-                moveSpeedMultiplier = absoluteFloor;
-            }
-            else
-            {
-                moveSpeedMultiplier = absoluteCeil;
-            }
-            accelMultiplier = 1f / moveSpeedMultiplier;
-            #endregion
-            #region Armor and Regen
-            //Armor and Regen work against eachother, higher armor means lower regen
-            tempValue = masterTracker.armorMultiplier *= Random.Range(relativeFloor, relativeCeil);
-            if (absoluteFloor <= tempValue && tempValue <= absoluteCeil)
-            {
-                armorMultiplier = tempValue;
-            }
-            else if (absoluteFloor > tempValue)
-            {
-                armorMultiplier = absoluteFloor;
-            }
-            else
-            {
-                armorMultiplier = absoluteCeil;
-            }
-            regenMultiplier = 1f / armorMultiplier;
-            #endregion
-            #region AttackSpeed and Damage
-            //AttackSpeed and Damage work against eachother, higher damage means lower attack speed
-            tempValue = masterTracker.damageMultiplier *= Random.Range(relativeFloor, relativeCeil);
-            if (absoluteFloor <= tempValue && tempValue <= absoluteCeil)
-            {
-                damageMultiplier = tempValue;
-            }
-            else if (absoluteFloor > tempValue)
-            {
-                damageMultiplier = absoluteFloor;
-            }
-            else
-            {
-                damageMultiplier = absoluteCeil;
-            }
-            attackSpeedMultiplier = 1f / damageMultiplier;
-            #endregion
+
         }
 
         internal void MutateFromChildren()
@@ -126,31 +69,28 @@ namespace GeneticsArtifact
                 damageWeight = 0f,
                 attackSpeedWeight = 0f,
                 armorWeight = 0f,
-                sizeWeight = 0f,
                 scoreWeight = 0f;
             //Use a modified weighted average to update master
             foreach (GeneTracker childTracker in GeneticMasterController.deadTrackers.Where(x => x.index == index))
             {
-                healthWeight += childTracker.healthMultiplier * childTracker.score;
-                regenWeight += childTracker.regenMultiplier * childTracker.score;
-                moveSpeedWeight += childTracker.moveSpeedMultiplier * childTracker.score;
-                accelWeight += childTracker.accelMultiplier * childTracker.score;
-                damageWeight += childTracker.damageMultiplier * childTracker.score;
-                attackSpeedWeight += childTracker.attackSpeedMultiplier * childTracker.score;
-                armorWeight += childTracker.armorMultiplier * childTracker.score;
-                sizeWeight += childTracker.sizeMultiplier * childTracker.score;
+                healthWeight += childTracker.genes[0] * childTracker.score;
+                regenWeight += childTracker.genes[1] * childTracker.score;
+                moveSpeedWeight += childTracker.genes[2] * childTracker.score;
+                accelWeight += childTracker.genes[3] * childTracker.score;
+                damageWeight += childTracker.genes[4] * childTracker.score;
+                attackSpeedWeight += childTracker.genes[5] * childTracker.score;
+                armorWeight += childTracker.genes[6] * childTracker.score;
                 scoreWeight += childTracker.score;
             }
             if (scoreWeight > 0)
             {
-                healthMultiplier = healthWeight / scoreWeight;
-                regenMultiplier = regenWeight / scoreWeight;
-                moveSpeedMultiplier = moveSpeedWeight / scoreWeight;
-                accelMultiplier = accelWeight / scoreWeight;
-                damageMultiplier = damageWeight / scoreWeight;
-                attackSpeedMultiplier = attackSpeedWeight / scoreWeight;
-                armorMultiplier = armorWeight / scoreWeight;
-                sizeMultiplier = sizeWeight / scoreWeight;
+                genes[0] = healthWeight / scoreWeight;
+                genes[1] = regenWeight / scoreWeight;
+                genes[2] = moveSpeedWeight / scoreWeight;
+                genes[3] = accelWeight / scoreWeight;
+                genes[4] = damageWeight / scoreWeight;
+                genes[5] = attackSpeedWeight / scoreWeight;
+                genes[6] = armorWeight / scoreWeight;
             }
         }
     }

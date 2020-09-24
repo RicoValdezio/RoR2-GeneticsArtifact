@@ -6,6 +6,10 @@ Acceleration is inversely tied to Move Speed, with faster monsters being less ab
 Armor and Regen are inversely related, with heavily armored monsters having reduced regen rates.
 Damage and Attack Speed are also inversely related, with heavy hitters attacking less often and slower than normal.
 
+As of 1.1.0 the stats are no longer tied to each other. Instead a balance system that penalizes Health when other stats are too high has been implemented to prevent monsters from getting too strong.
+This system can be disabled, but doing so removes all balance controls from the artifact.
+Another side-effect of this system is that I decided to cut the Size modification due to networking difficulties.
+
 How it Works
 ------------
 This is kinda complicated. I plan on adding a video that can give the system a proper explanation, but for right now the main idea is that the longer a monster lives or the more damage it deals to you, the more likely its stats are to be repeated on new monsters.
@@ -16,9 +20,11 @@ Known Issues/Planned Updates
 ------------
 - A feedback system to let the player know how the mutations are trending
 - Improve this readme to make more sense, and to add a code walkthrough for those interested
+- Reimplement the size modifier once I figure out the networking
 
 Changelog
 ------------
+1.1.0 - Major change to genetic system, possible performance hit, but should be more consistent
 1.0.1 - Minor optimization due to bug report, should almost halve the computations required
 1.0.0 - Initial upload, expect day one bugs
 

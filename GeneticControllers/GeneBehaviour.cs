@@ -7,7 +7,7 @@ namespace GeneticsArtifact
     {
         internal GeneTracker tracker;
         internal CharacterBody body;
-        internal float timePulse;
+        internal float timePulse, timeAlive = 0f, damageDealt = 0f;
 
         private void OnEnable()
         {
@@ -29,33 +29,32 @@ namespace GeneticsArtifact
 
         private void OnDisable()
         {
+            tracker.score = damageDealt / timeAlive;
             //If the stage ends, add body to dead list
             GeneticMasterController.deadTrackers.Add(tracker);
         }
 
         private void ApplyMutation()
         {
-            body.baseMaxHealth *= tracker.healthMultiplier;
-            body.levelMaxHealth *= tracker.healthMultiplier;
+            body.baseMaxHealth *= tracker.genes[0];
+            body.levelMaxHealth *= tracker.genes[0];
 
-            body.baseRegen *= tracker.regenMultiplier;
-            body.levelRegen *= tracker.regenMultiplier;
+            body.baseRegen *= tracker.genes[1];
+            body.levelRegen *= tracker.genes[1];
 
-            body.baseMoveSpeed *= tracker.moveSpeedMultiplier;
-            body.levelMoveSpeed *= tracker.moveSpeedMultiplier;
+            body.baseMoveSpeed *= tracker.genes[2];
+            body.levelMoveSpeed *= tracker.genes[2];
 
-            body.baseAcceleration *= tracker.accelMultiplier;
+            body.baseAcceleration *= tracker.genes[3];
 
-            body.baseDamage *= tracker.damageMultiplier;
-            body.levelDamage *= tracker.damageMultiplier;
+            body.baseDamage *= tracker.genes[4];
+            body.levelDamage *= tracker.genes[4];
 
-            body.baseAttackSpeed *= tracker.attackSpeedMultiplier;
-            body.levelAttackSpeed *= tracker.attackSpeedMultiplier;
+            body.baseAttackSpeed *= tracker.genes[5];
+            body.levelAttackSpeed *= tracker.genes[5];
 
-            body.baseArmor *= tracker.armorMultiplier;
-            body.levelArmor *= tracker.armorMultiplier;
-
-            body.transform.localScale *= tracker.sizeMultiplier;
+            body.baseArmor *= tracker.genes[6];
+            body.levelArmor *= tracker.genes[6];
 
             body.RecalculateStats();
         }
@@ -83,7 +82,7 @@ namespace GeneticsArtifact
                 timePulse += Time.deltaTime;
                 if (timePulse >= 1f)
                 {
-                    tracker.score += timePulse;
+                    timeAlive += timePulse;
                     timePulse = 0f;
                 }
             }
@@ -95,11 +94,11 @@ namespace GeneticsArtifact
             //Give tracker points equal to the damage it dealth
             if (damageInfo.attacker && damageInfo.attacker.GetComponent<CharacterBody>() == body)
             {
-                tracker.score += damageInfo.damage;
+                damageDealt += damageInfo.damage;
             }
             else if (damageInfo.inflictor && damageInfo.inflictor.GetComponent<CharacterBody>() == body)
             {
-                tracker.score += damageInfo.damage;
+                damageDealt += damageInfo.damage;
             }
         }
     }
