@@ -12,10 +12,6 @@ namespace GeneticsArtifact
         private void OnEnable()
         {
             body = gameObject.GetComponent<CharacterBody>();
-        }
-
-        private void Start()
-        {
             if (GeneticMasterController.trackerPerMonsterID)
             {
                 tracker = new GeneTracker(gameObject.GetComponent<CharacterBody>().bodyIndex);
@@ -24,11 +20,8 @@ namespace GeneticsArtifact
             {
                 tracker = new GeneTracker(Random.Range(0, GeneticMasterController.masterTrackers.Count - 1));
             }
+            GeneticMasterController.livingBehaviours.Add(this);
             ApplyMutation();
-
-            //On.RoR2.GlobalEventManager.OnCharacterDeath += GlobalEventManager_OnCharacterDeath;
-            On.RoR2.CharacterBody.Update += CharacterBody_Update;
-            On.RoR2.HealthComponent.TakeDamage += HealthComponent_TakeDamage;
         }
 
         private void OnDisable()
@@ -39,6 +32,7 @@ namespace GeneticsArtifact
             GeneticMasterController.deadTrackers.Add(tracker);
             //And destroy self and deref tracker
             tracker.Dispose();
+            GeneticMasterController.livingBehaviours.Remove(this);
             Destroy(this);
         }
 
@@ -67,47 +61,29 @@ namespace GeneticsArtifact
             body.RecalculateStats();
         }
 
-        //Removed due to OnDisable being triggered by the body death sequence and this causing duplicate copies
-        //private void GlobalEventManager_OnCharacterDeath(On.RoR2.GlobalEventManager.orig_OnCharacterDeath orig, GlobalEventManager self, DamageReport damageReport)
+        private void Update()
+        {
+            //Every second its alive, give it a point
+            timePulse += Time.deltaTime;
+            if (timePulse >= 1f)
+            {
+                timeAlive += timePulse;
+                timePulse = 0f;
+            }
+        }
+
+        //private void HealthComponent_TakeDamage(On.RoR2.HealthComponent.orig_TakeDamage orig, HealthComponent self, DamageInfo damageInfo)
         //{
-        //    orig(self, damageReport);
-        //    //If body is dead, add to the dead list
-        //    if(damageReport.victimBody == body)
+        //    orig(self, damageInfo);
+        //    //Give tracker points equal to the damage it dealth
+        //    if (damageInfo.attacker && damageInfo.attacker.GetComponent<CharacterBody>() == body)
         //    {
-        //        //GeneticMasterController.deadTrackers.Add(tracker);
-        //        //Chat.AddMessage("Death of a " + body.baseNameToken + " with " + tracker.score.ToString() + " points.");
-        //        enabled = false;
+        //        damageDealt += damageInfo.damage;
+        //    }
+        //    else if (damageInfo.inflictor && damageInfo.inflictor.GetComponent<CharacterBody>() == body)
+        //    {
+        //        damageDealt += damageInfo.damage;
         //    }
         //}
-
-        private void CharacterBody_Update(On.RoR2.CharacterBody.orig_Update orig, CharacterBody self)
-        {
-
-            orig(self);
-            //Every second its alive, give it a point
-            if (self == body)
-            {
-                timePulse += Time.deltaTime;
-                if (timePulse >= 1f)
-                {
-                    timeAlive += timePulse;
-                    timePulse = 0f;
-                }
-            }
-        }
-
-        private void HealthComponent_TakeDamage(On.RoR2.HealthComponent.orig_TakeDamage orig, HealthComponent self, DamageInfo damageInfo)
-        {
-            orig(self, damageInfo);
-            //Give tracker points equal to the damage it dealth
-            if (damageInfo.attacker && damageInfo.attacker.GetComponent<CharacterBody>() == body)
-            {
-                damageDealt += damageInfo.damage;
-            }
-            else if (damageInfo.inflictor && damageInfo.inflictor.GetComponent<CharacterBody>() == body)
-            {
-                damageDealt += damageInfo.damage;
-            }
-        }
     }
 }

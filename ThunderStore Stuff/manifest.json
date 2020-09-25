@@ -1,8 +1,8 @@
 ﻿{
     "name": "GeneticArtifact",
-    "version_number": "1.1.1",
+    "version_number": "1.2.0",
     "website_url": "https://github.com/RicoValdezio/RoR2-GeneticsArtifact",
-    "description": "A new artifact that adds a sudo-genetic backend to the monster spawning system.",
+    "description": "A new artifact that adds a pseudo-genetic backend to the monster spawning system.",
     "dependencies": [
         "bbepis-BepInExPack-5.3.1",
         "tristanmcpherson-R2API-2.5.14"

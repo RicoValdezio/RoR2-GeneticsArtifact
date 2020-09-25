@@ -8,6 +8,7 @@ namespace GeneticsArtifact
     {
         internal static List<GeneTracker> masterTrackers;
         internal static List<GeneTracker> deadTrackers;
+        internal static List<GeneBehaviour> livingBehaviours;
         internal static int maxTrackers;
         internal static bool trackerPerMonsterID;
 
@@ -18,10 +19,12 @@ namespace GeneticsArtifact
         {
             masterTrackers = new List<GeneTracker>();
             deadTrackers = new List<GeneTracker>();
+            livingBehaviours = new List<GeneBehaviour>();
 
             On.RoR2.Run.BeginStage += Run_BeginStage;
             On.RoR2.CharacterMaster.SpawnBody += CharacterMaster_SpawnBody;
             On.RoR2.Run.Update += Run_Update;
+            On.RoR2.HealthComponent.TakeDamage += HealthComponent_TakeDamage;
         }
 
         private static void BuildMasters()
@@ -89,6 +92,28 @@ namespace GeneticsArtifact
                         masterTracker.MutateFromChildren();
                     }
                     deadTrackers.Clear();
+                }
+            }
+        }
+
+        private static void HealthComponent_TakeDamage(On.RoR2.HealthComponent.orig_TakeDamage orig, HealthComponent self, DamageInfo damageInfo)
+        {
+            orig(self, damageInfo);
+            if (RunArtifactManager.instance.IsArtifactEnabled(ArtifactOfGenetics.def.artifactIndex))
+            {
+                foreach(GeneBehaviour behaviour in livingBehaviours)
+                {
+                    //If behaviour body matches, add its damage and break out
+                    if (damageInfo.attacker && damageInfo.attacker.GetComponent<CharacterBody>() == behaviour.body)
+                    {
+                        behaviour.damageDealt += damageInfo.damage;
+                        break;
+                    }
+                    if (damageInfo.inflictor && damageInfo.inflictor.GetComponent<CharacterBody>() == behaviour.body)
+                    {
+                        behaviour.damageDealt += damageInfo.damage;
+                        break;
+                    }
                 }
             }
         }
