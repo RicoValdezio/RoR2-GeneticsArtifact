@@ -11,6 +11,11 @@ namespace GeneticsArtifact
 
         private void OnEnable()
         {
+            body = gameObject.GetComponent<CharacterBody>();
+        }
+
+        private void Start()
+        {
             if (GeneticMasterController.trackerPerMonsterID)
             {
                 tracker = new GeneTracker(gameObject.GetComponent<CharacterBody>().bodyIndex);
@@ -19,7 +24,6 @@ namespace GeneticsArtifact
             {
                 tracker = new GeneTracker(Random.Range(0, GeneticMasterController.masterTrackers.Count - 1));
             }
-            body = gameObject.GetComponent<CharacterBody>();
             ApplyMutation();
 
             //On.RoR2.GlobalEventManager.OnCharacterDeath += GlobalEventManager_OnCharacterDeath;
@@ -29,9 +33,13 @@ namespace GeneticsArtifact
 
         private void OnDisable()
         {
+            //Calculate the score
             tracker.score = damageDealt / timeAlive;
             //If the stage ends, add body to dead list
             GeneticMasterController.deadTrackers.Add(tracker);
+            //And destroy self and deref tracker
+            tracker.Dispose();
+            Destroy(this);
         }
 
         private void ApplyMutation()

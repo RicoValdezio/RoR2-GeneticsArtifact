@@ -24,6 +24,7 @@ Known Issues/Planned Updates
 
 Changelog
 ------------
+1.1.1 - Minor improvement to garbage collection, at this point I'm fighting with the engine's computational power
 1.1.0 - Major change to genetic system, possible performance hit, but should be more consistent
 1.0.1 - Minor optimization due to bug report, should almost halve the computations required
 1.0.0 - Initial upload, expect day one bugs

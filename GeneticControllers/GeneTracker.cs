@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 namespace GeneticsArtifact
 {
-    internal class GeneTracker
+    internal class GeneTracker : IDisposable
     {
         internal int index;
         internal GeneTracker masterTracker;
@@ -16,6 +17,7 @@ namespace GeneticsArtifact
         //Config these later
         internal static float absoluteFloor, absoluteCeil, relativeFloor = 0.9f, relativeCeil = 1.1f;
         internal static bool useBalancePenalty = true;
+        private bool disposedValue;
 
         public GeneTracker(int refIndex, bool isMaster = false)
         {
@@ -38,7 +40,7 @@ namespace GeneticsArtifact
             float tempValue, penaltyMultiplier = 1f;
             for (int i = 0; i < genes.Count; i++)
             {
-                tempValue = masterTracker.genes[i] * Random.Range(relativeFloor, relativeCeil);
+                tempValue = masterTracker.genes[i] * UnityEngine.Random.Range(relativeFloor, relativeCeil);
                 //Check if inside absolute bounds
                 if (tempValue > absoluteCeil)
                 {
@@ -92,6 +94,35 @@ namespace GeneticsArtifact
                 genes[5] = attackSpeedWeight / scoreWeight;
                 genes[6] = armorWeight / scoreWeight;
             }
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposedValue)
+            {
+                if (disposing)
+                {
+                    // TODO: dispose managed state (managed objects)
+                }
+
+                // TODO: free unmanaged resources (unmanaged objects) and override finalizer
+                // TODO: set large fields to null
+                disposedValue = true;
+            }
+        }
+
+        // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
+        // ~GeneTracker()
+        // {
+        //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+        //     Dispose(disposing: false);
+        // }
+
+        public void Dispose()
+        {
+            // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
     }
 }
