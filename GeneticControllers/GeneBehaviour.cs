@@ -58,6 +58,12 @@ namespace GeneticsArtifact
             body.baseArmor *= tracker.genes[6];
             body.levelArmor *= tracker.genes[6];
 
+            //If Size is enabled, apply it
+            if (tracker.genes.Count == 8)
+            {
+                body.transform.localScale *= tracker.genes[7];
+            }
+
             body.RecalculateStats();
         }
 

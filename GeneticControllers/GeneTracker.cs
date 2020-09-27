@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IL.RoR2.Achievements;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -14,9 +15,8 @@ namespace GeneticsArtifact
         internal List<float> genes = new List<float>();
         internal float score = 0f;
 
-        //Config these later
-        internal static float absoluteFloor, absoluteCeil, relativeFloor = 0.9f, relativeCeil = 1.1f;
-        internal static bool useBalancePenalty = true;
+        internal static float absoluteFloor, absoluteCeil, relativeFloor, relativeCeil, deviationFromParent;
+        internal static bool useBalancePenalty, useSizeModifier;
         private bool disposedValue;
 
         public GeneTracker(int refIndex, bool isMaster = false)
@@ -26,12 +26,18 @@ namespace GeneticsArtifact
             {
                 genes.Add(1);
             }
+            if (useSizeModifier)
+            {
+                genes.Add(1);
+            }
             //If not a master, get values from a master
             if (!isMaster)
             {
                 masterTracker = GeneticMasterController.masterTrackers.Find(x => x.index == index);
                 MutateFromParent();
             }
+            relativeCeil = 1f + deviationFromParent;
+            relativeFloor = 1f - deviationFromParent;
             absoluteFloor = 1f / absoluteCeil;
         }
 
@@ -59,7 +65,6 @@ namespace GeneticsArtifact
             {
                 genes[0] *= penaltyMultiplier;
             }
-
         }
 
         internal void MutateFromChildren()
