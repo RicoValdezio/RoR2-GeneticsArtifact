@@ -24,6 +24,7 @@ Known Issues/Planned Updates
 
 Changelog
 ------------
+1.3.0 - Added config option to apply the artifact to neutrals and player minions (*You Monster*)
 1.2.1 - Added config options for per-generation deviation and re-enabling the Size modifier
 1.2.0 - Refactored the hook registry to prevent behaviour's from spamming hooks, should greatly reduce lag issue
 1.1.1 - Minor improvement to garbage collection, at this point I'm fighting with the engine's computational power

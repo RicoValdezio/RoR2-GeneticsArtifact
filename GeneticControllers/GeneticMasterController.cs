@@ -11,6 +11,7 @@ namespace GeneticsArtifact
         internal static List<GeneBehaviour> livingBehaviours;
         internal static int maxTrackers;
         internal static bool trackerPerMonsterID;
+        internal static bool applyToNeutrals, applyToMinions;
 
         //Configure the timeBetweenUpdates
         internal static float timeBetweenUpdates, updateTimer = 0f;
@@ -35,7 +36,7 @@ namespace GeneticsArtifact
             }
             else
             {
-                for(int x = 0; x < maxTrackers; x++)
+                for (int x = 0; x < maxTrackers; x++)
                 {
                     masterTrackers.Add(new GeneTracker(x, true));
                 }
@@ -62,16 +63,22 @@ namespace GeneticsArtifact
         {
             CharacterBody body = orig(self, bodyPrefab, position, rotation);
             //If the artifact is enabled and the body is a monster
-            if (RunArtifactManager.instance.IsArtifactEnabled(ArtifactOfGenetics.def.artifactIndex) && body.teamComponent.teamIndex == TeamIndex.Monster)
+            if (RunArtifactManager.instance.IsArtifactEnabled(ArtifactOfGenetics.def.artifactIndex))
             {
-                //If using a master per monster type and there isn't already a master for this type, add a master for this type
-                if (trackerPerMonsterID && masterTrackers.Find(x => x.index == body.bodyIndex) == null)
+                //Always apply this to Monsters, optionally apply this to Player minions and Neutrals
+                if ((body.teamComponent.teamIndex == TeamIndex.Monster) ||
+                    (body.teamComponent.teamIndex == TeamIndex.Neutral && applyToNeutrals) ||
+                    (body.teamComponent.teamIndex == TeamIndex.Player && applyToMinions && !body.master.playerCharacterMasterController))
                 {
-                    masterTrackers.Add(new GeneTracker(body.bodyIndex, true));
-                    //Chat.AddMessage("A new Master was made for bodyIndex: " + body.baseNameToken);
+                    //If using a master per monster type and there isn't already a master for this type, add a master for this type
+                    if (trackerPerMonsterID && masterTrackers.Find(x => x.index == body.bodyIndex) == null)
+                    {
+                        masterTrackers.Add(new GeneTracker(body.bodyIndex, true));
+                        //Chat.AddMessage("A new Master was made for bodyIndex: " + body.baseNameToken);
+                    }
+                    //Always add a behaviour to the body
+                    body.gameObject.AddComponent<GeneBehaviour>();
                 }
-                //Always add a behaviour to the body
-                body.gameObject.AddComponent<GeneBehaviour>();
             }
             return body;
         }
@@ -87,7 +94,7 @@ namespace GeneticsArtifact
                     //If the specified time has passed, update the masters and purge the dead
                     updateTimer = 0f;
                     //Chat.AddMessage("Dead Masters Count : " + deadTrackers.Count.ToString());
-                    foreach(GeneTracker masterTracker in masterTrackers)
+                    foreach (GeneTracker masterTracker in masterTrackers)
                     {
                         masterTracker.MutateFromChildren();
                     }
@@ -101,7 +108,7 @@ namespace GeneticsArtifact
             orig(self, damageInfo);
             if (RunArtifactManager.instance.IsArtifactEnabled(ArtifactOfGenetics.def.artifactIndex))
             {
-                foreach(GeneBehaviour behaviour in livingBehaviours)
+                foreach (GeneBehaviour behaviour in livingBehaviours)
                 {
                     //If behaviour body matches, add its damage and break out
                     if (damageInfo.attacker && damageInfo.attacker.GetComponent<CharacterBody>() == behaviour.body)

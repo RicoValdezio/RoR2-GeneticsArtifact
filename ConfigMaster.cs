@@ -13,6 +13,8 @@ namespace GeneticsArtifact
             GeneTracker.useBalancePenalty = GeneticsArtifactPlugin.Instance.Config.Bind(new ConfigDefinition("General Settings", "Balance Penalty Sytem"), true, new ConfigDescription("If set to true, health will be penalized for having too high of other stats.")).Value;
             GeneTracker.useSizeModifier = GeneticsArtifactPlugin.Instance.Config.Bind(new ConfigDefinition("General Settings", "Enable Size Modifer"), false, new ConfigDescription("If set to true, size will be tracked and modified. (Note: this is potentially bugged for clients.)")).Value;
             GeneTracker.deviationFromParent = GeneticsArtifactPlugin.Instance.Config.Bind(new ConfigDefinition("General Settings", "Maximum Deviation Rate"), 0.1f, new ConfigDescription("The maximum decimal amount that any monster can deviate from its master. At 0.1, a monster can be up to 10% different from the master that spawned it.")).Value;
+            GeneticMasterController.applyToNeutrals = GeneticsArtifactPlugin.Instance.Config.Bind(new ConfigDefinition("Optional Settings", "Apply Artifact to Neutrals"), false, new ConfigDescription("If set to true, this will apply the artifact to neutral entities.", new AcceptableValueList<bool>(true, false))).Value;
+            GeneticMasterController.applyToMinions = GeneticsArtifactPlugin.Instance.Config.Bind(new ConfigDefinition("Optional Settings", "Apply Artifact to Player Minions"), false, new ConfigDescription("If set to true, this will apply the artifact to player minions like turrets and drones.", new AcceptableValueList<bool>(true, false))).Value;
         }
     }
 }
