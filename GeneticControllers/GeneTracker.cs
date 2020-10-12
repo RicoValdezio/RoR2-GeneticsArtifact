@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml;
 using UnityEngine;
 
 namespace GeneticsArtifact
@@ -15,8 +16,8 @@ namespace GeneticsArtifact
         internal List<float> genes = new List<float>();
         internal float score = 0f;
 
-        internal static float absoluteFloor, absoluteCeil, relativeFloor, relativeCeil, deviationFromParent;
-        internal static bool useBalancePenalty, useSizeModifier;
+        internal static float absoluteFloor, absoluteCeil, relativeFloor, relativeCeil, deviationFromParent, balanceLimit, balanceStep;
+        internal static bool useSizeModifier;
         private bool disposedValue;
 
         public GeneTracker(int refIndex, bool isMaster = false)
@@ -43,7 +44,7 @@ namespace GeneticsArtifact
 
         private void MutateFromParent()
         {
-            float tempValue, penaltyMultiplier = 1f;
+            float tempValue;
             for (int i = 0; i < genes.Count; i++)
             {
                 tempValue = masterTracker.genes[i] * UnityEngine.Random.Range(relativeFloor, relativeCeil);
@@ -56,15 +57,36 @@ namespace GeneticsArtifact
                 {
                     tempValue = absoluteFloor;
                 }
-                //Apply the change and prepare the balance penalty
+                //Apply the change
                 genes[i] = tempValue;
-                penaltyMultiplier *= 1f / tempValue;
             }
-            //Apply the balance penalty to health, this ignores the absolute cap and should be corrected by scoring system
-            if (useBalancePenalty)
+            ApplyNewBalanceSystem();
+        }
+
+        private void ApplyNewBalanceSystem()
+        {
+            int statToDecrease;
+            //Start applying penalties until below the balanceLimit
+            while(DetermineCurrentBalance() > balanceLimit)
             {
-                genes[0] *= penaltyMultiplier;
+                //This is unsafe as it assumes that the chances of hitting a stat that CAN decrease is almost certain
+                statToDecrease = UnityEngine.Random.Range(0, 6);
+                if(genes[statToDecrease] - balanceStep >= absoluteFloor)
+                {
+                    genes[statToDecrease] -= balanceStep;
+                }
             }
+        }
+
+        private float DetermineCurrentBalance()
+        {
+            //Only the first 7 stats count towards balance, size is just for fun
+            float currentBalance = 1f;
+            for (int i = 0; i < 7; i++)
+            {
+                currentBalance *= genes[i];
+            }
+            return currentBalance;
         }
 
         internal void MutateFromChildren()

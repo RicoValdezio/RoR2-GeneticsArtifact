@@ -10,6 +10,9 @@ As of 1.1.0 the stats are no longer tied to each other. Instead a balance system
 This system can be disabled, but doing so removes all balance controls from the artifact.
 Another side-effect of this system is that I decided to cut the Size modification due to networking difficulties.
 
+As of 1.4.0 the health stat is no longer the only stat penalized using the new system, as all stats can be reduced to bring the product down to a reasonable value.
+This can be configured, and with a Maximum Mutation Product set to 10, the average multiplier on each stat will equate to 1.4x.
+
 How it Works
 ------------
 This is kinda complicated. I plan on adding a video that can give the system a proper explanation, but for right now the main idea is that the longer a monster lives or the more damage it deals to you, the more likely its stats are to be repeated on new monsters.
@@ -24,6 +27,7 @@ Known Issues/Planned Updates
 
 Changelog
 ------------
+1.4.0 - Brand new balance system in attempt to prevent the -infinity health bug, expect new bugs
 1.3.0 - Added config option to apply the artifact to neutrals and player minions (*You Monster*)
 1.2.1 - Added config options for per-generation deviation and re-enabling the Size modifier
 1.2.0 - Refactored the hook registry to prevent behaviour's from spamming hooks, should greatly reduce lag issue
