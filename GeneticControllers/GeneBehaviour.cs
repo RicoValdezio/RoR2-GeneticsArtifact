@@ -76,11 +76,11 @@ namespace GeneticsArtifact
             {
                 if(body.healthComponent.health < 0f)
                 {
-                    Debug.LogWarning("Body spawned with " + tracker.GetGeneString() + "and Current Health = " + body.healthComponent.health.ToString());
+                    Debug.LogWarning("Body spawned with " + tracker.GetGeneString() + "and Current Health = " + body.healthComponent.health.ToString() + " and Level = " + body.level.ToString());
                 }
                 else
                 {
-                    Debug.Log("Body spawned with " + tracker.GetGeneString() + "and Current Health = " + body.healthComponent.health.ToString());
+                    Debug.Log("Body spawned with " + tracker.GetGeneString() + "and Current Health = " + body.healthComponent.health.ToString() + " and Level = " + body.level.ToString());
                 }
             }
         }
