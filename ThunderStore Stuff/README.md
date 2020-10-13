@@ -27,6 +27,7 @@ Known Issues/Planned Updates
 
 Changelog
 ------------
+1.4.1 - Added some optional logging for the bug-hunters, and a bit a additional safety in the master/child relationship
 1.4.0 - Brand new balance system in attempt to prevent the -infinity health bug, expect new bugs
 1.3.0 - Added config option to apply the artifact to neutrals and player minions (*You Monster*)
 1.2.1 - Added config options for per-generation deviation and re-enabling the Size modifier

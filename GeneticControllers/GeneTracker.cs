@@ -1,9 +1,6 @@
-﻿using IL.RoR2.Achievements;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml;
-using UnityEngine;
 
 namespace GeneticsArtifact
 {
@@ -15,6 +12,7 @@ namespace GeneticsArtifact
         //Order is Health, Regen, MoveSpeed, Accel, Damage, AttackSpeed, Armor, (Size was removed)
         internal List<float> genes = new List<float>();
         internal float score = 0f;
+        internal bool isLocked = false;
 
         internal static float absoluteFloor, absoluteCeil, relativeFloor, relativeCeil, deviationFromParent, balanceLimit, balanceStep;
         internal static bool useSizeModifier;
@@ -44,6 +42,15 @@ namespace GeneticsArtifact
 
         private void MutateFromParent()
         {
+            //Wait until the master is free
+            while (masterTracker.isLocked)
+            {
+                //Do nothing and just wait
+            }
+            //Lock the master and self
+            masterTracker.isLocked = true;
+            isLocked = true;
+
             float tempValue;
             for (int i = 0; i < genes.Count; i++)
             {
@@ -60,18 +67,22 @@ namespace GeneticsArtifact
                 //Apply the change
                 genes[i] = tempValue;
             }
+
+            //Unlock the master and apply balance, then unlock self
+            masterTracker.isLocked = false;
             ApplyNewBalanceSystem();
+            isLocked = false;
         }
 
         private void ApplyNewBalanceSystem()
         {
             int statToDecrease;
             //Start applying penalties until below the balanceLimit
-            while(DetermineCurrentBalance() > balanceLimit)
+            while (DetermineCurrentBalance() > balanceLimit)
             {
                 //This is unsafe as it assumes that the chances of hitting a stat that CAN decrease is almost certain
                 statToDecrease = UnityEngine.Random.Range(0, 6);
-                if(genes[statToDecrease] - balanceStep >= absoluteFloor)
+                if (genes[statToDecrease] - balanceStep >= absoluteFloor)
                 {
                     genes[statToDecrease] -= balanceStep;
                 }
@@ -99,6 +110,8 @@ namespace GeneticsArtifact
                 attackSpeedWeight = 0f,
                 armorWeight = 0f,
                 scoreWeight = 0f;
+            //Lock self to prevent competiton with children
+            isLocked = true;
             //Use a modified weighted average to update master
             foreach (GeneTracker childTracker in GeneticMasterController.deadTrackers.Where(x => x.index == index))
             {
@@ -121,6 +134,28 @@ namespace GeneticsArtifact
                 genes[5] = attackSpeedWeight / scoreWeight;
                 genes[6] = armorWeight / scoreWeight;
             }
+            //Unlock self to allow spawning
+            isLocked = false;
+        }
+
+        internal string GetGeneString()
+        {
+            //Wait for my lock to open and lock
+            while (isLocked)
+            {
+                //Do nothing
+            }
+            isLocked = true;
+
+            string returnString = "Current Genes for ID#" + index.ToString() + " : ";
+            foreach (float gene in genes)
+            {
+                returnString += gene.ToString("N4") + " ";
+            }
+
+            //Free the lock and return the string
+            isLocked = false;
+            return returnString;
         }
 
         protected virtual void Dispose(bool disposing)

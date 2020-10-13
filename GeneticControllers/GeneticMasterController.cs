@@ -10,11 +10,10 @@ namespace GeneticsArtifact
         internal static List<GeneTracker> deadTrackers;
         internal static List<GeneBehaviour> livingBehaviours;
         internal static int maxTrackers;
-        internal static bool trackerPerMonsterID;
-        internal static bool applyToNeutrals, applyToMinions;
+        internal static bool trackerPerMonsterID, applyToNeutrals, applyToMinions, statusLogging;
 
         //Configure the timeBetweenUpdates
-        internal static float timeBetweenUpdates, updateTimer = 0f;
+        internal static float timeBetweenUpdates, updateTimer = 0f, timeBetweenStatusLogging, statusTimer = 0f;
 
         internal static void Init()
         {
@@ -89,6 +88,7 @@ namespace GeneticsArtifact
             if (RunArtifactManager.instance.IsArtifactEnabled(ArtifactOfGenetics.def.artifactIndex))
             {
                 updateTimer += Time.deltaTime;
+                statusTimer += Time.deltaTime;
                 if (updateTimer >= timeBetweenUpdates)
                 {
                     //If the specified time has passed, update the masters and purge the dead
@@ -99,6 +99,18 @@ namespace GeneticsArtifact
                         masterTracker.MutateFromChildren();
                     }
                     deadTrackers.Clear();
+                }
+
+                //Status logging for those who have it enabled
+                if(statusLogging && statusTimer >= timeBetweenStatusLogging)
+                {
+                    statusTimer = 0f;
+                    Debug.Log("Begin Genetic Master Status Log");
+                    foreach (GeneTracker masterTracker in masterTrackers)
+                    {
+                        Debug.Log(masterTracker.GetGeneString());
+                    }
+                    Debug.Log("End Genetic Master Status Log");
                 }
             }
         }

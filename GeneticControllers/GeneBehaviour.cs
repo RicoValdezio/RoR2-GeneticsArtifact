@@ -8,6 +8,7 @@ namespace GeneticsArtifact
         internal GeneTracker tracker;
         internal CharacterBody body;
         internal float timePulse, timeAlive = 0f, damageDealt = 0f;
+        internal static bool spawnLogging, accidentalDeathLogging;
 
         private void OnEnable()
         {
@@ -38,6 +39,11 @@ namespace GeneticsArtifact
 
         private void ApplyMutation()
         {
+            while (tracker.isLocked)
+            {
+                //Wait for the tracker to unlock itself before working
+            }
+
             body.baseMaxHealth *= tracker.genes[0];
             body.levelMaxHealth *= tracker.genes[0];
 
@@ -65,6 +71,18 @@ namespace GeneticsArtifact
             }
 
             body.RecalculateStats();
+
+            if(spawnLogging || (accidentalDeathLogging && body.healthComponent.health < 0f))
+            {
+                if(body.healthComponent.health < 0f)
+                {
+                    Debug.LogWarning("Body spawned with " + tracker.GetGeneString() + "and Current Health = " + body.healthComponent.health.ToString());
+                }
+                else
+                {
+                    Debug.Log("Body spawned with " + tracker.GetGeneString() + "and Current Health = " + body.healthComponent.health.ToString());
+                }
+            }
         }
 
         private void Update()
