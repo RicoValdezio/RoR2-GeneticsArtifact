@@ -120,18 +120,21 @@ namespace GeneticsArtifact
             orig(self, damageInfo);
             if (RunArtifactManager.instance.IsArtifactEnabled(ArtifactOfGenetics.def.artifactIndex))
             {
-                foreach (GeneBehaviour behaviour in livingBehaviours)
+                if (!float.IsNaN(damageInfo.damage))
                 {
-                    //If behaviour body matches, add its damage and break out
-                    if (damageInfo.attacker && damageInfo.attacker.GetComponent<CharacterBody>() == behaviour.body)
+                    foreach (GeneBehaviour behaviour in livingBehaviours)
                     {
-                        behaviour.damageDealt += damageInfo.damage;
-                        break;
-                    }
-                    if (damageInfo.inflictor && damageInfo.inflictor.GetComponent<CharacterBody>() == behaviour.body)
-                    {
-                        behaviour.damageDealt += damageInfo.damage;
-                        break;
+                        //If behaviour body matches, add its damage and break out
+                        if (damageInfo.attacker && damageInfo.attacker.GetComponent<CharacterBody>() == behaviour.body)
+                        {
+                            behaviour.damageDealt += damageInfo.damage;
+                            break;
+                        }
+                        if (damageInfo.inflictor && damageInfo.inflictor.GetComponent<CharacterBody>() == behaviour.body)
+                        {
+                            behaviour.damageDealt += damageInfo.damage;
+                            break;
+                        }
                     }
                 }
             }

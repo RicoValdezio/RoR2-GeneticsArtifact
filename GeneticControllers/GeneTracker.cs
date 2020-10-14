@@ -115,14 +115,17 @@ namespace GeneticsArtifact
             //Use a modified weighted average to update master
             foreach (GeneTracker childTracker in GeneticMasterController.deadTrackers.Where(x => x.index == index))
             {
-                healthWeight += childTracker.genes[0] * childTracker.score;
-                regenWeight += childTracker.genes[1] * childTracker.score;
-                moveSpeedWeight += childTracker.genes[2] * childTracker.score;
-                accelWeight += childTracker.genes[3] * childTracker.score;
-                damageWeight += childTracker.genes[4] * childTracker.score;
-                attackSpeedWeight += childTracker.genes[5] * childTracker.score;
-                armorWeight += childTracker.genes[6] * childTracker.score;
-                scoreWeight += childTracker.score;
+                if (!float.IsNaN(childTracker.score) && childTracker.score > 0f)
+                {
+                    healthWeight += childTracker.genes[0] * childTracker.score;
+                    regenWeight += childTracker.genes[1] * childTracker.score;
+                    moveSpeedWeight += childTracker.genes[2] * childTracker.score;
+                    accelWeight += childTracker.genes[3] * childTracker.score;
+                    damageWeight += childTracker.genes[4] * childTracker.score;
+                    attackSpeedWeight += childTracker.genes[5] * childTracker.score;
+                    armorWeight += childTracker.genes[6] * childTracker.score;
+                    scoreWeight += childTracker.score;
+                }
             }
             if (scoreWeight > 0)
             {

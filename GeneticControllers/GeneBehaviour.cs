@@ -72,15 +72,15 @@ namespace GeneticsArtifact
 
             body.RecalculateStats();
 
-            if(spawnLogging || (accidentalDeathLogging && body.healthComponent.health < 0f))
+            if(spawnLogging || (accidentalDeathLogging && body.maxHealth < 0f))
             {
                 if(body.healthComponent.health < 0f)
                 {
-                    Debug.LogWarning("Body spawned with " + tracker.GetGeneString() + "and Current Health = " + body.healthComponent.health.ToString() + " and Level = " + body.level.ToString());
+                    Debug.LogWarning("Body spawned with " + tracker.GetGeneString() + "and Max Health = " + body.maxHealth.ToString() + " and Level = " + body.level.ToString());
                 }
                 else
                 {
-                    Debug.Log("Body spawned with " + tracker.GetGeneString() + "and Current Health = " + body.healthComponent.health.ToString() + " and Level = " + body.level.ToString());
+                    Debug.Log("Body spawned with " + tracker.GetGeneString() + "and Max Health = " + body.maxHealth.ToString() + " and Level = " + body.level.ToString());
                 }
             }
         }
@@ -95,19 +95,5 @@ namespace GeneticsArtifact
                 timePulse = 0f;
             }
         }
-
-        //private void HealthComponent_TakeDamage(On.RoR2.HealthComponent.orig_TakeDamage orig, HealthComponent self, DamageInfo damageInfo)
-        //{
-        //    orig(self, damageInfo);
-        //    //Give tracker points equal to the damage it dealth
-        //    if (damageInfo.attacker && damageInfo.attacker.GetComponent<CharacterBody>() == body)
-        //    {
-        //        damageDealt += damageInfo.damage;
-        //    }
-        //    else if (damageInfo.inflictor && damageInfo.inflictor.GetComponent<CharacterBody>() == body)
-        //    {
-        //        damageDealt += damageInfo.damage;
-        //    }
-        //}
     }
 }
