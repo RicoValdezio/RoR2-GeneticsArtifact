@@ -111,6 +111,10 @@ namespace GeneticsArtifact
                 armorWeight = 0f,
                 scoreWeight = 0f;
             //Lock self to prevent competiton with children
+            while (isLocked)
+            {
+                //Do nothing
+            }
             isLocked = true;
             //Use a modified weighted average to update master
             foreach (GeneTracker childTracker in GeneticMasterController.deadTrackers.Where(x => x.index == index))
@@ -127,7 +131,7 @@ namespace GeneticsArtifact
                     scoreWeight += childTracker.score;
                 }
             }
-            if (scoreWeight > 0)
+            if (!float.IsNaN(scoreWeight) && scoreWeight > 0)
             {
                 genes[0] = healthWeight / scoreWeight;
                 genes[1] = regenWeight / scoreWeight;

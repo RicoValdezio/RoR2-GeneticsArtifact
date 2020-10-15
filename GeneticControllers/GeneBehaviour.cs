@@ -7,7 +7,7 @@ namespace GeneticsArtifact
     {
         internal GeneTracker tracker;
         internal CharacterBody body;
-        internal float timePulse, timeAlive = 0f, damageDealt = 0f;
+        internal float timePulse, timeAlive = 1f, damageDealt = 0f;
         internal static bool spawnLogging, accidentalDeathLogging;
 
         private void OnEnable()
@@ -44,6 +44,8 @@ namespace GeneticsArtifact
                 //Wait for the tracker to unlock itself before working
             }
 
+            tracker.isLocked = true;
+
             body.baseMaxHealth *= tracker.genes[0];
             body.levelMaxHealth *= tracker.genes[0];
 
@@ -69,6 +71,8 @@ namespace GeneticsArtifact
             {
                 body.transform.localScale *= tracker.genes[7];
             }
+
+            tracker.isLocked = false;
 
             body.RecalculateStats();
 

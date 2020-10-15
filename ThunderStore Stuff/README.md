@@ -24,9 +24,11 @@ Known Issues/Planned Updates
 - A feedback system to let the player know how the mutations are trending
 - Improve this readme to make more sense, and to add a code walkthrough for those interested
 - Reimplement the size modifier once I figure out the networking
+- If you find a case of the -infinity health bug, type !geneticsbughunt into the discord chat
 
 Changelog
 ------------
+1.4.4 - Added even more NaN checks and security to the scoring system
 1.4.3 - Added a NaN check for damage calculations in attempt to fix -infinty bug
 1.4.2 - Added the body level to the optional logging to help cut out some guesswork
 1.4.1 - Added some optional logging for the bug-hunters, and a bit a additional safety in the master/child relationship

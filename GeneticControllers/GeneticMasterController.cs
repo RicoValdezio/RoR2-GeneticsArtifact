@@ -120,7 +120,7 @@ namespace GeneticsArtifact
             orig(self, damageInfo);
             if (RunArtifactManager.instance.IsArtifactEnabled(ArtifactOfGenetics.def.artifactIndex))
             {
-                if (!float.IsNaN(damageInfo.damage))
+                if (!float.IsNaN(damageInfo.damage) && damageInfo.damage > 0)
                 {
                     foreach (GeneBehaviour behaviour in livingBehaviours)
                     {
