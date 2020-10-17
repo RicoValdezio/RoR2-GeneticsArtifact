@@ -12,7 +12,7 @@ How it Works
 - Every so often, the master will adapt its core values to reflect its best performers.
 - These masters are then used to determine how the multipliers are assigned in future spawns.
 Also, this video is my attempt at explaining this along with how the config values can affect the artifact and its systems: Its a bit scatter-brained but covers all of it.
---video link here--
+<https://youtu.be/orHs22htO3c>
 
 Known Issues/Planned Updates
 ------------
