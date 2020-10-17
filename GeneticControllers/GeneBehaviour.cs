@@ -76,7 +76,7 @@ namespace GeneticsArtifact
 
             body.RecalculateStats();
 
-            if(spawnLogging || (accidentalDeathLogging && body.maxHealth < 0f))
+            if(spawnLogging || (accidentalDeathLogging && (body.maxHealth < 0f || float.IsNaN(body.maxHealth))))
             {
                 if(body.healthComponent.health < 0f)
                 {

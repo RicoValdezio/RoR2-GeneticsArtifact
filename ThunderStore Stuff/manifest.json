@@ -1,6 +1,6 @@
 ﻿{
     "name": "GeneticArtifact",
-    "version_number": "1.4.4",
+    "version_number": "1.4.5",
     "website_url": "https://github.com/RicoValdezio/RoR2-GeneticsArtifact",
     "description": "A new artifact that adds a pseudo-genetic backend to the monster spawning system.",
     "dependencies": [

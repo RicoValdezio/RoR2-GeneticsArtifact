@@ -13,7 +13,7 @@ namespace GeneticsArtifact
             def = ScriptableObject.CreateInstance<ArtifactDef>();
 
             LanguageAPI.Add("GENE_NAME_TOKEN", "Artifact of Genetics");
-            LanguageAPI.Add("GENE_DESC_TOKEN", "Monsters' stats will change based on survival rating of previous monsters.");
+            LanguageAPI.Add("GENE_DESC_TOKEN", "Monsters' stats will change based on the performance of previous monsters.");
 
             def.nameToken = "GENE_NAME_TOKEN";
             def.descriptionToken = "GENE_DESC_TOKEN";

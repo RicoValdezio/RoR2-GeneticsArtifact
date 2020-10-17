@@ -1,33 +1,28 @@
 ﻿Basic Description
 ------------
 This mod adds a genetics system to the monsters, with every stat being able to mutate in specific ways.
-Health, Size, and Move Speed are all directly related, with bigger monsters having more health and moving faster.
-Acceleration is inversely tied to Move Speed, with faster monsters being less able to turn quickly.
-Armor and Regen are inversely related, with heavily armored monsters having reduced regen rates.
-Damage and Attack Speed are also inversely related, with heavy hitters attacking less often and slower than normal.
-
-As of 1.1.0 the stats are no longer tied to each other. Instead a balance system that penalizes Health when other stats are too high has been implemented to prevent monsters from getting too strong.
-This system can be disabled, but doing so removes all balance controls from the artifact.
-Another side-effect of this system is that I decided to cut the Size modification due to networking difficulties.
-
-As of 1.4.0 the health stat is no longer the only stat penalized using the new system, as all stats can be reduced to bring the product down to a reasonable value.
-This can be configured, and with a Maximum Mutation Product set to 10, the average multiplier on each stat will equate to 1.4x.
+The core stats that are affected are: Health, Regen, MoveSpeed, Acceleration, Damage, AttackSpeed, and Armor (and Size if its enabled)
+The goal of the system detailed below is to allow the game to adapt to the player, and in turn force the player to adapt to it.
 
 How it Works
 ------------
-This is kinda complicated. I plan on adding a video that can give the system a proper explanation, but for right now the main idea is that the longer a monster lives or the more damage it deals to you, the more likely its stats are to be repeated on new monsters.
-The actual scoring system for mutations is 1 point per second of being alive, and 1 point for every point of damage it deals. Heavy hitters rack up points faster, but tanks can soak up more points just for being alive.
-Note that the monsters aren't counted towards the genepool until they either die or the stage ends, so if a monster survives the entire stage it won't polute the future genepool.
+- Every monster has seven (eight if Size is enabled) multipliers that are randomly assigned on spawn.
+- If a monster manages to damage you, it will be awarded points based on how much damage it did.
+- When the monster dies (or is despawned by a stage change), its performance is sent to the master that spawned it.
+- Every so often, the master will adapt its core values to reflect its best performers.
+- These masters are then used to determine how the multipliers are assigned in future spawns.
+Also, this video is my attempt at explaining this along with how the config values can affect the artifact and its systems:
+--video link here--
 
 Known Issues/Planned Updates
 ------------
 - A feedback system to let the player know how the mutations are trending
-- Improve this readme to make more sense, and to add a code walkthrough for those interested
 - Reimplement the size modifier once I figure out the networking
 - If you find a case of the -infinity health bug, type !geneticsbughunt into the discord chat
 
 Changelog
 ------------
+1.4.5 - Housekeeping update, fixed the readme and added a video explanation
 1.4.4 - Added even more NaN checks and security to the scoring system
 1.4.3 - Added a NaN check for damage calculations in attempt to fix -infinty bug
 1.4.2 - Added the body level to the optional logging to help cut out some guesswork
