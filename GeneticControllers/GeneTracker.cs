@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace GeneticsArtifact
 {
@@ -29,15 +30,15 @@ namespace GeneticsArtifact
             {
                 genes.Add(1);
             }
+            relativeCeil = 1f + deviationFromParent;
+            relativeFloor = 1f - deviationFromParent;
+            absoluteFloor = 1f / absoluteCeil;
             //If not a master, get values from a master
             if (!isMaster)
             {
                 masterTracker = GeneticMasterController.masterTrackers.Find(x => x.index == index);
                 MutateFromParent();
             }
-            relativeCeil = 1f + deviationFromParent;
-            relativeFloor = 1f - deviationFromParent;
-            absoluteFloor = 1f / absoluteCeil;
         }
 
         private void MutateFromParent()
@@ -54,17 +55,7 @@ namespace GeneticsArtifact
             float tempValue;
             for (int i = 0; i < genes.Count; i++)
             {
-                tempValue = masterTracker.genes[i] * UnityEngine.Random.Range(relativeFloor, relativeCeil);
-                //Check if inside absolute bounds
-                if (tempValue > absoluteCeil)
-                {
-                    tempValue = absoluteCeil;
-                }
-                else if (tempValue < absoluteFloor)
-                {
-                    tempValue = absoluteFloor;
-                }
-                //Apply the change
+                tempValue = Mathf.Clamp(masterTracker.genes[i] * UnityEngine.Random.Range(relativeFloor, relativeCeil), absoluteFloor, absoluteCeil);
                 genes[i] = tempValue;
             }
 

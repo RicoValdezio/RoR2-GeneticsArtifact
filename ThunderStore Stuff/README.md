@@ -11,7 +11,7 @@ How it Works
 - When the monster dies (or is despawned by a stage change), its performance is sent to the master that spawned it.
 - Every so often, the master will adapt its core values to reflect its best performers.
 - These masters are then used to determine how the multipliers are assigned in future spawns.
-Also, this video is my attempt at explaining this along with how the config values can affect the artifact and its systems:
+Also, this video is my attempt at explaining this along with how the config values can affect the artifact and its systems: Its a bit scatter-brained but covers all of it.
 --video link here--
 
 Known Issues/Planned Updates
