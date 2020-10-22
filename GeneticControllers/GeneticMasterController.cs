@@ -150,7 +150,7 @@ namespace GeneticsArtifact
             ILCursor c = new ILCursor(il);
             bool found;
 
-            //Health Multiplier
+            #region HealthMultiplier
             int healthIndex = -1;
             found = c.TryGotoNext(
                     x => x.MatchLdfld<CharacterBody>("baseMaxHealth"),
@@ -180,8 +180,9 @@ namespace GeneticsArtifact
                 GeneticsArtifactPlugin.geneticLogSource.LogError("Health Hook Failed to Register");
             }
             c.Index = 0;
+            #endregion
 
-            //Regen Multiplier
+            #region RegenMultiplier
             int regenIndex = -1;
             found = c.TryGotoNext(
                 x => x.MatchLdloc(out regenIndex),
@@ -211,6 +212,7 @@ namespace GeneticsArtifact
                 GeneticsArtifactPlugin.geneticLogSource.LogError("Health Hook Failed to Register");
             }
             c.Index = 0;
+            #endregion
         }
     }
 }

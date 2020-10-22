@@ -22,6 +22,7 @@ Known Issues/Planned Updates
 
 Changelog
 -----------
+1.5.0 - Switched the stat application from the On space to the IL space (special thanks to ThinkInvis and Rein)
 1.4.7 - Switched logging system as per Harb's request
 1.4.6 - The link broke in the readme for some reason, fixed that
 1.4.5 - Housekeeping update, fixed the readme and added a video explanation
