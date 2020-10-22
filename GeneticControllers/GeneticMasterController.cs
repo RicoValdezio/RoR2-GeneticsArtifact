@@ -199,7 +199,7 @@ namespace GeneticsArtifact
                 {
                     if (body?.gameObject?.GetComponent<GeneBehaviour>() is GeneBehaviour geneBehaviour)
                     {
-                        return origRegen * geneBehaviour.tracker.genes[0];
+                        return origRegen * geneBehaviour.tracker.genes[1];
                     }
                     else
                     {
@@ -210,6 +210,67 @@ namespace GeneticsArtifact
             else
             {
                 GeneticsArtifactPlugin.geneticLogSource.LogError("Health Hook Failed to Register");
+            }
+            c.Index = 0;
+            #endregion
+
+            #region MoveSpeedMultiplier
+            int speedIndex = -1;
+            found = c.TryGotoNext(
+                x => x.MatchLdfld<CharacterBody>("baseMoveSpeed"),
+                x => x.MatchLdarg(0),
+                x => x.MatchLdfld<CharacterBody>("levelMoveSpeed"))
+                && c.TryGotoNext(
+                x => x.MatchStloc(out speedIndex)
+                );
+            if (found)
+            {
+                c.GotoPrev(x => x.MatchLdfld<CharacterBody>("levelMoveSpeed"));
+                c.GotoNext(x => x.MatchStloc(speedIndex));
+                c.Emit(OpCodes.Ldarg_0);
+                c.EmitDelegate<Func<float, CharacterBody, float>>((origMoveSpeed, body) =>
+                {
+                    if (body?.gameObject?.GetComponent<GeneBehaviour>() is GeneBehaviour geneBehaviour)
+                    {
+                        return origMoveSpeed * geneBehaviour.tracker.genes[2];
+                    }
+                    else
+                    {
+                        return origMoveSpeed;
+                    }
+                });
+            }
+            else
+            {
+                GeneticsArtifactPlugin.geneticLogSource.LogError("MoveSpeed Hook Failed to Register");
+            }
+            c.Index = 0;
+            #endregion
+
+            #region AccelMultiplier
+            found = c.TryGotoNext(
+                x => x.MatchLdarg(0),
+                x => x.MatchLdfld<CharacterBody>("baseAcceleration"),
+                x => x.MatchMul()
+                );
+            if (found)
+            {
+                c.Emit(OpCodes.Ldarg_0);
+                c.EmitDelegate<Func<float, CharacterBody, float>>((origAccel, body) =>
+                {
+                    if (body?.gameObject?.GetComponent<GeneBehaviour>() is GeneBehaviour geneBehaviour)
+                    {
+                        return origAccel * geneBehaviour.tracker.genes[3];
+                    }
+                    else
+                    {
+                        return origAccel;
+                    }
+                });
+            }
+            else
+            {
+                GeneticsArtifactPlugin.geneticLogSource.LogError("Acceleration Hook Failed to Register");
             }
             c.Index = 0;
             #endregion

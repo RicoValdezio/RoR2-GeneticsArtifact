@@ -22,7 +22,7 @@ Known Issues/Planned Updates
 
 Changelog
 -----------
-1.5.0 - Switched the stat application from the On space to the IL space (special thanks to ThinkInvis and Rein)
+1.5.0 - Switched the stat application from the On space to the IL space
 1.4.7 - Switched logging system as per Harb's request
 1.4.6 - The link broke in the readme for some reason, fixed that
 1.4.5 - Housekeeping update, fixed the readme and added a video explanation
@@ -31,7 +31,7 @@ Changelog
 1.4.2 - Added the body level to the optional logging to help cut out some guesswork
 1.4.1 - Added some optional logging for the bug-hunters, and a bit a additional safety in the master/child relationship
 1.4.0 - Brand new balance system in attempt to prevent the -infinity health bug, expect new bugs
-1.3.0 - Added config option to apply the artifact to neutrals and player minions (*You Monster*)
+1.3.0 - Added config option to apply the artifact to neutrals and player minions
 1.2.1 - Added config options for per-generation deviation and re-enabling the Size modifier
 1.2.0 - Refactored the hook registry to prevent behaviour's from spamming hooks, should greatly reduce lag issue
 1.1.1 - Minor improvement to garbage collection, at this point I'm fighting with the engine's computational power
@@ -46,3 +46,9 @@ Place the .dll in Risk of Rain 2\BepInEx\plugins or use a mod manager.
 Contact
 ------------
 If you have issues/suggestions leave them on the github as an issue/suggestion or reach out to Rico#6416 on the modding Discord.
+
+Special Thanks / People to Blame
+------------
+Rein and ThinkInvis - For their help figuring out the IL conversion
+Nemo - For testing all the 1.4.X versions to find the -infinity health culprit
+Jessica - For inspiring 1.3.0 by asking "can I unethically commit genocide on squids"
