@@ -49,8 +49,8 @@ namespace GeneticsArtifact
             //body.baseMaxHealth *= tracker.genes[0];
             //body.levelMaxHealth *= tracker.genes[0];
 
-            body.baseRegen *= tracker.genes[1];
-            body.levelRegen *= tracker.genes[1];
+            //body.baseRegen *= tracker.genes[1];
+            //body.levelRegen *= tracker.genes[1];
 
             body.baseMoveSpeed *= tracker.genes[2];
             body.levelMoveSpeed *= tracker.genes[2];

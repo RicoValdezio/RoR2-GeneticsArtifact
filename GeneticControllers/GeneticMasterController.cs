@@ -148,10 +148,11 @@ namespace GeneticsArtifact
         private static void CharacterBody_RecalculateStats(ILContext il)
         {
             ILCursor c = new ILCursor(il);
+            bool found;
 
             //Health Multiplier
             int healthIndex = -1;
-            bool found = c.TryGotoNext(
+            found = c.TryGotoNext(
                     x => x.MatchLdfld<CharacterBody>("baseMaxHealth"),
                     x => x.MatchLdarg(0),
                     x => x.MatchLdfld<CharacterBody>("levelMaxHealth"))
@@ -164,9 +165,9 @@ namespace GeneticsArtifact
                 c.Emit(OpCodes.Ldarg_0);
                 c.EmitDelegate<Func<float, CharacterBody, float>>((origHealth, body) =>
                 {
-                    if (body.gameObject.GetComponent<GeneBehaviour>())
+                    if (body?.gameObject?.GetComponent<GeneBehaviour>() is GeneBehaviour geneBehaviour)
                     {
-                        return origHealth * body.gameObject.GetComponent<GeneBehaviour>().tracker.genes[0];
+                        return origHealth * geneBehaviour.tracker.genes[0];
                     }
                     else
                     {
@@ -180,7 +181,36 @@ namespace GeneticsArtifact
             }
             c.Index = 0;
 
-            //Debug.Log(il.ToString());
+            //Regen Multiplier
+            int regenIndex = -1;
+            found = c.TryGotoNext(
+                x => x.MatchLdloc(out regenIndex),
+                x => x.MatchCallOrCallvirt<CharacterBody>("set_regen")
+                );
+            if (found)
+            {
+                c.GotoPrev(
+                    x => x.MatchAdd(),
+                    x => x.MatchStloc(regenIndex)
+                    );
+                c.Emit(OpCodes.Ldarg_0);
+                c.EmitDelegate<Func<float, CharacterBody, float>>((origRegen, body) =>
+                {
+                    if (body?.gameObject?.GetComponent<GeneBehaviour>() is GeneBehaviour geneBehaviour)
+                    {
+                        return origRegen * geneBehaviour.tracker.genes[0];
+                    }
+                    else
+                    {
+                        return origRegen;
+                    }
+                });
+            }
+            else
+            {
+                GeneticsArtifactPlugin.geneticLogSource.LogError("Health Hook Failed to Register");
+            }
+            c.Index = 0;
         }
     }
 }
