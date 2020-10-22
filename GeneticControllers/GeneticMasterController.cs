@@ -105,12 +105,12 @@ namespace GeneticsArtifact
                 if(statusLogging && statusTimer >= timeBetweenStatusLogging)
                 {
                     statusTimer = 0f;
-                    Debug.Log("Begin Genetic Master Status Log");
+                    GeneticsArtifactPlugin.geneticLogSource.LogInfo("Begin Genetic Master Status Log");
                     foreach (GeneTracker masterTracker in masterTrackers)
                     {
-                        Debug.Log(masterTracker.GetGeneString());
+                        GeneticsArtifactPlugin.geneticLogSource.LogInfo(masterTracker.GetGeneString());
                     }
-                    Debug.Log("End Genetic Master Status Log");
+                    GeneticsArtifactPlugin.geneticLogSource.LogInfo("End Genetic Master Status Log");
                 }
             }
         }

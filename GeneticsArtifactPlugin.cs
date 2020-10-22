@@ -1,4 +1,5 @@
 ﻿using BepInEx;
+using BepInEx.Logging;
 using R2API;
 using R2API.Utils;
 using System.Reflection;
@@ -12,14 +13,16 @@ namespace GeneticsArtifact
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.EveryoneNeedSameModVersion)]
     public class GeneticsArtifactPlugin : BaseUnityPlugin
     {
-        private const string ModVer = "1.4.6";
-        private const string ModName = "ArtifactOfGenetics";
+        private const string ModVer = "1.4.7";
+        private const string ModName = "Genetics";
         private const string ModGuid = "com.RicoValdezio.ArtifactOfGenetics";
         public static GeneticsArtifactPlugin Instance;
+        internal static ManualLogSource geneticLogSource;
 
         private void Awake()
         {
             if (Instance == null) Instance = this;
+            geneticLogSource = Instance.Logger;
             RegisterAssetBundleProvider();
             ConfigMaster.Init();
             ArtifactOfGenetics.Init();

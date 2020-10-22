@@ -7,7 +7,7 @@ namespace GeneticsArtifact
         internal static void Init()
         {
             GeneticMasterController.maxTrackers = GeneticsArtifactPlugin.Instance.Config.Bind(new ConfigDefinition("Master Settings", "Maximum General Purpose Trackers"), 4, new ConfigDescription("If the Tracker Per Monster ID flag is false, this is the maximum number of genetic families that will exist during a run.")).Value;
-            GeneticMasterController.trackerPerMonsterID = GeneticsArtifactPlugin.Instance.Config.Bind(new ConfigDefinition("Master Settings", "Tracker Per Monster ID"), false, new ConfigDescription("If set to true, this will create a genetic family for each monster type.", new AcceptableValueList<bool>(true, false))).Value;
+            GeneticMasterController.trackerPerMonsterID = GeneticsArtifactPlugin.Instance.Config.Bind(new ConfigDefinition("Master Settings", "Tracker Per Monster ID"), true, new ConfigDescription("If set to true, this will create a genetic family for each monster type.", new AcceptableValueList<bool>(true, false))).Value;
             GeneticMasterController.timeBetweenUpdates = GeneticsArtifactPlugin.Instance.Config.Bind(new ConfigDefinition("Master Settings", "Tracker Update Rate"), 10f, new ConfigDescription("The number of seconds between genetic family updates. Increase this if you have performance issues.")).Value;
             
             GeneTracker.absoluteCeil = GeneticsArtifactPlugin.Instance.Config.Bind(new ConfigDefinition("Tracker Settings", "Maximum Mutation Multiplier"), 5f, new ConfigDescription("The largest multiplier that can be applied to any particular stat. The minimum is determined by it's reciprocal.")).Value;

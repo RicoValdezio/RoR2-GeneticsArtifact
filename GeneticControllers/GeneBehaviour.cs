@@ -80,11 +80,11 @@ namespace GeneticsArtifact
             {
                 if(body.healthComponent.health < 0f)
                 {
-                    Debug.LogWarning("Body spawned with " + tracker.GetGeneString() + "and Max Health = " + body.maxHealth.ToString() + " and Level = " + body.level.ToString());
+                    GeneticsArtifactPlugin.geneticLogSource.LogWarning("Body spawned with " + tracker.GetGeneString() + "and Max Health = " + body.maxHealth.ToString() + " and Level = " + body.level.ToString());
                 }
                 else
                 {
-                    Debug.Log("Body spawned with " + tracker.GetGeneString() + "and Max Health = " + body.maxHealth.ToString() + " and Level = " + body.level.ToString());
+                    GeneticsArtifactPlugin.geneticLogSource.LogInfo("Body spawned with " + tracker.GetGeneString() + "and Max Health = " + body.maxHealth.ToString() + " and Level = " + body.level.ToString());
                 }
             }
         }

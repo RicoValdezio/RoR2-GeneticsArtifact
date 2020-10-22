@@ -22,6 +22,7 @@ Known Issues/Planned Updates
 
 Changelog
 -----------
+1.4.7 - Switched logging system as per Harb's request
 1.4.6 - The link broke in the readme for some reason, fixed that
 1.4.5 - Housekeeping update, fixed the readme and added a video explanation
 1.4.4 - Added even more NaN checks and security to the scoring system
