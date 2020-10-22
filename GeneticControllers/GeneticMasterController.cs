@@ -1,6 +1,10 @@
-﻿using RoR2;
+﻿using Mono.Cecil.Cil;
+using MonoMod.Cil;
+using MonoMod.Utils;
+using RoR2;
 using System.Collections.Generic;
 using UnityEngine;
+using static MonoMod.Cil.RuntimeILReferenceBag.FastDelegateInvokers;
 
 namespace GeneticsArtifact
 {
@@ -25,6 +29,7 @@ namespace GeneticsArtifact
             On.RoR2.CharacterMaster.SpawnBody += CharacterMaster_SpawnBody;
             On.RoR2.Run.Update += Run_Update;
             On.RoR2.HealthComponent.TakeDamage += HealthComponent_TakeDamage;
+            IL.RoR2.CharacterBody.RecalculateStats += CharacterBody_RecalculateStats;
         }
 
         private static void BuildMasters()
@@ -102,7 +107,7 @@ namespace GeneticsArtifact
                 }
 
                 //Status logging for those who have it enabled
-                if(statusLogging && statusTimer >= timeBetweenStatusLogging)
+                if (statusLogging && statusTimer >= timeBetweenStatusLogging)
                 {
                     statusTimer = 0f;
                     GeneticsArtifactPlugin.geneticLogSource.LogInfo("Begin Genetic Master Status Log");
@@ -138,6 +143,44 @@ namespace GeneticsArtifact
                     }
                 }
             }
+        }
+
+        private static void CharacterBody_RecalculateStats(ILContext il)
+        {
+            ILCursor c = new ILCursor(il);
+
+            //Health Multiplier
+            int healthIndex = -1;
+            bool found = c.TryGotoNext(
+                    x => x.MatchLdfld<CharacterBody>("baseMaxHealth"),
+                    x => x.MatchLdarg(0),
+                    x => x.MatchLdfld<CharacterBody>("levelMaxHealth"))
+                    && c.TryGotoNext(
+                    x => x.MatchStloc(out healthIndex));
+            if (found)
+            {
+                c.GotoPrev(x => x.MatchLdfld<CharacterBody>("baseMaxHealth"));
+                c.GotoNext(x => x.MatchStloc(healthIndex));
+                c.Emit(OpCodes.Ldarg_0);
+                c.EmitDelegate<Func<float, CharacterBody, float>>((origHealth, body) =>
+                {
+                    if (body.gameObject.GetComponent<GeneBehaviour>())
+                    {
+                        return origHealth * body.gameObject.GetComponent<GeneBehaviour>().tracker.genes[0];
+                    }
+                    else
+                    {
+                        return origHealth;
+                    }
+                });
+            }
+            else
+            {
+                GeneticsArtifactPlugin.geneticLogSource.LogError("Health Hook Failed to Register");
+            }
+            c.Index = 0;
+
+            //Debug.Log(il.ToString());
         }
     }
 }

@@ -26,6 +26,12 @@
     <Reference Include="MMHOOK_Assembly-CSharp">
       <HintPath>..\..\..\..\Documents\Libs\MMHOOK_Assembly-CSharp.dll</HintPath>
     </Reference>
+    <Reference Include="Mono.Cecil">
+      <HintPath>..\..\..\..\Documents\Libs\Mono.Cecil.dll</HintPath>
+    </Reference>
+    <Reference Include="MonoMod.Utils">
+      <HintPath>..\..\..\..\Documents\Libs\MonoMod.Utils.dll</HintPath>
+    </Reference>
     <Reference Include="R2API">
       <HintPath>..\..\..\..\Documents\Libs\R2API.dll</HintPath>
     </Reference>
