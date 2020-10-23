@@ -308,6 +308,72 @@ namespace GeneticsArtifact
             }
             c.Index = 0;
             #endregion
+
+            #region AttackSpeedMultiplier
+            int attackSpeedIndex = -1;
+            found = c.TryGotoNext(
+                x => x.MatchLdfld<CharacterBody>("baseAttackSpeed"),
+                x => x.MatchLdarg(0),
+                x => x.MatchLdfld<CharacterBody>("levelAttackSpeed"))
+                && c.TryGotoNext(
+                    x => x.MatchStloc(out attackSpeedIndex)
+                );
+            if (found)
+            {
+                c.GotoPrev(x => x.MatchLdfld<CharacterBody>("baseAttackSpeed"));
+                c.GotoNext(x => x.MatchStloc(attackSpeedIndex));
+                c.Emit(OpCodes.Ldarg_0);
+                c.EmitDelegate<Func<float, CharacterBody, float>>((origAttackSpeed, body) =>
+                {
+                    if (body?.gameObject?.GetComponent<GeneBehaviour>() is GeneBehaviour geneBehaviour)
+                    {
+                        return origAttackSpeed * geneBehaviour.tracker.genes[5];
+                    }
+                    else
+                    {
+                        return origAttackSpeed;
+                    }
+                });
+            }
+            else
+            {
+                GeneticsArtifactPlugin.geneticLogSource.LogError("AttackSpeed Hook Failed to Register");
+            }
+            c.Index = 0;
+            #endregion
+
+            #region ArmorMultiplier
+            int armorIndex = -1;
+            found = c.TryGotoNext(
+                x => x.MatchLdfld<CharacterBody>("baseArmor"),
+                x => x.MatchLdarg(0),
+                x => x.MatchLdfld<CharacterBody>("levelArmor"))
+                && c.TryGotoNext(
+                    x => x.MatchStloc(out armorIndex)
+                );
+            if (found)
+            {
+                c.GotoPrev(x => x.MatchLdfld<CharacterBody>("baseArmor"));
+                c.GotoNext(x => x.MatchStloc(armorIndex));
+                c.Emit(OpCodes.Ldarg_0);
+                c.EmitDelegate<Func<float, CharacterBody, float>>((origArmor, body) =>
+                {
+                    if (body?.gameObject?.GetComponent<GeneBehaviour>() is GeneBehaviour geneBehaviour)
+                    {
+                        return origArmor * geneBehaviour.tracker.genes[6];
+                    }
+                    else
+                    {
+                        return origArmor;
+                    }
+                });
+            }
+            else
+            {
+                GeneticsArtifactPlugin.geneticLogSource.LogError("Armor Hook Failed to Register");
+            }
+            c.Index = 0;
+            #endregion
         }
     }
 }

@@ -46,26 +46,6 @@ namespace GeneticsArtifact
 
             tracker.isLocked = true;
 
-            //body.baseMaxHealth *= tracker.genes[0];
-            //body.levelMaxHealth *= tracker.genes[0];
-
-            //body.baseRegen *= tracker.genes[1];
-            //body.levelRegen *= tracker.genes[1];
-
-            //body.baseMoveSpeed *= tracker.genes[2];
-            //body.levelMoveSpeed *= tracker.genes[2];
-
-            //body.baseAcceleration *= tracker.genes[3];
-
-            //body.baseDamage *= tracker.genes[4];
-            //body.levelDamage *= tracker.genes[4];
-
-            body.baseAttackSpeed *= tracker.genes[5];
-            body.levelAttackSpeed *= tracker.genes[5];
-
-            body.baseArmor *= tracker.genes[6];
-            body.levelArmor *= tracker.genes[6];
-
             //If Size is enabled, apply it
             if (tracker.genes.Count == 8)
             {
