@@ -147,6 +147,7 @@ namespace GeneticsArtifact
 
         private static void CharacterBody_RecalculateStats(ILContext il)
         {
+            //A lot of this is based on ThinkInvis's TLIER, adjusted to fit my style and needs
             ILCursor c = new ILCursor(il);
             bool found;
 
@@ -271,6 +272,39 @@ namespace GeneticsArtifact
             else
             {
                 GeneticsArtifactPlugin.geneticLogSource.LogError("Acceleration Hook Failed to Register");
+            }
+            c.Index = 0;
+            #endregion
+
+            #region DamageMultiplier
+            int damageIndex = -1;
+            found = c.TryGotoNext(
+                x => x.MatchLdfld<CharacterBody>("baseDamage"),
+                x => x.MatchLdarg(0),
+                x => x.MatchLdfld<CharacterBody>("levelDamage"))
+                && c.TryGotoNext(
+                    x => x.MatchStloc(out damageIndex)
+                );
+            if (found)
+            {
+                c.GotoPrev(x => x.MatchLdfld<CharacterBody>("baseDamage"));
+                c.GotoNext(x => x.MatchStloc(damageIndex));
+                c.Emit(OpCodes.Ldarg_0);
+                c.EmitDelegate<Func<float, CharacterBody, float>>((origDamage, body) =>
+                {
+                    if (body?.gameObject?.GetComponent<GeneBehaviour>() is GeneBehaviour geneBehaviour)
+                    {
+                        return origDamage * geneBehaviour.tracker.genes[4];
+                    }
+                    else
+                    {
+                        return origDamage;
+                    }
+                });
+            }
+            else
+            {
+                GeneticsArtifactPlugin.geneticLogSource.LogError("Damage Hook Failed to Register");
             }
             c.Index = 0;
             #endregion

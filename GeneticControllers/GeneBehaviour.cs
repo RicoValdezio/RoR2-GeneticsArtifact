@@ -57,8 +57,8 @@ namespace GeneticsArtifact
 
             //body.baseAcceleration *= tracker.genes[3];
 
-            body.baseDamage *= tracker.genes[4];
-            body.levelDamage *= tracker.genes[4];
+            //body.baseDamage *= tracker.genes[4];
+            //body.levelDamage *= tracker.genes[4];
 
             body.baseAttackSpeed *= tracker.genes[5];
             body.levelAttackSpeed *= tracker.genes[5];
@@ -78,13 +78,22 @@ namespace GeneticsArtifact
 
             if(spawnLogging || (accidentalDeathLogging && (body.maxHealth < 0f || float.IsNaN(body.maxHealth))))
             {
-                if(body.healthComponent.health < 0f)
+                string message = "Body spawned with " + tracker.GetGeneString() + "and the following expression "
+                    + body.maxHealth.ToString("N4") + " "
+                    + body.regen.ToString("N4") + " "
+                    + body.moveSpeed.ToString("N4") + " "
+                    + body.acceleration.ToString("N4") + " "
+                    + body.damage.ToString("N4") + " "
+                    + body.attackSpeed.ToString("N4") + " "
+                    + body.armor.ToString("N4") + " "
+                    + "and Level = " + body.level.ToString();
+                if (body.healthComponent.health < 0f)
                 {
-                    GeneticsArtifactPlugin.geneticLogSource.LogWarning("Body spawned with " + tracker.GetGeneString() + "and Max Health = " + body.maxHealth.ToString() + " and Level = " + body.level.ToString());
+                    GeneticsArtifactPlugin.geneticLogSource.LogWarning(message);
                 }
                 else
                 {
-                    GeneticsArtifactPlugin.geneticLogSource.LogInfo("Body spawned with " + tracker.GetGeneString() + "and Max Health = " + body.maxHealth.ToString() + " and Level = " + body.level.ToString());
+                    GeneticsArtifactPlugin.geneticLogSource.LogInfo(message);
                 }
             }
         }

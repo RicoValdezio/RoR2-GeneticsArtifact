@@ -46,9 +46,3 @@ Place the .dll in Risk of Rain 2\BepInEx\plugins or use a mod manager.
 Contact
 ------------
 If you have issues/suggestions leave them on the github as an issue/suggestion or reach out to Rico#6416 on the modding Discord.
-
-Special Thanks / People to Blame
-------------
-Rein and ThinkInvis - For their help figuring out the IL conversion
-Nemo - For testing all the 1.4.X versions to find the -infinity health culprit
-Jessica - For inspiring 1.3.0 by asking "can I unethically commit genocide on squids"
