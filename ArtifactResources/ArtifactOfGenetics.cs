@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace GeneticsArtifact
 {
-    internal class ArtifactOfGenetics
+    public class ArtifactOfGenetics
     {
-        internal static ArtifactDef def;
+        public static ArtifactDef def;
 
         internal static void Init()
         {

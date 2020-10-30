@@ -3,12 +3,12 @@ using UnityEngine;
 
 namespace GeneticsArtifact
 {
-    internal class GeneBehaviour : MonoBehaviour
+    public class GeneBehaviour : MonoBehaviour
     {
-        internal GeneTracker tracker;
-        internal CharacterBody body;
-        internal float timePulse, timeAlive = 1f, damageDealt = 0f;
-        internal static bool spawnLogging, accidentalDeathLogging;
+        public GeneTracker tracker;
+        public CharacterBody body;
+        public float timePulse, timeAlive = 1f, damageDealt = 0f;
+        public static bool spawnLogging, accidentalDeathLogging;
 
         private void OnEnable()
         {
@@ -37,7 +37,7 @@ namespace GeneticsArtifact
             Destroy(this);
         }
 
-        private void ApplyMutation()
+        public void ApplyMutation()
         {
             while (tracker.isLocked)
             {

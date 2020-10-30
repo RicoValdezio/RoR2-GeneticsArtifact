@@ -5,18 +5,18 @@ using UnityEngine;
 
 namespace GeneticsArtifact
 {
-    internal class GeneTracker : IDisposable
+    public class GeneTracker : IDisposable
     {
-        internal int index;
-        internal GeneTracker masterTracker;
+        public int index;
+        public GeneTracker masterTracker;
 
         //Order is Health, Regen, MoveSpeed, Accel, Damage, AttackSpeed, Armor, (Size was removed)
-        internal List<float> genes = new List<float>();
-        internal float score = 0f;
-        internal bool isLocked = false;
+        public List<float> genes = new List<float>();
+        public float score = 0f;
+        public bool isLocked = false;
 
-        internal static float absoluteFloor, absoluteCeil, relativeFloor, relativeCeil, deviationFromParent, balanceLimit, balanceStep;
-        internal static bool useSizeModifier;
+        public static float absoluteFloor, absoluteCeil, relativeFloor, relativeCeil, deviationFromParent, balanceLimit, balanceStep;
+        public static bool useSizeModifier;
         private bool disposedValue;
 
         public GeneTracker(int refIndex, bool isMaster = false)
@@ -41,7 +41,7 @@ namespace GeneticsArtifact
             }
         }
 
-        private void MutateFromParent()
+        public void MutateFromParent()
         {
             //Wait until the master is free
             while (masterTracker.isLocked)
@@ -65,7 +65,7 @@ namespace GeneticsArtifact
             isLocked = false;
         }
 
-        private void ApplyNewBalanceSystem()
+        public void ApplyNewBalanceSystem()
         {
             int statToDecrease;
             //Start applying penalties until below the balanceLimit
@@ -80,7 +80,7 @@ namespace GeneticsArtifact
             }
         }
 
-        private float DetermineCurrentBalance()
+        public float DetermineCurrentBalance()
         {
             //Only the first 7 stats count towards balance, size is just for fun
             float currentBalance = 1f;
@@ -91,7 +91,7 @@ namespace GeneticsArtifact
             return currentBalance;
         }
 
-        internal void MutateFromChildren()
+        public void MutateFromChildren()
         {
             float healthWeight = 0f,
                 regenWeight = 0f,
@@ -136,7 +136,7 @@ namespace GeneticsArtifact
             isLocked = false;
         }
 
-        internal string GetGeneString()
+        public string GetGeneString()
         {
             //Wait for my lock to open and lock
             while (isLocked)
