@@ -163,7 +163,7 @@ namespace GeneticsArtifact
 
         public string GetGeneString()
         {
-            string message = "ID " + index + " | "
+            string message = "ID " + index.ToString("D2") + " | "
                     + GetGeneValue("Health").ToString("N4") + " | "
                     + GetGeneValue("Regen").ToString("N4") + " | "
                     + GetGeneValue("MoveSpeed").ToString("N4") + " | "

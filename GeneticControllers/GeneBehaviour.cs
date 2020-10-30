@@ -71,7 +71,7 @@ namespace GeneticsArtifact
 
         public string GetGeneString()
         {
-            string message = "Body spawned with ID " + tracker.index + " | "
+            string message = "Body spawned with ID " + tracker.index.ToString("D2") + " | "
                     + "Health " + tracker.GetGeneValue("Health").ToString("N4") + " " + body.maxHealth.ToString("N4") + " | "
                     + "Regen " + tracker.GetGeneValue("Regen").ToString("N4") + " " + body.regen.ToString("N4") + " | "
                     + "MoveSpeed " + tracker.GetGeneValue("MoveSpeed").ToString("N4") + " " + body.moveSpeed.ToString("N4") + " | "
