@@ -10,8 +10,7 @@ namespace GeneticsArtifact
         public int index;
         public GeneTracker masterTracker;
 
-        //Order is Health, Regen, MoveSpeed, Accel, Damage, AttackSpeed, Armor, (Size was removed)
-        public List<float> genes = new List<float>();
+        public List<GenePair> genePairs;
         public float score = 0f;
         public bool isLocked = false;
 
@@ -22,13 +21,19 @@ namespace GeneticsArtifact
         public GeneTracker(int refIndex, bool isMaster = false)
         {
             index = refIndex;
-            for (int i = 0; i < 7; i++)
+            genePairs = new List<GenePair>
             {
-                genes.Add(1);
-            }
+                new GenePair("Health", 1f),
+                new GenePair("Regen", 1f),
+                new GenePair("MoveSpeed", 1f),
+                new GenePair("Acceleration", 1f),
+                new GenePair("Damage", 1f),
+                new GenePair("AttackSpeed", 1f),
+                new GenePair("Armor", 1f)
+            };
             if (useSizeModifier)
             {
-                genes.Add(1);
+                genePairs.Add(new GenePair("Size", 1f, false));
             }
             relativeCeil = 1f + deviationFromParent;
             relativeFloor = 1f - deviationFromParent;
@@ -38,6 +43,32 @@ namespace GeneticsArtifact
             {
                 masterTracker = GeneticMasterController.masterTrackers.Find(x => x.index == index);
                 MutateFromParent();
+            }
+        }
+
+        public float GetGeneValue(string compareName)
+        {
+            //If the gene exists, return its value
+            if (genePairs.Any(x => x.name == compareName))
+            {
+                return genePairs.Find(x => x.name == compareName).value;
+            }
+            else //Return the default value of 1
+            {
+                return 1f;
+            }
+        }
+
+        public void SetGeneValue(string compareName, float newValue)
+        {
+            //If the gene exists, return its value
+            if (genePairs.Any(x => x.name == compareName))
+            {
+                genePairs.Find(x => x.name == compareName).value = newValue;
+            }
+            else
+            {
+                throw new Exception("Tracker has no GenePair with name = " + compareName);
             }
         }
 
@@ -53,10 +84,10 @@ namespace GeneticsArtifact
             isLocked = true;
 
             float tempValue;
-            for (int i = 0; i < genes.Count; i++)
+            foreach (GenePair gene in genePairs)
             {
-                tempValue = Mathf.Clamp(masterTracker.genes[i] * UnityEngine.Random.Range(relativeFloor, relativeCeil), absoluteFloor, absoluteCeil);
-                genes[i] = tempValue;
+                tempValue = Mathf.Clamp(masterTracker.GetGeneValue(gene.name) * UnityEngine.Random.Range(relativeFloor, relativeCeil), absoluteFloor, absoluteCeil);
+                gene.value = tempValue;
             }
 
             //Unlock the master and apply balance, then unlock self
@@ -67,16 +98,17 @@ namespace GeneticsArtifact
 
         public void ApplyNewBalanceSystem()
         {
-            int statToDecrease;
+            int statToTest;
             //Start applying penalties until below the balanceLimit
             while (DetermineCurrentBalance() > balanceLimit)
             {
-                //This is unsafe as it assumes that the chances of hitting a stat that CAN decrease is almost certain
-                statToDecrease = UnityEngine.Random.Range(0, 6);
-                if (genes[statToDecrease] - balanceStep >= absoluteFloor)
+                //This is optimistic as it assumes that there is a high chance of hitting a decrease-able gene
+                statToTest = UnityEngine.Random.Range(0, genePairs.Count - 1);
+                if (genePairs[statToTest].isBalanceViable && genePairs[statToTest].value - balanceStep >= absoluteFloor)
                 {
-                    genes[statToDecrease] -= balanceStep;
+                    genePairs[statToTest].value -= balanceStep;
                 }
+
             }
         }
 
@@ -84,53 +116,46 @@ namespace GeneticsArtifact
         {
             //Only the first 7 stats count towards balance, size is just for fun
             float currentBalance = 1f;
-            for (int i = 0; i < 7; i++)
+            foreach (GenePair gene in genePairs.Where(x => x.isBalanceViable))
             {
-                currentBalance *= genes[i];
+                currentBalance *= gene.value;
             }
             return currentBalance;
         }
 
         public void MutateFromChildren()
         {
-            float healthWeight = 0f,
-                regenWeight = 0f,
-                moveSpeedWeight = 0f,
-                accelWeight = 0f,
-                damageWeight = 0f,
-                attackSpeedWeight = 0f,
-                armorWeight = 0f,
-                scoreWeight = 0f;
+            List<GenePair> sumPairs = new List<GenePair>();
+            float totalScore = 0f;
             //Lock self to prevent competiton with children
             while (isLocked)
             {
                 //Do nothing
             }
             isLocked = true;
-            //Use a modified weighted average to update master
+            //Use a modified weighted average system to determine mutation
             foreach (GeneTracker childTracker in GeneticMasterController.deadTrackers.Where(x => x.index == index))
             {
                 if (!float.IsNaN(childTracker.score) && childTracker.score > 0f)
                 {
-                    healthWeight += childTracker.genes[0] * childTracker.score;
-                    regenWeight += childTracker.genes[1] * childTracker.score;
-                    moveSpeedWeight += childTracker.genes[2] * childTracker.score;
-                    accelWeight += childTracker.genes[3] * childTracker.score;
-                    damageWeight += childTracker.genes[4] * childTracker.score;
-                    attackSpeedWeight += childTracker.genes[5] * childTracker.score;
-                    armorWeight += childTracker.genes[6] * childTracker.score;
-                    scoreWeight += childTracker.score;
+                    foreach (GenePair childPair in childTracker.genePairs)
+                    {
+                        if (!sumPairs.Any(x => x.name == childPair.name))
+                        {
+                            sumPairs.Add(new GenePair(childPair.name, 0f, childPair.isBalanceViable));
+                        }
+                        sumPairs.Find(x => x.name == childPair.name).value += childPair.value * childTracker.score;
+                    }
+                    totalScore += childTracker.score;
                 }
             }
-            if (!float.IsNaN(scoreWeight) && scoreWeight > 0)
+            //The actual averaging to determine new values
+            if (!float.IsNaN(totalScore) && totalScore > 0)
             {
-                genes[0] = healthWeight / scoreWeight;
-                genes[1] = regenWeight / scoreWeight;
-                genes[2] = moveSpeedWeight / scoreWeight;
-                genes[3] = accelWeight / scoreWeight;
-                genes[4] = damageWeight / scoreWeight;
-                genes[5] = attackSpeedWeight / scoreWeight;
-                genes[6] = armorWeight / scoreWeight;
+                foreach(GenePair genePair in sumPairs)
+                {
+                    SetGeneValue(genePair.name, genePair.value / totalScore);
+                }
             }
             //Unlock self to allow spawning
             isLocked = false;
@@ -138,22 +163,15 @@ namespace GeneticsArtifact
 
         public string GetGeneString()
         {
-            //Wait for my lock to open and lock
-            while (isLocked)
-            {
-                //Do nothing
-            }
-            isLocked = true;
-
-            string returnString = "Current Genes for ID#" + index.ToString() + " : ";
-            foreach (float gene in genes)
-            {
-                returnString += gene.ToString("N4") + " ";
-            }
-
-            //Free the lock and return the string
-            isLocked = false;
-            return returnString;
+            string message = "ID " + index.ToString("D2") + " | "
+                    + GetGeneValue("Health").ToString("N4") + " | "
+                    + GetGeneValue("Regen").ToString("N4") + " | "
+                    + GetGeneValue("MoveSpeed").ToString("N4") + " | "
+                    + GetGeneValue("Acceleration").ToString("N4") + " | "
+                    + GetGeneValue("Damage").ToString("N4") + " | "
+                    + GetGeneValue("AttackSpeed").ToString("N4") + " | "
+                    + GetGeneValue("Armor").ToString("N4");
+            return message;
         }
 
         protected virtual void Dispose(bool disposing)
@@ -183,6 +201,20 @@ namespace GeneticsArtifact
             // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
+        }
+    }
+
+    public class GenePair
+    {
+        public string name;
+        public float value;
+        public bool isBalanceViable;
+
+        public GenePair(string givenName, float givenValue, bool givenViable = true)
+        {
+            name = givenName;
+            value = givenValue;
+            isBalanceViable = givenViable;
         }
     }
 }

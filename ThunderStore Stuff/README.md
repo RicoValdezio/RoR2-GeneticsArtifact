@@ -20,9 +20,11 @@ Known Issues/Planned Updates
 - Reimplement the size modifier once I figure out the networking
 - If you find a case of the -infinity health bug, type !geneticsbughunt into the discord chat
 - The armor and regen genes may not be working properly, RecalculateStats is wierd
+- Make a video for devs to explain how to use the genetic system for their own mods
 
 Changelog
 -----------
+2.0.0 - Major refactor of the underlying systems, and publicized most of the functionality for potential use by other mods
 1.5.0 - Switched the stat application from the On space to the IL space (help from ThinkInvis and Rein)
 1.4.7 - Switched logging system as per Harb's request
 1.4.6 - The link broke in the readme for some reason, fixed that

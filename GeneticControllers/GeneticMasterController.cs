@@ -168,7 +168,7 @@ namespace GeneticsArtifact
                 {
                     if (body?.gameObject?.GetComponent<GeneBehaviour>() is GeneBehaviour geneBehaviour)
                     {
-                        return origHealth * geneBehaviour.tracker.genes[0];
+                        return origHealth * geneBehaviour.tracker.GetGeneValue("Health");
                     }
                     else
                     {
@@ -200,7 +200,7 @@ namespace GeneticsArtifact
                 {
                     if (body?.gameObject?.GetComponent<GeneBehaviour>() is GeneBehaviour geneBehaviour)
                     {
-                        return origRegen * geneBehaviour.tracker.genes[1];
+                        return origRegen * geneBehaviour.tracker.GetGeneValue("Regen");
                     }
                     else
                     {
@@ -233,7 +233,7 @@ namespace GeneticsArtifact
                 {
                     if (body?.gameObject?.GetComponent<GeneBehaviour>() is GeneBehaviour geneBehaviour)
                     {
-                        return origMoveSpeed * geneBehaviour.tracker.genes[2];
+                        return origMoveSpeed * geneBehaviour.tracker.GetGeneValue("MoveSpeed");
                     }
                     else
                     {
@@ -261,7 +261,7 @@ namespace GeneticsArtifact
                 {
                     if (body?.gameObject?.GetComponent<GeneBehaviour>() is GeneBehaviour geneBehaviour)
                     {
-                        return origAccel * geneBehaviour.tracker.genes[3];
+                        return origAccel * geneBehaviour.tracker.GetGeneValue("Acceleration");
                     }
                     else
                     {
@@ -294,7 +294,7 @@ namespace GeneticsArtifact
                 {
                     if (body?.gameObject?.GetComponent<GeneBehaviour>() is GeneBehaviour geneBehaviour)
                     {
-                        return origDamage * geneBehaviour.tracker.genes[4];
+                        return origDamage * geneBehaviour.tracker.GetGeneValue("Damage");
                     }
                     else
                     {
@@ -327,7 +327,7 @@ namespace GeneticsArtifact
                 {
                     if (body?.gameObject?.GetComponent<GeneBehaviour>() is GeneBehaviour geneBehaviour)
                     {
-                        return origAttackSpeed * geneBehaviour.tracker.genes[5];
+                        return origAttackSpeed * geneBehaviour.tracker.GetGeneValue("AttackSpeed");
                     }
                     else
                     {
@@ -360,7 +360,7 @@ namespace GeneticsArtifact
                 {
                     if (body?.gameObject?.GetComponent<GeneBehaviour>() is GeneBehaviour geneBehaviour)
                     {
-                        return origArmor * geneBehaviour.tracker.genes[6];
+                        return origArmor * geneBehaviour.tracker.GetGeneValue("Armor");
                     }
                     else
                     {

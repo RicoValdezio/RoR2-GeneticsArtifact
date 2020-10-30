@@ -47,9 +47,9 @@ namespace GeneticsArtifact
             tracker.isLocked = true;
 
             //If Size is enabled, apply it
-            if (tracker.genes.Count == 8)
+            if (tracker.GetGeneValue("Size") is float sizeMultiplier)
             {
-                body.transform.localScale *= tracker.genes[7];
+                body.transform.localScale *= sizeMultiplier;
             }
 
             tracker.isLocked = false;
@@ -58,24 +58,29 @@ namespace GeneticsArtifact
 
             if(spawnLogging || (accidentalDeathLogging && (body.maxHealth < 0f || float.IsNaN(body.maxHealth))))
             {
-                string message = "Body spawned with " + tracker.GetGeneString() + "and the following expression "
-                    + body.maxHealth.ToString("N4") + " "
-                    + body.regen.ToString("N4") + " "
-                    + body.moveSpeed.ToString("N4") + " "
-                    + body.acceleration.ToString("N4") + " "
-                    + body.damage.ToString("N4") + " "
-                    + body.attackSpeed.ToString("N4") + " "
-                    + body.armor.ToString("N4") + " "
-                    + "and Level = " + body.level.ToString();
                 if (body.healthComponent.health < 0f)
                 {
-                    GeneticsArtifactPlugin.geneticLogSource.LogWarning(message);
+                    GeneticsArtifactPlugin.geneticLogSource.LogWarning(GetGeneString());
                 }
                 else
                 {
-                    GeneticsArtifactPlugin.geneticLogSource.LogInfo(message);
+                    GeneticsArtifactPlugin.geneticLogSource.LogInfo(GetGeneString());
                 }
             }
+        }
+
+        public string GetGeneString()
+        {
+            string message = "Body spawned with ID " + tracker.index.ToString("D2") + " | "
+                    + "Health " + tracker.GetGeneValue("Health").ToString("N4") + " " + body.maxHealth.ToString("N4") + " | "
+                    + "Regen " + tracker.GetGeneValue("Regen").ToString("N4") + " " + body.regen.ToString("N4") + " | "
+                    + "MoveSpeed " + tracker.GetGeneValue("MoveSpeed").ToString("N4") + " " + body.moveSpeed.ToString("N4") + " | "
+                    + "Acceleration " + tracker.GetGeneValue("Acceleration").ToString("N4") + " " + body.acceleration.ToString("N4") + " | "
+                    + "Damage " + tracker.GetGeneValue("Damage").ToString("N4") + " " + body.damage.ToString("N4") + " | "
+                    + "AttackSpeed " + tracker.GetGeneValue("AttackSpeed").ToString("N4") + " " + body.attackSpeed.ToString("N4") + " | "
+                    + "Armor " + tracker.GetGeneValue("Armor").ToString("N4") + " " + body.armor.ToString("N4") + " | "
+                    + "Level " + body.level.ToString();
+            return message;
         }
 
         private void Update()
