@@ -179,18 +179,18 @@ namespace GeneticsArtifact
             c.Index = 0;
             #endregion
 
-            #region RegenMultiplier-ToRework
-            int regenIndex = -1;
+            #region RegenMultiplier
+            //For some reason num39 (The base+level regen) is held in memory (isn't stored), so we have to intercept it when its alone.
             found = c.TryGotoNext(
-                x => x.MatchLdloc(out regenIndex),
-                x => x.MatchCallOrCallvirt<CharacterBody>("set_regen")
-                );
+                        x => x.MatchLdfld<CharacterBody>("baseRegen"),
+                        x => x.MatchLdarg(0),
+                        x => x.MatchLdfld<CharacterBody>("levelRegen"))
+                    && c.TryGotoNext(
+                        x => x.MatchAdd());
             if (found)
             {
-                c.GotoPrev(
-                    x => x.MatchAdd(),
-                    x => x.MatchStloc(regenIndex)
-                    );
+                c.GotoNext(x => x.MatchStloc(out _));
+                c.GotoNext(x => x.MatchLdloc(out _));
                 c.Emit(OpCodes.Ldarg_0);
                 c.EmitDelegate<Func<float, CharacterBody, float>>((origRegen, body) =>
                 {
