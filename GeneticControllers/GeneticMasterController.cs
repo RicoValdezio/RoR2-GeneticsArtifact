@@ -147,11 +147,10 @@ namespace GeneticsArtifact
 
         private static void CharacterBody_RecalculateStats(ILContext il)
         {
-            //A lot of this is based on ThinkInvis's TLIER, adjusted to fit my style and needs
             ILCursor c = new ILCursor(il);
             bool found;
 
-            #region HealthMultiplier
+            #region HealthMultiplier-ToRework
             int healthIndex = -1;
             found = c.TryGotoNext(
                     x => x.MatchLdfld<CharacterBody>("baseMaxHealth"),
@@ -183,7 +182,7 @@ namespace GeneticsArtifact
             c.Index = 0;
             #endregion
 
-            #region RegenMultiplier
+            #region RegenMultiplier-ToRework
             int regenIndex = -1;
             found = c.TryGotoNext(
                 x => x.MatchLdloc(out regenIndex),
@@ -215,7 +214,7 @@ namespace GeneticsArtifact
             c.Index = 0;
             #endregion
 
-            #region MoveSpeedMultiplier
+            #region MoveSpeedMultiplier-ToRework
             int speedIndex = -1;
             found = c.TryGotoNext(
                 x => x.MatchLdfld<CharacterBody>("baseMoveSpeed"),
@@ -248,7 +247,7 @@ namespace GeneticsArtifact
             c.Index = 0;
             #endregion
 
-            #region AccelMultiplier
+            #region AccelMultiplier-ToRework
             found = c.TryGotoNext(
                 x => x.MatchLdarg(0),
                 x => x.MatchLdfld<CharacterBody>("baseAcceleration"),
@@ -276,7 +275,7 @@ namespace GeneticsArtifact
             c.Index = 0;
             #endregion
 
-            #region DamageMultiplier
+            #region DamageMultiplier-ToRework
             int damageIndex = -1;
             found = c.TryGotoNext(
                 x => x.MatchLdfld<CharacterBody>("baseDamage"),
@@ -309,7 +308,7 @@ namespace GeneticsArtifact
             c.Index = 0;
             #endregion
 
-            #region AttackSpeedMultiplier
+            #region AttackSpeedMultiplier-ToRework
             int attackSpeedIndex = -1;
             found = c.TryGotoNext(
                 x => x.MatchLdfld<CharacterBody>("baseAttackSpeed"),
@@ -342,7 +341,7 @@ namespace GeneticsArtifact
             c.Index = 0;
             #endregion
 
-            #region ArmorMultiplier
+            #region ArmorMultiplier-ToRework
             int armorIndex = -1;
             found = c.TryGotoNext(
                 x => x.MatchLdfld<CharacterBody>("baseArmor"),
