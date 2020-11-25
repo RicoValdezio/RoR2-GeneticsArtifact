@@ -242,18 +242,15 @@ namespace GeneticsArtifact
             #endregion
 
             #region DamageMultiplier-ToRework
-            int damageIndex = -1;
             found = c.TryGotoNext(
-                x => x.MatchLdfld<CharacterBody>("baseDamage"),
-                x => x.MatchLdarg(0),
-                x => x.MatchLdfld<CharacterBody>("levelDamage"))
+                    x => x.MatchLdfld<CharacterBody>("baseDamage"),
+                    x => x.MatchLdarg(0),
+                    x => x.MatchLdfld<CharacterBody>("levelDamage"))
                 && c.TryGotoNext(
-                    x => x.MatchStloc(out damageIndex)
-                );
+                    x => x.MatchAdd());
             if (found)
             {
-                c.GotoPrev(x => x.MatchLdfld<CharacterBody>("baseDamage"));
-                c.GotoNext(x => x.MatchStloc(damageIndex));
+                c.GotoNext(x => x.MatchStloc(out _));
                 c.Emit(OpCodes.Ldarg_0);
                 c.EmitDelegate<Func<float, CharacterBody, float>>((origDamage, body) =>
                 {
