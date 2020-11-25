@@ -241,34 +241,6 @@ namespace GeneticsArtifact
             c.Index = 0;
             #endregion
 
-            #region AccelMultiplier-ToRework
-            found = c.TryGotoNext(
-                x => x.MatchLdarg(0),
-                x => x.MatchLdfld<CharacterBody>("baseAcceleration"),
-                x => x.MatchMul()
-                );
-            if (found)
-            {
-                c.Emit(OpCodes.Ldarg_0);
-                c.EmitDelegate<Func<float, CharacterBody, float>>((origAccel, body) =>
-                {
-                    if (body?.gameObject?.GetComponent<GeneBehaviour>() is GeneBehaviour geneBehaviour)
-                    {
-                        return origAccel * geneBehaviour.tracker.GetGeneValue("Acceleration");
-                    }
-                    else
-                    {
-                        return origAccel;
-                    }
-                });
-            }
-            else
-            {
-                GeneticsArtifactPlugin.geneticLogSource.LogError("Acceleration Hook Failed to Register");
-            }
-            c.Index = 0;
-            #endregion
-
             #region DamageMultiplier-ToRework
             int damageIndex = -1;
             found = c.TryGotoNext(
