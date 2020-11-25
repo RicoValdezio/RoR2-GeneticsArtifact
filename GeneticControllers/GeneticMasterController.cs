@@ -1,6 +1,5 @@
 ﻿using Mono.Cecil.Cil;
 using MonoMod.Cil;
-using MonoMod.Utils;
 using RoR2;
 using System.Collections.Generic;
 using UnityEngine;
@@ -147,22 +146,19 @@ namespace GeneticsArtifact
 
         private static void CharacterBody_RecalculateStats(ILContext il)
         {
-            //A lot of this is based on ThinkInvis's TLIER, adjusted to fit my style and needs
             ILCursor c = new ILCursor(il);
             bool found;
 
             #region HealthMultiplier
-            int healthIndex = -1;
             found = c.TryGotoNext(
-                    x => x.MatchLdfld<CharacterBody>("baseMaxHealth"),
-                    x => x.MatchLdarg(0),
-                    x => x.MatchLdfld<CharacterBody>("levelMaxHealth"))
+                        x => x.MatchLdfld<CharacterBody>("baseMaxHealth"),
+                        x => x.MatchLdarg(0),
+                        x => x.MatchLdfld<CharacterBody>("levelMaxHealth"))
                     && c.TryGotoNext(
-                    x => x.MatchStloc(out healthIndex));
+                        x => x.MatchAdd());
             if (found)
             {
-                c.GotoPrev(x => x.MatchLdfld<CharacterBody>("baseMaxHealth"));
-                c.GotoNext(x => x.MatchStloc(healthIndex));
+                c.GotoNext(x => x.MatchStloc(out _));
                 c.Emit(OpCodes.Ldarg_0);
                 c.EmitDelegate<Func<float, CharacterBody, float>>((origHealth, body) =>
                 {
@@ -184,17 +180,17 @@ namespace GeneticsArtifact
             #endregion
 
             #region RegenMultiplier
-            int regenIndex = -1;
+            //For some reason num39 (The base+level regen) is held in memory (isn't stored), so we have to intercept it when its alone.
             found = c.TryGotoNext(
-                x => x.MatchLdloc(out regenIndex),
-                x => x.MatchCallOrCallvirt<CharacterBody>("set_regen")
-                );
+                        x => x.MatchLdfld<CharacterBody>("baseRegen"),
+                        x => x.MatchLdarg(0),
+                        x => x.MatchLdfld<CharacterBody>("levelRegen"))
+                    && c.TryGotoNext(
+                        x => x.MatchAdd());
             if (found)
             {
-                c.GotoPrev(
-                    x => x.MatchAdd(),
-                    x => x.MatchStloc(regenIndex)
-                    );
+                c.GotoNext(x => x.MatchStloc(out _));
+                c.GotoNext(x => x.MatchLdloc(out _));
                 c.Emit(OpCodes.Ldarg_0);
                 c.EmitDelegate<Func<float, CharacterBody, float>>((origRegen, body) =>
                 {
@@ -216,18 +212,15 @@ namespace GeneticsArtifact
             #endregion
 
             #region MoveSpeedMultiplier
-            int speedIndex = -1;
             found = c.TryGotoNext(
-                x => x.MatchLdfld<CharacterBody>("baseMoveSpeed"),
-                x => x.MatchLdarg(0),
-                x => x.MatchLdfld<CharacterBody>("levelMoveSpeed"))
+                    x => x.MatchLdfld<CharacterBody>("baseMoveSpeed"),
+                    x => x.MatchLdarg(0),
+                    x => x.MatchLdfld<CharacterBody>("levelMoveSpeed"))
                 && c.TryGotoNext(
-                x => x.MatchStloc(out speedIndex)
-                );
+                    x => x.MatchAdd());
             if (found)
             {
-                c.GotoPrev(x => x.MatchLdfld<CharacterBody>("levelMoveSpeed"));
-                c.GotoNext(x => x.MatchStloc(speedIndex));
+                c.GotoNext(x => x.MatchStloc(out _));
                 c.Emit(OpCodes.Ldarg_0);
                 c.EmitDelegate<Func<float, CharacterBody, float>>((origMoveSpeed, body) =>
                 {
@@ -248,47 +241,16 @@ namespace GeneticsArtifact
             c.Index = 0;
             #endregion
 
-            #region AccelMultiplier
-            found = c.TryGotoNext(
-                x => x.MatchLdarg(0),
-                x => x.MatchLdfld<CharacterBody>("baseAcceleration"),
-                x => x.MatchMul()
-                );
-            if (found)
-            {
-                c.Emit(OpCodes.Ldarg_0);
-                c.EmitDelegate<Func<float, CharacterBody, float>>((origAccel, body) =>
-                {
-                    if (body?.gameObject?.GetComponent<GeneBehaviour>() is GeneBehaviour geneBehaviour)
-                    {
-                        return origAccel * geneBehaviour.tracker.GetGeneValue("Acceleration");
-                    }
-                    else
-                    {
-                        return origAccel;
-                    }
-                });
-            }
-            else
-            {
-                GeneticsArtifactPlugin.geneticLogSource.LogError("Acceleration Hook Failed to Register");
-            }
-            c.Index = 0;
-            #endregion
-
             #region DamageMultiplier
-            int damageIndex = -1;
             found = c.TryGotoNext(
-                x => x.MatchLdfld<CharacterBody>("baseDamage"),
-                x => x.MatchLdarg(0),
-                x => x.MatchLdfld<CharacterBody>("levelDamage"))
+                    x => x.MatchLdfld<CharacterBody>("baseDamage"),
+                    x => x.MatchLdarg(0),
+                    x => x.MatchLdfld<CharacterBody>("levelDamage"))
                 && c.TryGotoNext(
-                    x => x.MatchStloc(out damageIndex)
-                );
+                    x => x.MatchAdd());
             if (found)
             {
-                c.GotoPrev(x => x.MatchLdfld<CharacterBody>("baseDamage"));
-                c.GotoNext(x => x.MatchStloc(damageIndex));
+                c.GotoNext(x => x.MatchStloc(out _));
                 c.Emit(OpCodes.Ldarg_0);
                 c.EmitDelegate<Func<float, CharacterBody, float>>((origDamage, body) =>
                 {
@@ -309,19 +271,16 @@ namespace GeneticsArtifact
             c.Index = 0;
             #endregion
 
-            #region AttackSpeedMultiplier
-            int attackSpeedIndex = -1;
+            #region AttackSpeedMultiplier-ToRework
             found = c.TryGotoNext(
-                x => x.MatchLdfld<CharacterBody>("baseAttackSpeed"),
-                x => x.MatchLdarg(0),
-                x => x.MatchLdfld<CharacterBody>("levelAttackSpeed"))
+                    x => x.MatchLdfld<CharacterBody>("baseAttackSpeed"),
+                    x => x.MatchLdarg(0),
+                    x => x.MatchLdfld<CharacterBody>("levelAttackSpeed"))
                 && c.TryGotoNext(
-                    x => x.MatchStloc(out attackSpeedIndex)
-                );
+                    x => x.MatchAdd());
             if (found)
             {
-                c.GotoPrev(x => x.MatchLdfld<CharacterBody>("baseAttackSpeed"));
-                c.GotoNext(x => x.MatchStloc(attackSpeedIndex));
+                c.GotoNext(x => x.MatchStloc(out _));
                 c.Emit(OpCodes.Ldarg_0);
                 c.EmitDelegate<Func<float, CharacterBody, float>>((origAttackSpeed, body) =>
                 {
@@ -342,19 +301,17 @@ namespace GeneticsArtifact
             c.Index = 0;
             #endregion
 
-            #region ArmorMultiplier
-            int armorIndex = -1;
+            #region ArmorMultiplier-ToRework
+            //Armor is also never stored, so we have to intercept it in the single line.
             found = c.TryGotoNext(
-                x => x.MatchLdfld<CharacterBody>("baseArmor"),
-                x => x.MatchLdarg(0),
-                x => x.MatchLdfld<CharacterBody>("levelArmor"))
+                    x => x.MatchLdfld<CharacterBody>("baseArmor"),
+                    x => x.MatchLdarg(0),
+                    x => x.MatchLdfld<CharacterBody>("levelArmor"))
                 && c.TryGotoNext(
-                    x => x.MatchStloc(out armorIndex)
-                );
+                    x => x.MatchAdd());
             if (found)
             {
-                c.GotoPrev(x => x.MatchLdfld<CharacterBody>("baseArmor"));
-                c.GotoNext(x => x.MatchStloc(armorIndex));
+                c.GotoNext();
                 c.Emit(OpCodes.Ldarg_0);
                 c.EmitDelegate<Func<float, CharacterBody, float>>((origArmor, body) =>
                 {

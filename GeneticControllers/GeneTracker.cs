@@ -26,7 +26,6 @@ namespace GeneticsArtifact
                 new GenePair("Health", 1f),
                 new GenePair("Regen", 1f),
                 new GenePair("MoveSpeed", 1f),
-                new GenePair("Acceleration", 1f),
                 new GenePair("Damage", 1f),
                 new GenePair("AttackSpeed", 1f),
                 new GenePair("Armor", 1f)
