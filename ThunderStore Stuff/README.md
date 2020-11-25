@@ -1,7 +1,7 @@
 ﻿Basic Description
 ------------
 This mod adds a genetics system to the monsters, with every stat being able to mutate in specific ways.
-The core stats that are affected are: Health, Regen, MoveSpeed, Acceleration, Damage, AttackSpeed, and Armor (and Size if its enabled)
+The core stats that are affected are: Health, Regen, MoveSpeed, ~~Acceleration~~, Damage, AttackSpeed, and Armor (and Size if its enabled)
 The goal of the system detailed below is to allow the game to adapt to the player, and in turn force the player to adapt to it.
 
 How it Works
@@ -19,11 +19,11 @@ Known Issues/Planned Updates
 - A feedback system to let the player know how the mutations are trending
 - Reimplement the size modifier once I figure out the networking
 - If you find a case of the -infinity health bug, type !geneticsbughunt into the discord chat
-- The armor and regen genes may not be working properly, RecalculateStats is wierd
 - Make a video for devs to explain how to use the genetic system for their own mods
 
 Changelog
 -----------
+2.1.0 - Minor refactor of stat application, fixed Armor and Regen not working in some cases, and cut Acceleration since MoveSpeed dominates it
 2.0.0 - Major refactor of the underlying systems, and publicized most of the functionality for potential use by other mods
 1.5.0 - Switched the stat application from the On space to the IL space (help from ThinkInvis and Rein)
 1.4.7 - Switched logging system as per Harb's request

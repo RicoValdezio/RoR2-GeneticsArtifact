@@ -241,7 +241,7 @@ namespace GeneticsArtifact
             c.Index = 0;
             #endregion
 
-            #region DamageMultiplier-ToRework
+            #region DamageMultiplier
             found = c.TryGotoNext(
                     x => x.MatchLdfld<CharacterBody>("baseDamage"),
                     x => x.MatchLdarg(0),
@@ -272,18 +272,15 @@ namespace GeneticsArtifact
             #endregion
 
             #region AttackSpeedMultiplier-ToRework
-            int attackSpeedIndex = -1;
             found = c.TryGotoNext(
-                x => x.MatchLdfld<CharacterBody>("baseAttackSpeed"),
-                x => x.MatchLdarg(0),
-                x => x.MatchLdfld<CharacterBody>("levelAttackSpeed"))
+                    x => x.MatchLdfld<CharacterBody>("baseAttackSpeed"),
+                    x => x.MatchLdarg(0),
+                    x => x.MatchLdfld<CharacterBody>("levelAttackSpeed"))
                 && c.TryGotoNext(
-                    x => x.MatchStloc(out attackSpeedIndex)
-                );
+                    x => x.MatchAdd());
             if (found)
             {
-                c.GotoPrev(x => x.MatchLdfld<CharacterBody>("baseAttackSpeed"));
-                c.GotoNext(x => x.MatchStloc(attackSpeedIndex));
+                c.GotoNext(x => x.MatchStloc(out _));
                 c.Emit(OpCodes.Ldarg_0);
                 c.EmitDelegate<Func<float, CharacterBody, float>>((origAttackSpeed, body) =>
                 {
@@ -305,18 +302,16 @@ namespace GeneticsArtifact
             #endregion
 
             #region ArmorMultiplier-ToRework
-            int armorIndex = -1;
+            //Armor is also never stored, so we have to intercept it in the single line.
             found = c.TryGotoNext(
-                x => x.MatchLdfld<CharacterBody>("baseArmor"),
-                x => x.MatchLdarg(0),
-                x => x.MatchLdfld<CharacterBody>("levelArmor"))
+                    x => x.MatchLdfld<CharacterBody>("baseArmor"),
+                    x => x.MatchLdarg(0),
+                    x => x.MatchLdfld<CharacterBody>("levelArmor"))
                 && c.TryGotoNext(
-                    x => x.MatchStloc(out armorIndex)
-                );
+                    x => x.MatchAdd());
             if (found)
             {
-                c.GotoPrev(x => x.MatchLdfld<CharacterBody>("baseArmor"));
-                c.GotoNext(x => x.MatchStloc(armorIndex));
+                c.GotoNext();
                 c.Emit(OpCodes.Ldarg_0);
                 c.EmitDelegate<Func<float, CharacterBody, float>>((origArmor, body) =>
                 {
