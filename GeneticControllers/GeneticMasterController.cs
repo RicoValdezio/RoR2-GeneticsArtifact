@@ -1,6 +1,5 @@
 ﻿using Mono.Cecil.Cil;
 using MonoMod.Cil;
-using MonoMod.Utils;
 using RoR2;
 using System.Collections.Generic;
 using UnityEngine;
@@ -150,18 +149,16 @@ namespace GeneticsArtifact
             ILCursor c = new ILCursor(il);
             bool found;
 
-            #region HealthMultiplier-ToRework
-            int healthIndex = -1;
+            #region HealthMultiplier
             found = c.TryGotoNext(
-                    x => x.MatchLdfld<CharacterBody>("baseMaxHealth"),
-                    x => x.MatchLdarg(0),
-                    x => x.MatchLdfld<CharacterBody>("levelMaxHealth"))
+                        x => x.MatchLdfld<CharacterBody>("baseMaxHealth"),
+                        x => x.MatchLdarg(0),
+                        x => x.MatchLdfld<CharacterBody>("levelMaxHealth"))
                     && c.TryGotoNext(
-                    x => x.MatchStloc(out healthIndex));
+                        x => x.MatchAdd());
             if (found)
             {
-                c.GotoPrev(x => x.MatchLdfld<CharacterBody>("baseMaxHealth"));
-                c.GotoNext(x => x.MatchStloc(healthIndex));
+                c.GotoNext(x => x.MatchStloc(out _));
                 c.Emit(OpCodes.Ldarg_0);
                 c.EmitDelegate<Func<float, CharacterBody, float>>((origHealth, body) =>
                 {
