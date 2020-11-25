@@ -211,19 +211,16 @@ namespace GeneticsArtifact
             c.Index = 0;
             #endregion
 
-            #region MoveSpeedMultiplier-ToRework
-            int speedIndex = -1;
+            #region MoveSpeedMultiplier
             found = c.TryGotoNext(
-                x => x.MatchLdfld<CharacterBody>("baseMoveSpeed"),
-                x => x.MatchLdarg(0),
-                x => x.MatchLdfld<CharacterBody>("levelMoveSpeed"))
+                    x => x.MatchLdfld<CharacterBody>("baseMoveSpeed"),
+                    x => x.MatchLdarg(0),
+                    x => x.MatchLdfld<CharacterBody>("levelMoveSpeed"))
                 && c.TryGotoNext(
-                x => x.MatchStloc(out speedIndex)
-                );
+                    x => x.MatchAdd());
             if (found)
             {
-                c.GotoPrev(x => x.MatchLdfld<CharacterBody>("levelMoveSpeed"));
-                c.GotoNext(x => x.MatchStloc(speedIndex));
+                c.GotoNext(x => x.MatchStloc(out _));
                 c.Emit(OpCodes.Ldarg_0);
                 c.EmitDelegate<Func<float, CharacterBody, float>>((origMoveSpeed, body) =>
                 {
