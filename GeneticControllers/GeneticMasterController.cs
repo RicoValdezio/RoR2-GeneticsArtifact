@@ -25,7 +25,7 @@ namespace GeneticsArtifact
             livingBehaviours = new List<GeneBehaviour>();
 
             On.RoR2.Run.BeginStage += Run_BeginStage;
-            On.RoR2.CharacterMaster.SpawnBody += CharacterMaster_SpawnBody;
+            On.RoR2.CharacterBody.Start += CharacterBody_Start;
             On.RoR2.Run.Update += Run_Update;
             On.RoR2.HealthComponent.TakeDamage += HealthComponent_TakeDamage;
             IL.RoR2.CharacterBody.RecalculateStats += CharacterBody_RecalculateStats;
@@ -62,28 +62,27 @@ namespace GeneticsArtifact
             }
         }
 
-        private static CharacterBody CharacterMaster_SpawnBody(On.RoR2.CharacterMaster.orig_SpawnBody orig, CharacterMaster self, GameObject bodyPrefab, Vector3 position, Quaternion rotation)
+        private static void CharacterBody_Start(On.RoR2.CharacterBody.orig_Start orig, CharacterBody self)
         {
-            CharacterBody body = orig(self, bodyPrefab, position, rotation);
+            orig(self);
             //If the artifact is enabled and the body is a monster
             if (RunArtifactManager.instance.IsArtifactEnabled(ArtifactOfGenetics.def.artifactIndex))
             {
                 //Always apply this to Monsters, optionally apply this to Player minions and Neutrals
-                if ((body.teamComponent.teamIndex == TeamIndex.Monster) ||
-                    (body.teamComponent.teamIndex == TeamIndex.Neutral && applyToNeutrals) ||
-                    (body.teamComponent.teamIndex == TeamIndex.Player && applyToMinions && !body.master.playerCharacterMasterController))
+                if ((self.teamComponent.teamIndex == TeamIndex.Monster) ||
+                    (self.teamComponent.teamIndex == TeamIndex.Neutral && applyToNeutrals) ||
+                    (self.teamComponent.teamIndex == TeamIndex.Player && applyToMinions && !self.master.playerCharacterMasterController))
                 {
                     //If using a master per monster type and there isn't already a master for this type, add a master for this type
-                    if (trackerPerMonsterID && masterTrackers.Find(x => x.index == body.bodyIndex) == null)
+                    if (trackerPerMonsterID && masterTrackers.Find(x => x.index == self.bodyIndex) == null)
                     {
-                        masterTrackers.Add(new GeneTracker(body.bodyIndex, true));
+                        masterTrackers.Add(new GeneTracker(self.bodyIndex, true));
                         //Chat.AddMessage("A new Master was made for bodyIndex: " + body.baseNameToken);
                     }
                     //Always add a behaviour to the body
-                    body.gameObject.AddComponent<GeneBehaviour>();
+                    self.gameObject.AddComponent<GeneBehaviour>();
                 }
             }
-            return body;
         }
 
         private static void Run_Update(On.RoR2.Run.orig_Update orig, Run self)
@@ -271,7 +270,7 @@ namespace GeneticsArtifact
             c.Index = 0;
             #endregion
 
-            #region AttackSpeedMultiplier-ToRework
+            #region AttackSpeedMultiplier
             found = c.TryGotoNext(
                     x => x.MatchLdfld<CharacterBody>("baseAttackSpeed"),
                     x => x.MatchLdarg(0),
@@ -301,7 +300,7 @@ namespace GeneticsArtifact
             c.Index = 0;
             #endregion
 
-            #region ArmorMultiplier-ToRework
+            #region ArmorMultiplier
             //Armor is also never stored, so we have to intercept it in the single line.
             found = c.TryGotoNext(
                     x => x.MatchLdfld<CharacterBody>("baseArmor"),

@@ -23,6 +23,7 @@ Known Issues/Planned Updates
 
 Changelog
 -----------
+2.1.1 - Moved component activation to prevent a visual bug with teleporter healthbars when Swarm is also active
 2.1.0 - Minor refactor of stat application, fixed Armor and Regen not working in some cases, and cut Acceleration since MoveSpeed dominates it
 2.0.0 - Major refactor of the underlying systems, and publicized most of the functionality for potential use by other mods
 1.5.0 - Switched the stat application from the On space to the IL space (help from ThinkInvis and Rein)
