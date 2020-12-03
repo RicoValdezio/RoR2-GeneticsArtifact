@@ -13,17 +13,18 @@ namespace GeneticsArtifact
     {
         public string name;
         public float value;
-        public float maxValue, minValue, mutValue;
+        public float maxValue, minValue, mutValue, penValue;
         public GeneBalanceType balanceType;
 
-        public GenePair(string givenName, float givenValue, GeneBalanceType givenType, float givenMax, float givenMin, float givenMutStep)
+        public GenePair(string givenName, float givenValue, GeneBalanceType givenType, float givenMax, float givenMin, float givenMutationScale, float givenPenaltySize)
         {
             name = givenName;
             value = givenValue;
             balanceType = givenType;
             maxValue = givenMax;
             minValue = givenMin;
-            mutValue = givenMutStep;
+            mutValue = givenMutationScale;
+            penValue = givenPenaltySize;
         }
 
         public void Mutate()
@@ -49,6 +50,28 @@ namespace GeneticsArtifact
                     return Mathf.Max(value / 1f, 1f / value);
                 default: //GeneBalanceType.Ignored
                     return 1f;
+            }
+        }
+
+        public void ApplyBalancePenalty()
+        {
+            switch (balanceType)
+            {
+                case GeneBalanceType.Normal:
+                    value = Mathf.Max(minValue, value - penValue);
+                    break;
+                case GeneBalanceType.Centered:
+                    if(value > 1f)
+                    {
+                        value = Mathf.Max(1f, value - penValue);
+                    }
+                    else
+                    {
+                        value = Mathf.Min(1f, value + penValue);
+                    }
+                    break;
+                default: //GeneBalanceType.Ignored
+                    break;
             }
         }
     }

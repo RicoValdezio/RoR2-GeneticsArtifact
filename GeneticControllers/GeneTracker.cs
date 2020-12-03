@@ -23,16 +23,16 @@ namespace GeneticsArtifact
             index = refIndex;
             genePairs = new List<GenePair>
             {
-                new GenePair("Health", 1f, GeneBalanceType.Normal, absoluteCeil, absoluteFloor, deviationFromParent),
-                new GenePair("Regen", 1f, GeneBalanceType.Normal, absoluteCeil, absoluteFloor, deviationFromParent),
-                new GenePair("MoveSpeed", 1f, GeneBalanceType.Normal, absoluteCeil, absoluteFloor, deviationFromParent),
-                new GenePair("Damage", 1f, GeneBalanceType.Normal, absoluteCeil, absoluteFloor, deviationFromParent),
-                new GenePair("AttackSpeed", 1f, GeneBalanceType.Normal, absoluteCeil, absoluteFloor, deviationFromParent),
-                new GenePair("Armor", 1f, GeneBalanceType.Normal, absoluteCeil, absoluteFloor, deviationFromParent)
+                new GenePair("Health", 1f, GeneBalanceType.Normal, absoluteCeil, absoluteFloor, deviationFromParent, balanceStep),
+                new GenePair("Regen", 1f, GeneBalanceType.Normal, absoluteCeil, absoluteFloor, deviationFromParent, balanceStep),
+                new GenePair("MoveSpeed", 1f, GeneBalanceType.Normal, absoluteCeil, absoluteFloor, deviationFromParent, balanceStep),
+                new GenePair("Damage", 1f, GeneBalanceType.Normal, absoluteCeil, absoluteFloor, deviationFromParent, balanceStep),
+                new GenePair("AttackSpeed", 1f, GeneBalanceType.Normal, absoluteCeil, absoluteFloor, deviationFromParent, balanceStep),
+                new GenePair("Armor", 1f, GeneBalanceType.Normal, absoluteCeil, absoluteFloor, deviationFromParent, balanceStep)
             };
             if (useSizeModifier)
             {
-                genePairs.Add(new GenePair("Size", 1f, GeneBalanceType.Centered, absoluteCeil, absoluteFloor, deviationFromParent));
+                genePairs.Add(new GenePair("Size", 1f, GeneBalanceType.Centered, absoluteCeil, absoluteFloor, deviationFromParent, balanceStep));
             }
             absoluteFloor = 1f / absoluteCeil;
             //If not a master, get values from a master
@@ -95,17 +95,11 @@ namespace GeneticsArtifact
 
         public void ApplyNewBalanceSystem()
         {
-            int statToTest;
             //Start applying penalties until below the balanceLimit
             while (DetermineCurrentBalance() > balanceLimit)
             {
                 //This is optimistic as it assumes that there is a high chance of hitting a decrease-able gene
-                statToTest = UnityEngine.Random.Range(0, genePairs.Count - 1);
-                if (genePairs[statToTest].balanceType != GeneBalanceType.Ignored && genePairs[statToTest].value - balanceStep >= absoluteFloor)
-                {
-                    genePairs[statToTest].value -= balanceStep;
-                }
-
+                genePairs[UnityEngine.Random.Range(0, genePairs.Count - 1)].ApplyBalancePenalty();
             }
         }
 
@@ -138,7 +132,7 @@ namespace GeneticsArtifact
                     {
                         if (!sumPairs.Any(x => x.name == childPair.name))
                         {
-                            sumPairs.Add(new GenePair(childPair.name, 0f, GeneBalanceType.Ignored, 0f, 0f, 0f));
+                            sumPairs.Add(new GenePair(childPair.name, 0f, GeneBalanceType.Ignored, 0f, 0f, 0f, 0f));
                         }
                         sumPairs.Find(x => x.name == childPair.name).value += childPair.value * childTracker.score;
                     }
