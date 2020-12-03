@@ -35,7 +35,7 @@ namespace GeneticsArtifact
 
         public void MutateXTimes(int timesToMutate)
         {
-            for(int x = 1; x < timesToMutate; x++)
+            for(int x = 0; x < timesToMutate; x++)
             {
                 Mutate();
             }

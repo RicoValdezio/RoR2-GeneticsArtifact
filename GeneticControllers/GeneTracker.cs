@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RoR2;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -21,20 +22,24 @@ namespace GeneticsArtifact
         public GeneTracker(int refIndex, bool isMaster = false)
         {
             index = refIndex;
-            genePairs = new List<GenePair>
+            genePairs = new List<GenePair>();
+            if (RunArtifactManager.instance.IsArtifactEnabled(ArtifactOfGenetics.def.artifactIndex))
             {
-                new GenePair("Health", 1f, GeneBalanceType.Normal, absoluteCeil, absoluteFloor, deviationFromParent, balanceStep),
-                new GenePair("Regen", 1f, GeneBalanceType.Normal, absoluteCeil, absoluteFloor, deviationFromParent, balanceStep),
-                new GenePair("MoveSpeed", 1f, GeneBalanceType.Normal, absoluteCeil, absoluteFloor, deviationFromParent, balanceStep),
-                new GenePair("Damage", 1f, GeneBalanceType.Normal, absoluteCeil, absoluteFloor, deviationFromParent, balanceStep),
-                new GenePair("AttackSpeed", 1f, GeneBalanceType.Normal, absoluteCeil, absoluteFloor, deviationFromParent, balanceStep),
-                new GenePair("Armor", 1f, GeneBalanceType.Normal, absoluteCeil, absoluteFloor, deviationFromParent, balanceStep)
-            };
-            if (useSizeModifier)
-            {
-                genePairs.Add(new GenePair("Size", 1f, GeneBalanceType.Centered, absoluteCeil, absoluteFloor, deviationFromParent, balanceStep));
+                absoluteFloor = 1f / absoluteCeil;
+                genePairs.AddRange(new List<GenePair>
+                {
+                    new GenePair("Health", 1f, GeneBalanceType.Normal, absoluteCeil, absoluteFloor, deviationFromParent, balanceStep),
+                    new GenePair("Regen", 1f, GeneBalanceType.Normal, absoluteCeil, absoluteFloor, deviationFromParent, balanceStep),
+                    new GenePair("MoveSpeed", 1f, GeneBalanceType.Normal, absoluteCeil, absoluteFloor, deviationFromParent, balanceStep),
+                    new GenePair("Damage", 1f, GeneBalanceType.Normal, absoluteCeil, absoluteFloor, deviationFromParent, balanceStep),
+                    new GenePair("AttackSpeed", 1f, GeneBalanceType.Normal, absoluteCeil, absoluteFloor, deviationFromParent, balanceStep),
+                    new GenePair("Armor", 1f, GeneBalanceType.Normal, absoluteCeil, absoluteFloor, deviationFromParent, balanceStep)
+                });
+                if (useSizeModifier)
+                {
+                    genePairs.Add(new GenePair("Size", 1f, GeneBalanceType.Centered, absoluteCeil, absoluteFloor, deviationFromParent, balanceStep));
+                }
             }
-            absoluteFloor = 1f / absoluteCeil;
             //If not a master, get values from a master
             if (!isMaster)
             {
