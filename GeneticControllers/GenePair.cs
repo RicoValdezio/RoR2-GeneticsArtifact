@@ -7,6 +7,7 @@ namespace GeneticsArtifact
         Ignored,
         Normal,
         Centered,
+        Inverted
     }
 
     public class GenePair
@@ -48,6 +49,8 @@ namespace GeneticsArtifact
                     return value;
                 case GeneBalanceType.Centered:
                     return Mathf.Max(value / 1f, 1f / value);
+                case GeneBalanceType.Inverted:
+                    return 1f / value;
                 default: //GeneBalanceType.Ignored
                     return 1f;
             }
@@ -69,6 +72,9 @@ namespace GeneticsArtifact
                     {
                         value = Mathf.Min(1f, value + penValue);
                     }
+                    break;
+                case GeneBalanceType.Inverted:
+                    value = Mathf.Min(maxValue, value + penValue);
                     break;
                 default: //GeneBalanceType.Ignored
                     break;
