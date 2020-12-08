@@ -8,12 +8,11 @@ namespace GeneticsArtifact
         public GeneTracker tracker;
         public CharacterBody body;
         public float timePulse, timeAlive = 1f, damageDealt = 0f;
-        public static bool spawnLogging, accidentalDeathLogging;
 
         private void OnEnable()
         {
             body = gameObject.GetComponent<CharacterBody>();
-            if (GeneticMasterController.trackerPerMonsterID)
+            if (ConfigMaster.trackerPerMonsterID)
             {
                 tracker = new GeneTracker(gameObject.GetComponent<CharacterBody>().bodyIndex);
             }
@@ -56,7 +55,7 @@ namespace GeneticsArtifact
 
             body.RecalculateStats();
 
-            if(spawnLogging || (accidentalDeathLogging && (body.maxHealth < 0f || float.IsNaN(body.maxHealth))))
+            if(ConfigMaster.spawnLogging || (ConfigMaster.accidentalDeathLogging && (body.maxHealth < 0f || float.IsNaN(body.maxHealth))))
             {
                 if (body.healthComponent.health < 0f)
                 {

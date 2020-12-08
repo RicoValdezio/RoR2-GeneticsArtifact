@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RoR2;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -14,29 +15,28 @@ namespace GeneticsArtifact
         public float score = 0f;
         public bool isLocked = false;
 
-        public static float absoluteFloor, absoluteCeil, relativeFloor, relativeCeil, deviationFromParent, balanceLimit, balanceStep;
-        public static bool useSizeModifier;
         private bool disposedValue;
 
         public GeneTracker(int refIndex, bool isMaster = false)
         {
             index = refIndex;
-            genePairs = new List<GenePair>
+            genePairs = new List<GenePair>();
+            if (RunArtifactManager.instance.IsArtifactEnabled(ArtifactOfGenetics.def.artifactIndex))
             {
-                new GenePair("Health", 1f),
-                new GenePair("Regen", 1f),
-                new GenePair("MoveSpeed", 1f),
-                new GenePair("Damage", 1f),
-                new GenePair("AttackSpeed", 1f),
-                new GenePair("Armor", 1f)
-            };
-            if (useSizeModifier)
-            {
-                genePairs.Add(new GenePair("Size", 1f, false));
+                genePairs.AddRange(new List<GenePair>
+                {
+                    new GenePair("Health", 1f, GeneBalanceType.Normal, ConfigMaster.healthMax, ConfigMaster.healthMin),
+                    new GenePair("Regen", 1f, GeneBalanceType.Normal, ConfigMaster.regenMax, ConfigMaster.regenMin),
+                    new GenePair("MoveSpeed", 1f, GeneBalanceType.Normal, ConfigMaster.moveSpeedMax, ConfigMaster.moveSpeedMin),
+                    new GenePair("Damage", 1f, GeneBalanceType.Normal, ConfigMaster.damageMax, ConfigMaster.damageMin),
+                    new GenePair("AttackSpeed", 1f, GeneBalanceType.Normal, ConfigMaster.attackSpeedMax, ConfigMaster.attackSpeedMin),
+                    new GenePair("Armor", 1f, GeneBalanceType.Normal, ConfigMaster.armorMax, ConfigMaster.armorMin)
+                });
+                if (ConfigMaster.useSizeModifier)
+                {
+                    genePairs.Add(new GenePair("Size", 1f, GeneBalanceType.Centered, ConfigMaster.sizeMax, ConfigMaster.sizeMin));
+                }
             }
-            relativeCeil = 1f + deviationFromParent;
-            relativeFloor = 1f - deviationFromParent;
-            absoluteFloor = 1f / absoluteCeil;
             //If not a master, get values from a master
             if (!isMaster)
             {
@@ -45,6 +45,7 @@ namespace GeneticsArtifact
             }
         }
 
+        //I will need to deprecate this eventually
         public float GetGeneValue(string compareName)
         {
             //If the gene exists, return its value
@@ -58,6 +59,7 @@ namespace GeneticsArtifact
             }
         }
 
+        //Same for this, as the generalization will make this useless
         public void SetGeneValue(string compareName, float newValue)
         {
             //If the gene exists, return its value
@@ -65,9 +67,9 @@ namespace GeneticsArtifact
             {
                 genePairs.Find(x => x.name == compareName).value = newValue;
             }
-            else
+            else //Throw an exception as if it were a nullref
             {
-                throw new Exception("Tracker has no GenePair with name = " + compareName);
+                throw new NullReferenceException("Tracker has no GenePair with name = " + compareName);
             }
         }
 
@@ -82,11 +84,11 @@ namespace GeneticsArtifact
             masterTracker.isLocked = true;
             isLocked = true;
 
-            float tempValue;
             foreach (GenePair gene in genePairs)
             {
-                tempValue = Mathf.Clamp(masterTracker.GetGeneValue(gene.name) * UnityEngine.Random.Range(relativeFloor, relativeCeil), absoluteFloor, absoluteCeil);
-                gene.value = tempValue;
+                //Copy the master value, then mutate
+                gene.value = masterTracker.GetGeneValue(gene.name);
+                gene.Mutate();
             }
 
             //Unlock the master and apply balance, then unlock self
@@ -97,27 +99,20 @@ namespace GeneticsArtifact
 
         public void ApplyNewBalanceSystem()
         {
-            int statToTest;
             //Start applying penalties until below the balanceLimit
-            while (DetermineCurrentBalance() > balanceLimit)
+            while (DetermineCurrentBalance() > ConfigMaster.balanceLimit)
             {
                 //This is optimistic as it assumes that there is a high chance of hitting a decrease-able gene
-                statToTest = UnityEngine.Random.Range(0, genePairs.Count - 1);
-                if (genePairs[statToTest].isBalanceViable && genePairs[statToTest].value - balanceStep >= absoluteFloor)
-                {
-                    genePairs[statToTest].value -= balanceStep;
-                }
-
+                genePairs[UnityEngine.Random.Range(0, genePairs.Count - 1)].ApplyBalancePenalty();
             }
         }
 
         public float DetermineCurrentBalance()
         {
-            //Only the first 7 stats count towards balance, size is just for fun
             float currentBalance = 1f;
-            foreach (GenePair gene in genePairs.Where(x => x.isBalanceViable))
+            foreach (GenePair gene in genePairs)
             {
-                currentBalance *= gene.value;
+                currentBalance *= gene.GetBalanceValue();
             }
             return currentBalance;
         }
@@ -141,7 +136,7 @@ namespace GeneticsArtifact
                     {
                         if (!sumPairs.Any(x => x.name == childPair.name))
                         {
-                            sumPairs.Add(new GenePair(childPair.name, 0f, childPair.isBalanceViable));
+                            sumPairs.Add(new GenePair(childPair.name, 0f, GeneBalanceType.Ignored, 0f, 0f, 0f, 0f));
                         }
                         sumPairs.Find(x => x.name == childPair.name).value += childPair.value * childTracker.score;
                     }
@@ -200,20 +195,6 @@ namespace GeneticsArtifact
             // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
             Dispose(disposing: true);
             GC.SuppressFinalize(this);
-        }
-    }
-
-    public class GenePair
-    {
-        public string name;
-        public float value;
-        public bool isBalanceViable;
-
-        public GenePair(string givenName, float givenValue, bool givenViable = true)
-        {
-            name = givenName;
-            value = givenValue;
-            isBalanceViable = givenViable;
         }
     }
 }

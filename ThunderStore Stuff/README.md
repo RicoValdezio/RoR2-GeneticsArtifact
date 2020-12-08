@@ -20,9 +20,11 @@ Known Issues/Planned Updates
 - Reimplement the size modifier once I figure out the networking
 - If you find a case of the -infinity health bug, type !geneticsbughunt into the discord chat
 - Make a video for devs to explain how to use the genetic system for their own mods
+- The underlying system is getting close to being a standalone API. If you're interested in using it, let me know, I'm looking for design help in converting it.
 
 Changelog
 -----------
+2.2.0 - Major refactor of underlying mutation and balance system, each stat now has its own configurable cap and floor (manual installs will need to delete the old config)
 2.1.1 - Moved component activation to prevent a visual bug with teleporter healthbars when Swarm is also active
 2.1.0 - Minor refactor of stat application, fixed Armor and Regen not working in some cases, and cut Acceleration since MoveSpeed dominates it
 2.0.0 - Major refactor of the underlying systems, and publicized most of the functionality for potential use by other mods
