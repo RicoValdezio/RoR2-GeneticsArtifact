@@ -86,6 +86,8 @@ namespace GeneticsArtifact
 
             foreach (GenePair gene in genePairs)
             {
+                //Copy the master value, then mutate
+                gene.value = masterTracker.GetGeneValue(gene.name);
                 gene.Mutate();
             }
 
