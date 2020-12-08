@@ -12,11 +12,9 @@ namespace GeneticsArtifact
         internal static List<GeneTracker> masterTrackers;
         internal static List<GeneTracker> deadTrackers;
         internal static List<GeneBehaviour> livingBehaviours;
-        internal static int maxTrackers;
-        internal static bool trackerPerMonsterID, applyToNeutrals, applyToMinions, statusLogging;
 
         //Configure the timeBetweenUpdates
-        internal static float timeBetweenUpdates, updateTimer = 0f, timeBetweenStatusLogging, statusTimer = 0f;
+        internal static float updateTimer = 0f, statusTimer = 0f;
 
         internal static void Init()
         {
@@ -33,13 +31,13 @@ namespace GeneticsArtifact
 
         private static void BuildMasters()
         {
-            if (trackerPerMonsterID)
+            if (ConfigMaster.trackerPerMonsterID)
             {
                 //Do nothing, we'll add trackers when the first of a monster spawns
             }
             else
             {
-                for (int x = 0; x < maxTrackers; x++)
+                for (int x = 0; x < ConfigMaster.maxTrackers; x++)
                 {
                     masterTrackers.Add(new GeneTracker(x, true));
                 }
@@ -70,11 +68,11 @@ namespace GeneticsArtifact
             {
                 //Always apply this to Monsters, optionally apply this to Player minions and Neutrals
                 if ((self.teamComponent.teamIndex == TeamIndex.Monster) ||
-                    (self.teamComponent.teamIndex == TeamIndex.Neutral && applyToNeutrals) ||
-                    (self.teamComponent.teamIndex == TeamIndex.Player && applyToMinions && !self.master.playerCharacterMasterController))
+                    (self.teamComponent.teamIndex == TeamIndex.Neutral && ConfigMaster.applyToNeutrals) ||
+                    (self.teamComponent.teamIndex == TeamIndex.Player && ConfigMaster.applyToMinions && !self.master.playerCharacterMasterController))
                 {
                     //If using a master per monster type and there isn't already a master for this type, add a master for this type
-                    if (trackerPerMonsterID && masterTrackers.Find(x => x.index == self.bodyIndex) == null)
+                    if (ConfigMaster.trackerPerMonsterID && masterTrackers.Find(x => x.index == self.bodyIndex) == null)
                     {
                         masterTrackers.Add(new GeneTracker(self.bodyIndex, true));
                         //Chat.AddMessage("A new Master was made for bodyIndex: " + body.baseNameToken);
@@ -92,7 +90,7 @@ namespace GeneticsArtifact
             {
                 updateTimer += Time.deltaTime;
                 statusTimer += Time.deltaTime;
-                if (updateTimer >= timeBetweenUpdates)
+                if (updateTimer >= ConfigMaster.timeBetweenUpdates)
                 {
                     //If the specified time has passed, update the masters and purge the dead
                     updateTimer = 0f;
@@ -105,7 +103,7 @@ namespace GeneticsArtifact
                 }
 
                 //Status logging for those who have it enabled
-                if (statusLogging && statusTimer >= timeBetweenStatusLogging)
+                if (ConfigMaster.statusLogging && statusTimer >= ConfigMaster.timeBetweenStatusLogging)
                 {
                     statusTimer = 0f;
                     GeneticsArtifactPlugin.geneticLogSource.LogInfo("Begin Genetic Master Status Log");

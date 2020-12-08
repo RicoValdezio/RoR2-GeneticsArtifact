@@ -13,7 +13,7 @@ namespace GeneticsArtifact
         private void OnEnable()
         {
             body = gameObject.GetComponent<CharacterBody>();
-            if (GeneticMasterController.trackerPerMonsterID)
+            if (ConfigMaster.trackerPerMonsterID)
             {
                 tracker = new GeneTracker(gameObject.GetComponent<CharacterBody>().bodyIndex);
             }
