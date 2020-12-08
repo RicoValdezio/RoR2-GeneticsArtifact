@@ -15,8 +15,6 @@ namespace GeneticsArtifact
         public float score = 0f;
         public bool isLocked = false;
 
-        public static float absoluteFloor, absoluteCeil, deviationFromParent, balanceLimit, balanceStep;
-        public static bool useSizeModifier;
         private bool disposedValue;
 
         public GeneTracker(int refIndex, bool isMaster = false)
@@ -25,19 +23,18 @@ namespace GeneticsArtifact
             genePairs = new List<GenePair>();
             if (RunArtifactManager.instance.IsArtifactEnabled(ArtifactOfGenetics.def.artifactIndex))
             {
-                absoluteFloor = 1f / absoluteCeil;
                 genePairs.AddRange(new List<GenePair>
                 {
-                    new GenePair("Health", 1f, GeneBalanceType.Normal, absoluteCeil, absoluteFloor, deviationFromParent, balanceStep),
-                    new GenePair("Regen", 1f, GeneBalanceType.Normal, absoluteCeil, absoluteFloor, deviationFromParent, balanceStep),
-                    new GenePair("MoveSpeed", 1f, GeneBalanceType.Normal, absoluteCeil, absoluteFloor, deviationFromParent, balanceStep),
-                    new GenePair("Damage", 1f, GeneBalanceType.Normal, absoluteCeil, absoluteFloor, deviationFromParent, balanceStep),
-                    new GenePair("AttackSpeed", 1f, GeneBalanceType.Normal, absoluteCeil, absoluteFloor, deviationFromParent, balanceStep),
-                    new GenePair("Armor", 1f, GeneBalanceType.Normal, absoluteCeil, absoluteFloor, deviationFromParent, balanceStep)
+                    new GenePair("Health", 1f, GeneBalanceType.Normal, ConfigMaster.healthMax, ConfigMaster.healthMin),
+                    new GenePair("Regen", 1f, GeneBalanceType.Normal, ConfigMaster.regenMax, ConfigMaster.regenMin),
+                    new GenePair("MoveSpeed", 1f, GeneBalanceType.Normal, ConfigMaster.moveSpeedMax, ConfigMaster.moveSpeedMin),
+                    new GenePair("Damage", 1f, GeneBalanceType.Normal, ConfigMaster.damageMax, ConfigMaster.damageMin),
+                    new GenePair("AttackSpeed", 1f, GeneBalanceType.Normal, ConfigMaster.attackSpeedMax, ConfigMaster.attackSpeedMin),
+                    new GenePair("Armor", 1f, GeneBalanceType.Normal, ConfigMaster.armorMax, ConfigMaster.armorMin)
                 });
-                if (useSizeModifier)
+                if (ConfigMaster.useSizeModifier)
                 {
-                    genePairs.Add(new GenePair("Size", 1f, GeneBalanceType.Centered, absoluteCeil, absoluteFloor, deviationFromParent, balanceStep));
+                    genePairs.Add(new GenePair("Size", 1f, GeneBalanceType.Centered, ConfigMaster.sizeMax, ConfigMaster.sizeMin));
                 }
             }
             //If not a master, get values from a master
@@ -101,7 +98,7 @@ namespace GeneticsArtifact
         public void ApplyNewBalanceSystem()
         {
             //Start applying penalties until below the balanceLimit
-            while (DetermineCurrentBalance() > balanceLimit)
+            while (DetermineCurrentBalance() > ConfigMaster.balanceLimit)
             {
                 //This is optimistic as it assumes that there is a high chance of hitting a decrease-able gene
                 genePairs[UnityEngine.Random.Range(0, genePairs.Count - 1)].ApplyBalancePenalty();

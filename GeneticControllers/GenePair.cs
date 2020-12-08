@@ -17,6 +17,17 @@ namespace GeneticsArtifact
         public float maxValue, minValue, mutValue, penValue;
         public GeneBalanceType balanceType;
 
+        public GenePair(string givenName, float givenValue, GeneBalanceType givenType, float givenMax, float givenMin)
+        {
+            name = givenName;
+            value = givenValue;
+            balanceType = givenType;
+            maxValue = givenMax;
+            minValue = givenMin;
+            mutValue = ConfigMaster.deviationFromParent;
+            penValue = ConfigMaster.balanceStep;
+        }
+
         public GenePair(string givenName, float givenValue, GeneBalanceType givenType, float givenMax, float givenMin, float givenMutationScale, float givenPenaltySize)
         {
             name = givenName;
