@@ -24,7 +24,7 @@ Known Issues/Planned Updates
 
 Changelog
 -----------
-2.3.0 - Artifact can now be enabled/disabled/paused during a run (with soft compatibility for KingEnderBrine-ArtifactsRandomizer)
+2.3.0 - Artifact can now be enabled/disabled/paused during a run (for use with KingEnderBrine-ArtifactsRandomizer)
 2.2.0 - Major refactor of underlying mutation and balance system, each stat now has its own configurable cap and floor (manual installs will need to delete the old config)
 2.1.1 - Moved component activation to prevent a visual bug with teleporter healthbars when Swarm is also active
 2.1.0 - Minor refactor of stat application, fixed Armor and Regen not working in some cases, and cut Acceleration since MoveSpeed dominates it
