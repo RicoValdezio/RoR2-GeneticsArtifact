@@ -14,38 +14,39 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Libs\" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Reference Include="Assembly-CSharp">
-      <HintPath>..\..\..\..\Documents\Libs\Assembly-CSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="Assembly-CSharp.R2API.mm">
-      <HintPath>..\..\..\..\Documents\Libs\Assembly-CSharp.R2API.mm.dll</HintPath>
+      <HintPath>Libs\Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="BepInEx">
-      <HintPath>..\..\..\..\Documents\Libs\BepInEx.dll</HintPath>
+      <HintPath>Libs\BepInEx.dll</HintPath>
     </Reference>
     <Reference Include="MMHOOK_Assembly-CSharp">
-      <HintPath>..\..\..\..\Documents\Libs\MMHOOK_Assembly-CSharp.dll</HintPath>
+      <HintPath>Libs\MMHOOK_Assembly-CSharp.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Cecil">
-      <HintPath>..\..\..\..\Documents\Libs\Mono.Cecil.dll</HintPath>
+      <HintPath>Libs\Mono.Cecil.dll</HintPath>
     </Reference>
     <Reference Include="MonoMod.Utils">
-      <HintPath>..\..\..\..\Documents\Libs\MonoMod.Utils.dll</HintPath>
+      <HintPath>Libs\MonoMod.Utils.dll</HintPath>
     </Reference>
     <Reference Include="R2API">
-      <HintPath>..\..\..\..\Documents\Libs\R2API.dll</HintPath>
+      <HintPath>Libs\R2API.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>..\..\..\..\Documents\Libs\UnityEngine.dll</HintPath>
+      <HintPath>Libs\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AssetBundleModule">
-      <HintPath>..\..\..\..\Documents\Libs\UnityEngine.AssetBundleModule.dll</HintPath>
+      <HintPath>Libs\UnityEngine.AssetBundleModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>..\..\..\..\Documents\Libs\UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>Libs\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.Networking">
-      <HintPath>..\..\..\..\Documents\Libs\UnityEngine.Networking.dll</HintPath>
+      <HintPath>Libs\UnityEngine.Networking.dll</HintPath>
     </Reference>
   </ItemGroup>
 

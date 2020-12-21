@@ -7,7 +7,7 @@ using static MonoMod.Cil.RuntimeILReferenceBag.FastDelegateInvokers;
 
 namespace GeneticsArtifact
 {
-    internal class GeneticMasterController
+    internal class GeneticMasterController : MonoBehaviour
     {
         internal static List<GeneTracker> masterTrackers;
         internal static List<GeneTracker> deadTrackers;
@@ -22,11 +22,11 @@ namespace GeneticsArtifact
             deadTrackers = new List<GeneTracker>();
             livingBehaviours = new List<GeneBehaviour>();
 
-            On.RoR2.Run.BeginStage += Run_BeginStage;
             On.RoR2.CharacterBody.Start += CharacterBody_Start;
-            On.RoR2.Run.Update += Run_Update;
             On.RoR2.HealthComponent.TakeDamage += HealthComponent_TakeDamage;
             IL.RoR2.CharacterBody.RecalculateStats += CharacterBody_RecalculateStats;
+            On.RoR2.Run.BeginGameOver += Run_BeginGameOver;
+            On.RoR2.RunArtifactManager.SetArtifactEnabledServer += RunArtifactManager_SetArtifactEnabledServer;
         }
 
         private static void BuildMasters()
@@ -44,50 +44,18 @@ namespace GeneticsArtifact
             }
         }
 
-        private static void Run_BeginStage(On.RoR2.Run.orig_BeginStage orig, Run self)
+        private static void Update()
         {
-            orig(self);
             //If the artifact is enabled
             if (RunArtifactManager.instance.IsArtifactEnabled(ArtifactOfGenetics.def.artifactIndex))
             {
-                //If its the first stage in a run, reset all masters and purge all dead
-                if (self.stageClearCount == 0)
+                //If the master list is empty, build all masters
+                if (masterTrackers.Count == 0)
                 {
-                    masterTrackers.Clear();
-                    deadTrackers.Clear();
                     BuildMasters();
                 }
-            }
-        }
 
-        private static void CharacterBody_Start(On.RoR2.CharacterBody.orig_Start orig, CharacterBody self)
-        {
-            orig(self);
-            //If the artifact is enabled and the body is a monster
-            if (RunArtifactManager.instance.IsArtifactEnabled(ArtifactOfGenetics.def.artifactIndex))
-            {
-                //Always apply this to Monsters, optionally apply this to Player minions and Neutrals
-                if ((self.teamComponent.teamIndex == TeamIndex.Monster) ||
-                    (self.teamComponent.teamIndex == TeamIndex.Neutral && ConfigMaster.applyToNeutrals) ||
-                    (self.teamComponent.teamIndex == TeamIndex.Player && ConfigMaster.applyToMinions && !self.master.playerCharacterMasterController))
-                {
-                    //If using a master per monster type and there isn't already a master for this type, add a master for this type
-                    if (ConfigMaster.trackerPerMonsterID && masterTrackers.Find(x => x.index == self.bodyIndex) == null)
-                    {
-                        masterTrackers.Add(new GeneTracker(self.bodyIndex, true));
-                        //Chat.AddMessage("A new Master was made for bodyIndex: " + body.baseNameToken);
-                    }
-                    //Always add a behaviour to the body
-                    self.gameObject.AddComponent<GeneBehaviour>();
-                }
-            }
-        }
-
-        private static void Run_Update(On.RoR2.Run.orig_Update orig, Run self)
-        {
-            orig(self);
-            if (RunArtifactManager.instance.IsArtifactEnabled(ArtifactOfGenetics.def.artifactIndex))
-            {
+                #region Logging
                 updateTimer += Time.deltaTime;
                 statusTimer += Time.deltaTime;
                 if (updateTimer >= ConfigMaster.timeBetweenUpdates)
@@ -112,6 +80,30 @@ namespace GeneticsArtifact
                         GeneticsArtifactPlugin.geneticLogSource.LogInfo(masterTracker.GetGeneString());
                     }
                     GeneticsArtifactPlugin.geneticLogSource.LogInfo("End Genetic Master Status Log");
+                }
+                #endregion
+            }
+        }
+
+        private static void CharacterBody_Start(On.RoR2.CharacterBody.orig_Start orig, CharacterBody self)
+        {
+            orig(self);
+            //If the artifact is enabled and the body is a monster
+            if (RunArtifactManager.instance.IsArtifactEnabled(ArtifactOfGenetics.def.artifactIndex))
+            {
+                //Always apply this to Monsters, optionally apply this to Player minions and Neutrals
+                if ((self.teamComponent.teamIndex == TeamIndex.Monster) ||
+                    (self.teamComponent.teamIndex == TeamIndex.Neutral && ConfigMaster.applyToNeutrals) ||
+                    (self.teamComponent.teamIndex == TeamIndex.Player && ConfigMaster.applyToMinions && !self.master.playerCharacterMasterController))
+                {
+                    //If using a master per monster type and there isn't already a master for this type, add a master for this type
+                    if (ConfigMaster.trackerPerMonsterID && masterTrackers.Find(x => x.index == self.bodyIndex) == null)
+                    {
+                        masterTrackers.Add(new GeneTracker(self.bodyIndex, true));
+                        //Chat.AddMessage("A new Master was made for bodyIndex: " + body.baseNameToken);
+                    }
+                    //Always add a behaviour to the body
+                    self.gameObject.AddComponent<GeneBehaviour>();
                 }
             }
         }
@@ -328,6 +320,37 @@ namespace GeneticsArtifact
             }
             c.Index = 0;
             #endregion
+        }
+
+        private static void PurgeMasters()
+        {
+            masterTrackers.Clear();
+            deadTrackers.Clear();
+        }
+
+        private static void Run_BeginGameOver(On.RoR2.Run.orig_BeginGameOver orig, Run self, GameEndingDef gameEndingDef)
+        {
+            orig(self, gameEndingDef);
+            PurgeMasters();
+        }
+
+        private static void RunArtifactManager_SetArtifactEnabledServer(On.RoR2.RunArtifactManager.orig_SetArtifactEnabledServer orig, RunArtifactManager self, ArtifactDef artifactDef, bool newEnabled)
+        {
+            orig(self, artifactDef, newEnabled);
+            //If the artifact is being disbled
+            if (artifactDef.artifactIndex == ArtifactOfGenetics.def.artifactIndex && !newEnabled)
+            {
+                //If pausing is disabled, purge the masters and the dead
+                if (!ConfigMaster.enableMasterPause)
+                {
+                    GeneticsArtifactPlugin.geneticLogSource.LogInfo("Artifact has been disabled, purging all masters.");
+                    PurgeMasters();
+                }
+                else
+                {
+                    GeneticsArtifactPlugin.geneticLogSource.LogInfo("Artifact has been disabled, pausing all masters.");
+                }
+            }
         }
     }
 }
