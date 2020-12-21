@@ -1,12 +1,12 @@
 ﻿Basic Description
 ------------
 This mod adds a genetics system to the monsters, with every stat being able to mutate in specific ways.
-The core stats that are affected are: Health, Regen, MoveSpeed, ~~Acceleration~~, Damage, AttackSpeed, and Armor (and Size if its enabled)
+The core stats that are affected are: Health, Regen, MoveSpeed, Damage, AttackSpeed, and Armor (and Size if its enabled)
 The goal of the system detailed below is to allow the game to adapt to the player, and in turn force the player to adapt to it.
 
 How it Works
 ------------
-- Every monster has seven (eight if Size is enabled) multipliers that are randomly assigned on spawn.
+- Every monster has six (seven if Size is enabled) multipliers that are randomly assigned on spawn.
 - If a monster manages to damage you, it will be awarded points based on how much damage it did.
 - When the monster dies (or is despawned by a stage change), its performance is sent to the master that spawned it.
 - Every so often, the master will adapt its core values to reflect its best performers.
@@ -24,6 +24,7 @@ Known Issues/Planned Updates
 
 Changelog
 -----------
+2.3.0 - Artifact can now be enabled/disabled/paused during a run (with soft compatibility for KingEnderBrine-ArtifactsRandomizer)
 2.2.0 - Major refactor of underlying mutation and balance system, each stat now has its own configurable cap and floor (manual installs will need to delete the old config)
 2.1.1 - Moved component activation to prevent a visual bug with teleporter healthbars when Swarm is also active
 2.1.0 - Minor refactor of stat application, fixed Armor and Regen not working in some cases, and cut Acceleration since MoveSpeed dominates it

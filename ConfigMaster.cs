@@ -8,6 +8,7 @@ namespace GeneticsArtifact
         public static int maxTrackers;
         public static bool trackerPerMonsterID, applyToNeutrals, applyToMinions, statusLogging;
         public static float timeBetweenUpdates, timeBetweenStatusLogging;
+        public static bool enableMasterPause;
         #endregion
 
         #region GeneTracker
@@ -57,6 +58,8 @@ namespace GeneticsArtifact
             armorMin = GeneticsArtifactPlugin.Instance.Config.Bind(new ConfigDefinition("4. Gene Specific Settings", "Minimum Armor Multiplier"), 0.2f, new ConfigDescription("The smallest possible multiplier that can be applied to Armor.")).Value;
             sizeMax = GeneticsArtifactPlugin.Instance.Config.Bind(new ConfigDefinition("4. Gene Specific Settings", "Maximum Size Multiplier"), 2f, new ConfigDescription("The largest possible multiplier that can be applied to Size.")).Value;
             sizeMin = GeneticsArtifactPlugin.Instance.Config.Bind(new ConfigDefinition("4. Gene Specific Settings", "Minimum Size Multiplier"), 0.5f, new ConfigDescription("The smallest possible multiplier that can be applied to Size.")).Value;
+            
+            enableMasterPause = GeneticsArtifactPlugin.Instance.Config.Bind(new ConfigDefinition("1. Master Settings", "Enable Master Pause"), true, new ConfigDescription("If set to true, all masters will be paused if the artifact is disabled during a run. If set to false, the masters will be destroyed.", new AcceptableValueList<bool>(true, false))).Value;
         }
     }
 }
