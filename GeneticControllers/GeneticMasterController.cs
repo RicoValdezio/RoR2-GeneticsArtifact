@@ -93,7 +93,6 @@ namespace GeneticsArtifact
                 #endregion
 
                 #region RapidMutation-Activation
-                rapidBroadcast = rapidMutationActive;
                 switch (ConfigMaster.rapidMutationType)
                 {
                     case "Always":
@@ -114,7 +113,7 @@ namespace GeneticsArtifact
                 }
                 if(rapidBroadcast != rapidMutationActive)
                 {
-                    Chat.AddMessage("Rapid Mutation has been " + (rapidBroadcast ? "Activated" : "Deactivated"));
+                    GeneticsArtifactPlugin.geneticLogSource.LogInfo("Rapid Mutation has been " + (rapidBroadcast ? "Activated" : "Deactivated"));
                     rapidMutationActive = rapidBroadcast;
                 }
                 #endregion
@@ -408,6 +407,7 @@ namespace GeneticsArtifact
             }
         }
 
+        #region RapidMutation-EventTriggers
         private static void ArenaMissionController_BeginRound(On.RoR2.ArenaMissionController.orig_BeginRound orig, ArenaMissionController self)
         {
             orig(self);
@@ -431,5 +431,6 @@ namespace GeneticsArtifact
             orig(self);
             zoneActive = false;
         }
+        #endregion
     }
 }

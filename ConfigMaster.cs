@@ -63,6 +63,7 @@ namespace GeneticsArtifact
             enableMasterPause = GeneticsArtifactPlugin.Instance.Config.Bind(new ConfigDefinition("1. Master Settings", "Enable Master Pause"), true, new ConfigDescription("If set to true, all masters will be paused if the artifact is disabled during a run. If set to false, the masters will be destroyed.", new AcceptableValueList<bool>(true, false))).Value;
 
             rapidMutationType = GeneticsArtifactPlugin.Instance.Config.Bind(new ConfigDefinition("5. Master Optional Settings", "Rapid Mutation Type"), "Never", new ConfigDescription("Determines if/when the rapid mutation mode is active.", new AcceptableValueList<string>("Never", "Always", "OnlyEvents", "OnlyMoon", "EventsAndMoon"))).Value;
+            GeneticsArtifactPlugin.geneticLogSource.LogInfo("RMT entered was: " + rapidMutationType);
         }
     }
 }
