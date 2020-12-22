@@ -16,7 +16,7 @@ namespace GeneticsArtifact
         //Configure the timeBetweenUpdates
         internal static float updateTimer = 0f, statusTimer = 0f;
 
-        internal static bool rapidMutationActive = false, rapidBroadcast, arenaChallengeActive = false;
+        internal static bool rapidMutationActive = false, rapidBroadcast, zoneActive = false;
         internal static float rapidTimer = 0f;
 
         internal static void Init()
@@ -33,6 +33,8 @@ namespace GeneticsArtifact
 
             On.RoR2.ArenaMissionController.BeginRound += ArenaMissionController_BeginRound;
             On.RoR2.ArenaMissionController.EndRound += ArenaMissionController_EndRound;
+            On.RoR2.HoldoutZoneController.OnEnable += HoldoutZoneController_OnEnable;
+            On.RoR2.HoldoutZoneController.OnDisable += HoldoutZoneController_OnDisable;
         }
 
         private static void BuildMasters()
@@ -98,10 +100,13 @@ namespace GeneticsArtifact
                         rapidBroadcast = true;
                         break;
                     case "OnlyEvents":
-                        rapidBroadcast = TeleporterInteraction.instance.isCharging || arenaChallengeActive;
+                        rapidBroadcast = zoneActive;
                         break;
                     case "OnlyMoon":
                         rapidBroadcast = Stage.instance.sceneDef.isFinalStage;
+                        break;
+                    case "EventsAndMoon":
+                        rapidBroadcast = zoneActive || Stage.instance.sceneDef.isFinalStage;
                         break;
                     default: //case "Never"
                         rapidBroadcast = false;
@@ -406,13 +411,25 @@ namespace GeneticsArtifact
         private static void ArenaMissionController_BeginRound(On.RoR2.ArenaMissionController.orig_BeginRound orig, ArenaMissionController self)
         {
             orig(self);
-            arenaChallengeActive = true;
+            zoneActive = true;
         }
 
         private static void ArenaMissionController_EndRound(On.RoR2.ArenaMissionController.orig_EndRound orig, ArenaMissionController self)
         {
             orig(self);
-            arenaChallengeActive = false;
+            zoneActive = false;
+        }
+
+        private static void HoldoutZoneController_OnEnable(On.RoR2.HoldoutZoneController.orig_OnEnable orig, HoldoutZoneController self)
+        {
+            orig(self);
+            zoneActive = true;
+        }
+
+        private static void HoldoutZoneController_OnDisable(On.RoR2.HoldoutZoneController.orig_OnDisable orig, HoldoutZoneController self)
+        {
+            orig(self);
+            zoneActive = false;
         }
     }
 }
