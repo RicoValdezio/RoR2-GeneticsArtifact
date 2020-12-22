@@ -39,17 +39,28 @@ namespace GeneticsArtifact
             penValue = givenPenaltySize;
         }
 
+        /// <summary>
+        /// The standard mutate method, value will shift by up to mutValue, and is bound by minValue and maxValue
+        /// </summary>
         public void Mutate()
         {
             value = Mathf.Clamp(Random.Range(value * (1 - mutValue), value * (1 + mutValue)), minValue, maxValue);
         }
 
-        public void MutateXTimes(int timesToMutate)
+        /// <summary>
+        /// Variation of standard method, value will shift by up to mutValue, but is not bound by minValue or maxValue
+        /// </summary>
+        public void UnclampedMutate()
         {
-            for(int x = 0; x < timesToMutate; x++)
-            {
-                Mutate();
-            }
+            value = Random.Range(value * (1 - mutValue), value * (1 + mutValue));
+        }
+
+        /// <summary>
+        /// Variation of standard method, value is only bound by minValue and maxValue
+        /// </summary>
+        public void MinMaxMutate()
+        {
+            value = Random.Range(minValue, maxValue);
         }
 
         public float GetBalanceValue()
