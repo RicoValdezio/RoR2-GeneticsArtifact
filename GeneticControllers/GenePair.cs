@@ -4,9 +4,21 @@ namespace GeneticsArtifact
 {
     public enum GeneBalanceType
     {
+        /// <summary>
+        /// Gene is not used in the balance system
+        /// </summary>
         Ignored,
+        /// <summary>
+        /// Balance penalty reduces the value if possible
+        /// </summary>
         Normal,
+        /// <summary>
+        /// Balance penalty reduces the value if greater than 1, and increases it if less than 1
+        /// </summary>
         Centered,
+        /// <summary>
+        /// Balance penalty increases the value if possible
+        /// </summary>
         Inverted
     }
 

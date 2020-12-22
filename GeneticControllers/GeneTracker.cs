@@ -86,15 +86,22 @@ namespace GeneticsArtifact
 
             foreach (GenePair gene in genePairs)
             {
-                //Copy the master value, then mutate
                 gene.value = masterTracker.GetGeneValue(gene.name);
-                gene.Mutate();
             }
 
-            //Unlock the master and apply balance, then unlock self
+            //Unlock the master, mutate and then unlock self
             masterTracker.isLocked = false;
-            ApplyNewBalanceSystem();
+            MutateSelf();
             isLocked = false;
+        }
+
+        public void MutateSelf()
+        {
+            foreach (GenePair gene in genePairs)
+            {
+                gene.Mutate();
+            }
+            ApplyNewBalanceSystem();
         }
 
         public void ApplyNewBalanceSystem()

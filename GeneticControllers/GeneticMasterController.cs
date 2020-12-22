@@ -16,6 +16,9 @@ namespace GeneticsArtifact
         //Configure the timeBetweenUpdates
         internal static float updateTimer = 0f, statusTimer = 0f;
 
+        internal static bool rapidMutationActive = false;
+        internal static float rapidTimer = 0f;
+
         internal static void Init()
         {
             masterTrackers = new List<GeneTracker>();
@@ -52,6 +55,7 @@ namespace GeneticsArtifact
                 //If the master list is empty, build all masters
                 if (masterTrackers.Count == 0)
                 {
+                    GeneticsArtifactPlugin.geneticLogSource.LogInfo("Artifact has been enabled, building all masters.");
                     BuildMasters();
                 }
 
@@ -80,6 +84,25 @@ namespace GeneticsArtifact
                         GeneticsArtifactPlugin.geneticLogSource.LogInfo(masterTracker.GetGeneString());
                     }
                     GeneticsArtifactPlugin.geneticLogSource.LogInfo("End Genetic Master Status Log");
+                }
+                #endregion
+
+                #region RapidMutation-Running
+                if (rapidMutationActive)
+                {
+                    rapidTimer += Time.deltaTime;
+                    if(rapidTimer >= 1f)
+                    {
+                        rapidTimer = 0f;
+                        foreach(GeneBehaviour behaviour in livingBehaviours)
+                        {
+                            behaviour.tracker.MutateSelf();
+                        }
+                    }
+                }
+                else
+                {
+                    rapidTimer = 0f;
                 }
                 #endregion
             }
