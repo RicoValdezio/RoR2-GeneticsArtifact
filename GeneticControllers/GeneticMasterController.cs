@@ -16,7 +16,7 @@ namespace GeneticsArtifact
         //Configure the timeBetweenUpdates
         internal static float updateTimer = 0f, statusTimer = 0f;
 
-        internal static bool rapidMutationActive = false;
+        internal static bool rapidMutationActive = false, rapidBroadcast, arenaChallengeActive = false;
         internal static float rapidTimer = 0f;
 
         internal static void Init()
@@ -30,6 +30,9 @@ namespace GeneticsArtifact
             IL.RoR2.CharacterBody.RecalculateStats += CharacterBody_RecalculateStats;
             On.RoR2.Run.BeginGameOver += Run_BeginGameOver;
             On.RoR2.RunArtifactManager.SetArtifactEnabledServer += RunArtifactManager_SetArtifactEnabledServer;
+
+            On.RoR2.ArenaMissionController.BeginRound += ArenaMissionController_BeginRound;
+            On.RoR2.ArenaMissionController.EndRound += ArenaMissionController_EndRound;
         }
 
         private static void BuildMasters()
@@ -84,6 +87,30 @@ namespace GeneticsArtifact
                         GeneticsArtifactPlugin.geneticLogSource.LogInfo(masterTracker.GetGeneString());
                     }
                     GeneticsArtifactPlugin.geneticLogSource.LogInfo("End Genetic Master Status Log");
+                }
+                #endregion
+
+                #region RapidMutation-Activation
+                rapidBroadcast = rapidMutationActive;
+                switch (ConfigMaster.rapidMutationType)
+                {
+                    case "Always":
+                        rapidBroadcast = true;
+                        break;
+                    case "OnlyEvents":
+                        rapidBroadcast = TeleporterInteraction.instance.isCharging || arenaChallengeActive;
+                        break;
+                    case "OnlyMoon":
+                        rapidBroadcast = Stage.instance.sceneDef.isFinalStage;
+                        break;
+                    default: //case "Never"
+                        rapidBroadcast = false;
+                        break;
+                }
+                if(rapidBroadcast != rapidMutationActive)
+                {
+                    Chat.AddMessage("Rapid Mutation has been " + (rapidBroadcast ? "Activated" : "Deactivated"));
+                    rapidMutationActive = rapidBroadcast;
                 }
                 #endregion
 
@@ -374,6 +401,18 @@ namespace GeneticsArtifact
                     GeneticsArtifactPlugin.geneticLogSource.LogInfo("Artifact has been disabled, pausing all masters.");
                 }
             }
+        }
+
+        private static void ArenaMissionController_BeginRound(On.RoR2.ArenaMissionController.orig_BeginRound orig, ArenaMissionController self)
+        {
+            orig(self);
+            arenaChallengeActive = true;
+        }
+
+        private static void ArenaMissionController_EndRound(On.RoR2.ArenaMissionController.orig_EndRound orig, ArenaMissionController self)
+        {
+            orig(self);
+            arenaChallengeActive = false;
         }
     }
 }
