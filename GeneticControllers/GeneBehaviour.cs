@@ -5,7 +5,7 @@ namespace GeneticsArtifact
 {
     public class GeneBehaviour : MonoBehaviour
     {
-        public GeneTracker tracker;
+        public GeneTracker tracker, masterTracker;
         public CharacterBody body;
         public float timePulse, timeAlive = 1f, damageDealt = 0f;
 
@@ -15,10 +15,12 @@ namespace GeneticsArtifact
             if (ConfigMaster.trackerPerMonsterID)
             {
                 tracker = new GeneTracker(gameObject.GetComponent<CharacterBody>().bodyIndex);
+                masterTracker = GeneticMasterController.masterTrackers.Find(x => x.index == tracker.index);
             }
             else
             {
-                tracker = new GeneTracker(Random.Range(0, GeneticMasterController.masterTrackers.Count - 1));
+                masterTracker = GeneticMasterController.masterTrackers[Random.Range(0, ConfigMaster.maxTrackers - 1)];
+                tracker = new GeneTracker(masterTracker.index);
             }
             GeneticMasterController.livingBehaviours.Add(this);
             ApplyMutation();

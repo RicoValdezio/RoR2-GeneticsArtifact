@@ -37,21 +37,6 @@ namespace GeneticsArtifact
             On.RoR2.HoldoutZoneController.OnDisable += HoldoutZoneController_OnDisable;
         }
 
-        private static void BuildMasters()
-        {
-            if (ConfigMaster.trackerPerMonsterID)
-            {
-                //Do nothing, we'll add trackers when the first of a monster spawns
-            }
-            else
-            {
-                for (int x = 0; x < ConfigMaster.maxTrackers; x++)
-                {
-                    masterTrackers.Add(new GeneTracker(x, true));
-                }
-            }
-        }
-
         private static void Update()
         {
             //If the artifact is enabled
@@ -149,6 +134,13 @@ namespace GeneticsArtifact
                     {
                         masterTrackers.Add(new GeneTracker(self.bodyIndex, true));
                         //Chat.AddMessage("A new Master was made for bodyIndex: " + body.baseNameToken);
+                    }
+                    else if(masterTrackers.Count < ConfigMaster.maxTrackers)
+                    {
+                        for (int x = masterTrackers.Count; x < ConfigMaster.maxTrackers; x++)
+                        {
+                            masterTrackers.Add(new GeneTracker(x, true));
+                        }
                     }
                     //Always add a behaviour to the body
                     self.gameObject.AddComponent<GeneBehaviour>();

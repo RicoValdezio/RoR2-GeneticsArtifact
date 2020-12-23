@@ -21,9 +21,11 @@ Known Issues/Planned Updates
 - If you find a case of the -infinity health bug, type !geneticsbughunt into the discord chat
 - Make a video for devs to explain how to use the genetic system for their own mods
 - The underlying system is getting close to being a standalone API. If you're interested in using it, let me know, I'm looking for design help in converting it.
+- There is a conflict with Rein-RogueWisp that I am currently working with Rein to resolve, ETA unknown
 
 Changelog
 -----------
+2.3.1 - Changed master assignment in order to resolve bug where generic mode would fail to find a valid master
 2.3.0 - Artifact can now be enabled/disabled/paused during a run (for use with KingEnderBrine-ArtifactsRandomizer)
 2.2.0 - Major refactor of underlying mutation and balance system, each stat now has its own configurable cap and floor (manual installs will need to delete the old config)
 2.1.1 - Moved component activation to prevent a visual bug with teleporter healthbars when Swarm is also active
