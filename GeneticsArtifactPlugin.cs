@@ -13,7 +13,7 @@ namespace GeneticsArtifact
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.EveryoneNeedSameModVersion)]
     public class GeneticsArtifactPlugin : BaseUnityPlugin
     {
-        private const string ModVer = "2.3.0";
+        private const string ModVer = "2.3.1";
         private const string ModName = "Genetics";
         private const string ModGuid = "com.RicoValdezio.ArtifactOfGenetics";
         public static GeneticsArtifactPlugin Instance;

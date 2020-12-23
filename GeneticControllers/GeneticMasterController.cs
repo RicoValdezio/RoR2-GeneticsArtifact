@@ -29,32 +29,11 @@ namespace GeneticsArtifact
             On.RoR2.RunArtifactManager.SetArtifactEnabledServer += RunArtifactManager_SetArtifactEnabledServer;
         }
 
-        private static void BuildMasters()
-        {
-            if (ConfigMaster.trackerPerMonsterID)
-            {
-                //Do nothing, we'll add trackers when the first of a monster spawns
-            }
-            else
-            {
-                for (int x = 0; x < ConfigMaster.maxTrackers; x++)
-                {
-                    masterTrackers.Add(new GeneTracker(x, true));
-                }
-            }
-        }
-
         private static void Update()
         {
             //If the artifact is enabled
             if (RunArtifactManager.instance.IsArtifactEnabled(ArtifactOfGenetics.def.artifactIndex))
-            {
-                //If the master list is empty, build all masters
-                if (masterTrackers.Count == 0)
-                {
-                    BuildMasters();
-                }
-
+            { 
                 #region Logging
                 updateTimer += Time.deltaTime;
                 statusTimer += Time.deltaTime;
@@ -101,6 +80,13 @@ namespace GeneticsArtifact
                     {
                         masterTrackers.Add(new GeneTracker(self.bodyIndex, true));
                         //Chat.AddMessage("A new Master was made for bodyIndex: " + body.baseNameToken);
+                    }
+                    else if(masterTrackers.Count < ConfigMaster.maxTrackers)
+                    {
+                        for (int x = masterTrackers.Count; x < ConfigMaster.maxTrackers; x++)
+                        {
+                            masterTrackers.Add(new GeneTracker(x, true));
+                        }
                     }
                     //Always add a behaviour to the body
                     self.gameObject.AddComponent<GeneBehaviour>();
