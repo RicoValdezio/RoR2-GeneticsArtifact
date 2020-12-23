@@ -57,13 +57,6 @@ namespace GeneticsArtifact
             //If the artifact is enabled
             if (RunArtifactManager.instance.IsArtifactEnabled(ArtifactOfGenetics.def.artifactIndex))
             {
-                //If the master list is empty, build all masters
-                if (masterTrackers.Count == 0)
-                {
-                    GeneticsArtifactPlugin.geneticLogSource.LogInfo("Artifact has been enabled, building all masters.");
-                    BuildMasters();
-                }
-
                 #region Logging
                 updateTimer += Time.deltaTime;
                 statusTimer += Time.deltaTime;
