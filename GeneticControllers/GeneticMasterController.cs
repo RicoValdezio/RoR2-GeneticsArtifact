@@ -128,6 +128,7 @@ namespace GeneticsArtifact
                         foreach(GeneBehaviour behaviour in livingBehaviours)
                         {
                             behaviour.tracker.MutateSelf();
+                            behaviour.ApplyMutation();
                         }
                     }
                 }
