@@ -1,5 +1,6 @@
 ﻿using Mono.Cecil.Cil;
 using MonoMod.Cil;
+using R2API;
 using RoR2;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,14 +10,13 @@ namespace GeneticsArtifact
 {
     internal class GeneticMasterController : MonoBehaviour
     {
-        internal static List<GeneTracker> masterTrackers;
-        internal static List<GeneTracker> deadTrackers;
-        internal static List<GeneBehaviour> livingBehaviours;
+        public static List<GeneTracker> masterTrackers;
+        public static List<GeneTracker> deadTrackers;
+        public static List<GeneBehaviour> livingBehaviours;
 
-        //Configure the timeBetweenUpdates
         internal static float updateTimer = 0f, statusTimer = 0f;
 
-        internal static bool rapidMutationActive, moonActive;
+        public static bool rapidMutationActive, moonActive;
         internal static float rapidTimer = 0f;
 
         internal static void Init()
@@ -35,6 +35,9 @@ namespace GeneticsArtifact
             On.RoR2.Stage.Start += Stage_Start;
             On.RoR2.HoldoutZoneController.OnEnable += HoldoutZoneController_OnEnable;
             On.RoR2.HoldoutZoneController.OnDisable += HoldoutZoneController_OnDisable;
+
+            LanguageAPI.Add("GENE_RAPID_ENABLE", "<style=cEvent>The world begins to grow unstable.</style>");
+            LanguageAPI.Add("GENE_RAPID_DISABLE", "<style=cEvent>The world adapts to its new normal.</style>");
         }
 
         private void Update()
@@ -48,7 +51,6 @@ namespace GeneticsArtifact
                 {
                     //If the specified time has passed, update the masters and purge the dead
                     updateTimer = 0f;
-                    //Chat.AddMessage("Dead Masters Count : " + deadTrackers.Count.ToString());
                     foreach (GeneTracker masterTracker in masterTrackers)
                     {
                         masterTracker.MutateFromChildren();
@@ -72,16 +74,6 @@ namespace GeneticsArtifact
                 }
                 #endregion
 
-                
-                //else if (ConfigMaster.rapidMutationType.Contains("Event"))
-                //{
-                //    rapidBroadcast = InstanceTracker.GetInstancesList<HoldoutZoneController>().Count > 0;
-                //}
-                //else
-                //{
-                //    rapidBroadcast = false;
-                //}
-
                 #region RapidMutation-Running
                 if (rapidMutationActive)
                 {
@@ -104,7 +96,7 @@ namespace GeneticsArtifact
             }
         }
 
-        #region GeneralHooks
+        #region General-Triggers
         private static void CharacterBody_Start(On.RoR2.CharacterBody.orig_Start orig, CharacterBody self)
         {
             orig(self);
@@ -386,8 +378,17 @@ namespace GeneticsArtifact
         {
             if (newValue != rapidMutationActive)
             {
+                Chat.SimpleChatMessage message;
+                if (newValue)
+                {
+                    message = new Chat.SimpleChatMessage { baseToken = "GENE_RAPID_ENABLE" };
+                }
+                else
+                {
+                    message = new Chat.SimpleChatMessage { baseToken = "GENE_RAPID_DISABLE" };
+                }
+                Chat.SendBroadcastChat(message);
                 GeneticsArtifactPlugin.geneticLogSource.LogInfo("Rapid Mutation has been " + (newValue ? "Activated" : "Deactivated"));
-                Chat.AddMessage("The Aritfact of Genetics " + (newValue ? "has started glowing!" : "glow has subsided."));
                 rapidMutationActive = newValue;
             }
         }
