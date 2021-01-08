@@ -16,7 +16,7 @@ namespace GeneticsArtifact
         //Configure the timeBetweenUpdates
         internal static float updateTimer = 0f, statusTimer = 0f;
 
-        internal static bool rapidMutationActive = false, rapidBroadcast, zoneActive = false;
+        internal static bool rapidMutationActive, moonActive;
         internal static float rapidTimer = 0f;
 
         internal static void Init()
@@ -24,6 +24,7 @@ namespace GeneticsArtifact
             masterTrackers = new List<GeneTracker>();
             deadTrackers = new List<GeneTracker>();
             livingBehaviours = new List<GeneBehaviour>();
+            rapidMutationActive = ConfigMaster.rapidMutationType.Contains("Always");
 
             On.RoR2.CharacterBody.Start += CharacterBody_Start;
             On.RoR2.HealthComponent.TakeDamage += HealthComponent_TakeDamage;
@@ -31,20 +32,18 @@ namespace GeneticsArtifact
             On.RoR2.Run.BeginGameOver += Run_BeginGameOver;
             On.RoR2.RunArtifactManager.SetArtifactEnabledServer += RunArtifactManager_SetArtifactEnabledServer;
 
-            On.RoR2.ArenaMissionController.BeginRound += ArenaMissionController_BeginRound;
-            On.RoR2.ArenaMissionController.EndRound += ArenaMissionController_EndRound;
+            On.RoR2.Stage.Start += Stage_Start;
             On.RoR2.HoldoutZoneController.OnEnable += HoldoutZoneController_OnEnable;
             On.RoR2.HoldoutZoneController.OnDisable += HoldoutZoneController_OnDisable;
         }
 
-        private static void Update()
+        private void Update()
         {
             //If the artifact is enabled
             if (RunArtifactManager.instance.IsArtifactEnabled(ArtifactOfGenetics.def.artifactIndex))
             {
                 #region Logging
                 updateTimer += Time.deltaTime;
-                statusTimer += Time.deltaTime;
                 if (updateTimer >= ConfigMaster.timeBetweenUpdates)
                 {
                     //If the specified time has passed, update the masters and purge the dead
@@ -58,43 +57,30 @@ namespace GeneticsArtifact
                 }
 
                 //Status logging for those who have it enabled
-                if (ConfigMaster.statusLogging && statusTimer >= ConfigMaster.timeBetweenStatusLogging)
-                {
-                    statusTimer = 0f;
-                    GeneticsArtifactPlugin.geneticLogSource.LogInfo("Begin Genetic Master Status Log");
-                    foreach (GeneTracker masterTracker in masterTrackers)
+                if (ConfigMaster.statusLogging) {
+                    statusTimer += Time.deltaTime;
+                    if (statusTimer >= ConfigMaster.timeBetweenStatusLogging)
                     {
-                        GeneticsArtifactPlugin.geneticLogSource.LogInfo(masterTracker.GetGeneString());
-                    }
-                    GeneticsArtifactPlugin.geneticLogSource.LogInfo("End Genetic Master Status Log");
+                        statusTimer = 0f;
+                        GeneticsArtifactPlugin.geneticLogSource.LogInfo("Begin Genetic Master Status Log");
+                        foreach (GeneTracker masterTracker in masterTrackers)
+                        {
+                            GeneticsArtifactPlugin.geneticLogSource.LogInfo(masterTracker.GetGeneString());
+                        }
+                        GeneticsArtifactPlugin.geneticLogSource.LogInfo("End Genetic Master Status Log");
+                    } 
                 }
                 #endregion
 
-                #region RapidMutation-Activation
-                switch (ConfigMaster.rapidMutationType)
-                {
-                    case "Always":
-                        rapidBroadcast = true;
-                        break;
-                    case "OnlyEvents":
-                        rapidBroadcast = zoneActive;
-                        break;
-                    case "OnlyMoon":
-                        rapidBroadcast = Stage.instance.sceneDef.isFinalStage;
-                        break;
-                    case "EventsAndMoon":
-                        rapidBroadcast = zoneActive || Stage.instance.sceneDef.isFinalStage;
-                        break;
-                    default: //case "Never"
-                        rapidBroadcast = false;
-                        break;
-                }
-                if(rapidBroadcast != rapidMutationActive)
-                {
-                    GeneticsArtifactPlugin.geneticLogSource.LogInfo("Rapid Mutation has been " + (rapidBroadcast ? "Activated" : "Deactivated"));
-                    rapidMutationActive = rapidBroadcast;
-                }
-                #endregion
+                
+                //else if (ConfigMaster.rapidMutationType.Contains("Event"))
+                //{
+                //    rapidBroadcast = InstanceTracker.GetInstancesList<HoldoutZoneController>().Count > 0;
+                //}
+                //else
+                //{
+                //    rapidBroadcast = false;
+                //}
 
                 #region RapidMutation-Running
                 if (rapidMutationActive)
@@ -118,6 +104,7 @@ namespace GeneticsArtifact
             }
         }
 
+        #region GeneralHooks
         private static void CharacterBody_Start(On.RoR2.CharacterBody.orig_Start orig, CharacterBody self)
         {
             orig(self);
@@ -392,30 +379,50 @@ namespace GeneticsArtifact
                 }
             }
         }
+        #endregion
 
         #region RapidMutation-EventTriggers
-        private static void ArenaMissionController_BeginRound(On.RoR2.ArenaMissionController.orig_BeginRound orig, ArenaMissionController self)
+        public static void UpdateRapidMutation(bool newValue)
         {
-            orig(self);
-            zoneActive = true;
+            if (newValue != rapidMutationActive)
+            {
+                GeneticsArtifactPlugin.geneticLogSource.LogInfo("Rapid Mutation has been " + (newValue ? "Activated" : "Deactivated"));
+                Chat.AddMessage("The Aritfact of Genetics " + (newValue ? "has started glowing!" : "glow has subsided."));
+                rapidMutationActive = newValue;
+            }
         }
 
-        private static void ArenaMissionController_EndRound(On.RoR2.ArenaMissionController.orig_EndRound orig, ArenaMissionController self)
+        private static void Stage_Start(On.RoR2.Stage.orig_Start orig, Stage self)
         {
             orig(self);
-            zoneActive = false;
+            if (self.sceneDef.isFinalStage && ConfigMaster.rapidMutationType.Contains("Moon"))
+            {
+                UpdateRapidMutation(true);
+                moonActive = true;
+            }
+            else
+            {
+                UpdateRapidMutation(false);
+                moonActive = false;
+            }
         }
 
         private static void HoldoutZoneController_OnEnable(On.RoR2.HoldoutZoneController.orig_OnEnable orig, HoldoutZoneController self)
         {
             orig(self);
-            zoneActive = true;
+            if (ConfigMaster.rapidMutationType.Contains("Event"))
+            {
+                UpdateRapidMutation(true);
+            }
         }
 
         private static void HoldoutZoneController_OnDisable(On.RoR2.HoldoutZoneController.orig_OnDisable orig, HoldoutZoneController self)
         {
             orig(self);
-            zoneActive = false;
+            if (ConfigMaster.rapidMutationType.Contains("Event") && !moonActive && InstanceTracker.GetInstancesList<HoldoutZoneController>().Count == 0)
+            {
+                UpdateRapidMutation(false);
+            }
         }
         #endregion
     }
