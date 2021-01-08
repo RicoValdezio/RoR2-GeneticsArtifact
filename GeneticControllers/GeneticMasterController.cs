@@ -1,5 +1,6 @@
 ﻿using Mono.Cecil.Cil;
 using MonoMod.Cil;
+using R2API;
 using RoR2;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,39 +10,47 @@ namespace GeneticsArtifact
 {
     internal class GeneticMasterController : MonoBehaviour
     {
-        internal static List<GeneTracker> masterTrackers;
-        internal static List<GeneTracker> deadTrackers;
-        internal static List<GeneBehaviour> livingBehaviours;
+        public static List<GeneTracker> masterTrackers;
+        public static List<GeneTracker> deadTrackers;
+        public static List<GeneBehaviour> livingBehaviours;
 
-        //Configure the timeBetweenUpdates
         internal static float updateTimer = 0f, statusTimer = 0f;
+
+        public static bool rapidMutationActive, moonActive;
+        internal static float rapidTimer = 0f;
 
         internal static void Init()
         {
             masterTrackers = new List<GeneTracker>();
             deadTrackers = new List<GeneTracker>();
             livingBehaviours = new List<GeneBehaviour>();
+            rapidMutationActive = ConfigMaster.rapidMutationType.Contains("Always");
 
             On.RoR2.CharacterBody.Start += CharacterBody_Start;
             On.RoR2.HealthComponent.TakeDamage += HealthComponent_TakeDamage;
             IL.RoR2.CharacterBody.RecalculateStats += CharacterBody_RecalculateStats;
             On.RoR2.Run.BeginGameOver += Run_BeginGameOver;
             On.RoR2.RunArtifactManager.SetArtifactEnabledServer += RunArtifactManager_SetArtifactEnabledServer;
+
+            On.RoR2.Stage.Start += Stage_Start;
+            On.RoR2.HoldoutZoneController.OnEnable += HoldoutZoneController_OnEnable;
+            On.RoR2.HoldoutZoneController.OnDisable += HoldoutZoneController_OnDisable;
+
+            LanguageAPI.Add("GENE_RAPID_ENABLE", "<style=cEvent>The world begins to grow unstable.</style>");
+            LanguageAPI.Add("GENE_RAPID_DISABLE", "<style=cEvent>The world adapts to its new normal.</style>");
         }
 
-        private static void Update()
+        private void Update()
         {
             //If the artifact is enabled
             if (RunArtifactManager.instance.IsArtifactEnabled(ArtifactOfGenetics.def.artifactIndex))
-            { 
+            {
                 #region Logging
                 updateTimer += Time.deltaTime;
-                statusTimer += Time.deltaTime;
                 if (updateTimer >= ConfigMaster.timeBetweenUpdates)
                 {
                     //If the specified time has passed, update the masters and purge the dead
                     updateTimer = 0f;
-                    //Chat.AddMessage("Dead Masters Count : " + deadTrackers.Count.ToString());
                     foreach (GeneTracker masterTracker in masterTrackers)
                     {
                         masterTracker.MutateFromChildren();
@@ -50,20 +59,44 @@ namespace GeneticsArtifact
                 }
 
                 //Status logging for those who have it enabled
-                if (ConfigMaster.statusLogging && statusTimer >= ConfigMaster.timeBetweenStatusLogging)
-                {
-                    statusTimer = 0f;
-                    GeneticsArtifactPlugin.geneticLogSource.LogInfo("Begin Genetic Master Status Log");
-                    foreach (GeneTracker masterTracker in masterTrackers)
+                if (ConfigMaster.statusLogging) {
+                    statusTimer += Time.deltaTime;
+                    if (statusTimer >= ConfigMaster.timeBetweenStatusLogging)
                     {
-                        GeneticsArtifactPlugin.geneticLogSource.LogInfo(masterTracker.GetGeneString());
+                        statusTimer = 0f;
+                        GeneticsArtifactPlugin.geneticLogSource.LogInfo("Begin Genetic Master Status Log");
+                        foreach (GeneTracker masterTracker in masterTrackers)
+                        {
+                            GeneticsArtifactPlugin.geneticLogSource.LogInfo(masterTracker.GetGeneString());
+                        }
+                        GeneticsArtifactPlugin.geneticLogSource.LogInfo("End Genetic Master Status Log");
+                    } 
+                }
+                #endregion
+
+                #region RapidMutation-Running
+                if (rapidMutationActive)
+                {
+                    rapidTimer += Time.deltaTime;
+                    if(rapidTimer >= 1f)
+                    {
+                        rapidTimer = 0f;
+                        foreach(GeneBehaviour behaviour in livingBehaviours)
+                        {
+                            behaviour.tracker.MutateSelf();
+                            behaviour.ApplyMutation();
+                        }
                     }
-                    GeneticsArtifactPlugin.geneticLogSource.LogInfo("End Genetic Master Status Log");
+                }
+                else
+                {
+                    rapidTimer = 0f;
                 }
                 #endregion
             }
         }
 
+        #region General-Triggers
         private static void CharacterBody_Start(On.RoR2.CharacterBody.orig_Start orig, CharacterBody self)
         {
             orig(self);
@@ -338,5 +371,60 @@ namespace GeneticsArtifact
                 }
             }
         }
+        #endregion
+
+        #region RapidMutation-EventTriggers
+        public static void UpdateRapidMutation(bool newValue)
+        {
+            if (newValue != rapidMutationActive)
+            {
+                Chat.SimpleChatMessage message;
+                if (newValue)
+                {
+                    message = new Chat.SimpleChatMessage { baseToken = "GENE_RAPID_ENABLE" };
+                }
+                else
+                {
+                    message = new Chat.SimpleChatMessage { baseToken = "GENE_RAPID_DISABLE" };
+                }
+                Chat.SendBroadcastChat(message);
+                GeneticsArtifactPlugin.geneticLogSource.LogInfo("Rapid Mutation has been " + (newValue ? "Activated" : "Deactivated"));
+                rapidMutationActive = newValue;
+            }
+        }
+
+        private static void Stage_Start(On.RoR2.Stage.orig_Start orig, Stage self)
+        {
+            orig(self);
+            if (self.sceneDef.isFinalStage && ConfigMaster.rapidMutationType.Contains("Moon"))
+            {
+                UpdateRapidMutation(true);
+                moonActive = true;
+            }
+            else
+            {
+                UpdateRapidMutation(false);
+                moonActive = false;
+            }
+        }
+
+        private static void HoldoutZoneController_OnEnable(On.RoR2.HoldoutZoneController.orig_OnEnable orig, HoldoutZoneController self)
+        {
+            orig(self);
+            if (ConfigMaster.rapidMutationType.Contains("Event"))
+            {
+                UpdateRapidMutation(true);
+            }
+        }
+
+        private static void HoldoutZoneController_OnDisable(On.RoR2.HoldoutZoneController.orig_OnDisable orig, HoldoutZoneController self)
+        {
+            orig(self);
+            if (ConfigMaster.rapidMutationType.Contains("Event") && !moonActive && InstanceTracker.GetInstancesList<HoldoutZoneController>().Count == 0)
+            {
+                UpdateRapidMutation(false);
+            }
+        }
+        #endregion
     }
 }

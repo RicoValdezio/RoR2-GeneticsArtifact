@@ -25,6 +25,7 @@ Known Issues/Planned Updates
 
 Changelog
 -----------
+2.4.0 - Added optional "Rapid Mutation" mode that can be triggered by Teleporter events, the final stage, or both (and a bit of polish)
 2.3.1 - Changed master assignment in order to resolve bug where generic mode would fail to find a valid master
 2.3.0 - Artifact can now be enabled/disabled/paused during a run (for use with KingEnderBrine-ArtifactsRandomizer)
 2.2.0 - Major refactor of underlying mutation and balance system, each stat now has its own configurable cap and floor (manual installs will need to delete the old config)

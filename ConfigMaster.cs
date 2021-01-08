@@ -9,6 +9,7 @@ namespace GeneticsArtifact
         public static bool trackerPerMonsterID, applyToNeutrals, applyToMinions, statusLogging;
         public static float timeBetweenUpdates, timeBetweenStatusLogging;
         public static bool enableMasterPause;
+        public static string rapidMutationType;
         #endregion
 
         #region GeneTracker
@@ -60,6 +61,8 @@ namespace GeneticsArtifact
             sizeMin = GeneticsArtifactPlugin.Instance.Config.Bind(new ConfigDefinition("4. Gene Specific Settings", "Minimum Size Multiplier"), 0.5f, new ConfigDescription("The smallest possible multiplier that can be applied to Size.")).Value;
             
             enableMasterPause = GeneticsArtifactPlugin.Instance.Config.Bind(new ConfigDefinition("1. Master Settings", "Enable Master Pause"), true, new ConfigDescription("If set to true, all masters will be paused if the artifact is disabled during a run. If set to false, the masters will be destroyed.", new AcceptableValueList<bool>(true, false))).Value;
+
+            rapidMutationType = GeneticsArtifactPlugin.Instance.Config.Bind(new ConfigDefinition("5. Master Optional Settings", "Rapid Mutation Type"), "Never", new ConfigDescription("Determines if/when the rapid mutation mode is active.", new AcceptableValueList<string>("Never", "Always", "OnlyEvents", "OnlyMoon", "EventsAndMoon"))).Value;
         }
     }
 }
