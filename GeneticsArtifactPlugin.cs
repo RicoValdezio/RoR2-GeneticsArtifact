@@ -8,12 +8,13 @@ using UnityEngine;
 namespace GeneticsArtifact
 {
     [BepInDependency("com.bepis.r2api", BepInDependency.DependencyFlags.HardDependency)]
+    [BepInIncompatibility("Rein.RogueWisp")] //Going to officially incompat this
     [R2APISubmoduleDependency(new string[] { "ResourcesAPI", "LanguageAPI" })]
     [BepInPlugin(ModGuid, ModName, ModVer)]
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.EveryoneNeedSameModVersion)]
     public class GeneticsArtifactPlugin : BaseUnityPlugin
     {
-        private const string ModVer = "2.4.0";
+        private const string ModVer = "2.4.1";
         private const string ModName = "Genetics";
         private const string ModGuid = "com.RicoValdezio.ArtifactOfGenetics";
         public static GeneticsArtifactPlugin Instance;
@@ -37,6 +38,11 @@ namespace GeneticsArtifact
                 AssetBundleResourcesProvider provider = new AssetBundleResourcesProvider("@Genetics", bundle);
                 ResourcesAPI.AddProvider(provider);
             }
+        }
+
+        private void OnDisable()
+        {
+            GeneticMasterController.Cleanup();
         }
     }
 }

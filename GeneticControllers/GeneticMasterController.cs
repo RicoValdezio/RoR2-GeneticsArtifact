@@ -40,6 +40,25 @@ namespace GeneticsArtifact
             LanguageAPI.Add("GENE_RAPID_DISABLE", "<style=cEvent>The world adapts to its new normal.</style>");
         }
 
+        internal static void Cleanup()
+        {
+            foreach(GeneBehaviour behaviour in livingBehaviours)
+            {
+                behaviour.enabled = false;
+            }
+            PurgeMasters();
+
+            On.RoR2.CharacterBody.Start -= CharacterBody_Start;
+            On.RoR2.HealthComponent.TakeDamage -= HealthComponent_TakeDamage;
+            IL.RoR2.CharacterBody.RecalculateStats -= CharacterBody_RecalculateStats;
+            On.RoR2.Run.BeginGameOver -= Run_BeginGameOver;
+            On.RoR2.RunArtifactManager.SetArtifactEnabledServer -= RunArtifactManager_SetArtifactEnabledServer;
+
+            On.RoR2.Stage.Start -= Stage_Start;
+            On.RoR2.HoldoutZoneController.OnEnable -= HoldoutZoneController_OnEnable;
+            On.RoR2.HoldoutZoneController.OnDisable -= HoldoutZoneController_OnDisable;
+        }
+
         private void Update()
         {
             //If the artifact is enabled

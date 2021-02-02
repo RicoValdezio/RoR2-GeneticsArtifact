@@ -11,8 +11,13 @@ How it Works
 - When the monster dies (or is despawned by a stage change), its performance is sent to the master that spawned it.
 - Every so often, the master will adapt its core values to reflect its best performers.
 - These masters are then used to determine how the multipliers are assigned in future spawns.
-Also, this video is my attempt at explaining this along with how the config values can affect the artifact and its systems: Its a bit scatter-brained but covers all of it.
-https://youtu.be/V4uxtHPvQKY
+
+Video Explanations
+------------
+1.4.5 - 30-minute overview
+	https://youtu.be/V4uxtHPvQKY
+2.4.1 - "Rapid Mutation" overview
+	https://youtu.be/odUNUfmcHg4
 
 Known Issues/Planned Updates
 ------------
@@ -20,11 +25,11 @@ Known Issues/Planned Updates
 - Reimplement the size modifier once I figure out the networking
 - If you find a case of the -infinity health bug, type !geneticsbughunt into the discord chat
 - Make a video for devs to explain how to use the genetic system for their own mods
-- The underlying system is getting close to being a standalone API. If you're interested in using it, let me know, I'm looking for design help in converting it.
-- There is a conflict with Rein-RogueWisp that I am currently working with Rein to resolve, ETA unknown
+- There is a conflict with Rein-RogueWisp that causes 1/4 max health due to a hook issue, flagged as incompatible
 
 Changelog
 -----------
+2.4.1 - Housekeeping update, now unregisters hooks on game close and a new explanation video
 2.4.0 - Added optional "Rapid Mutation" mode that can be triggered by Teleporter events, the final stage, or both (and a bit of polish)
 2.3.1 - Changed master assignment in order to resolve bug where generic mode would fail to find a valid master
 2.3.0 - Artifact can now be enabled/disabled/paused during a run (for use with KingEnderBrine-ArtifactsRandomizer)
