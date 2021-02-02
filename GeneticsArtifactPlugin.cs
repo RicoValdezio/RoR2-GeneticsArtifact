@@ -8,13 +8,13 @@ using UnityEngine;
 namespace GeneticsArtifact
 {
     [BepInDependency("com.bepis.r2api", BepInDependency.DependencyFlags.HardDependency)]
-    [BepInIncompatibility("Rein.RogueWisp")] //Going to officially incompat this
+    [BepInDependency("Rein.RogueWisp", BepInDependency.DependencyFlags.SoftDependency)] //This is bad and I hate it that load order caused the bug
     [R2APISubmoduleDependency(new string[] { "ResourcesAPI", "LanguageAPI" })]
     [BepInPlugin(ModGuid, ModName, ModVer)]
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.EveryoneNeedSameModVersion)]
     public class GeneticsArtifactPlugin : BaseUnityPlugin
     {
-        private const string ModVer = "2.4.1";
+        private const string ModVer = "2.4.2";
         private const string ModName = "Genetics";
         private const string ModGuid = "com.RicoValdezio.ArtifactOfGenetics";
         public static GeneticsArtifactPlugin Instance;

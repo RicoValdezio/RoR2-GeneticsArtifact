@@ -25,10 +25,10 @@ Known Issues/Planned Updates
 - Reimplement the size modifier once I figure out the networking
 - If you find a case of the -infinity health bug, type !geneticsbughunt into the discord chat
 - Make a video for devs to explain how to use the genetic system for their own mods
-- There is a conflict with Rein-RogueWisp that causes 1/4 max health due to a hook issue, flagged as incompatible
 
 Changelog
 -----------
+2.4.2 - Fixed the RogueWisp conflict, turns out that hook load order was the problem
 2.4.1 - Housekeeping update, now unregisters hooks on game close and a new explanation video
 2.4.0 - Added optional "Rapid Mutation" mode that can be triggered by Teleporter events, the final stage, or both (and a bit of polish)
 2.3.1 - Changed master assignment in order to resolve bug where generic mode would fail to find a valid master
