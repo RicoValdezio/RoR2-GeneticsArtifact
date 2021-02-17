@@ -3,12 +3,13 @@ using MonoMod.Cil;
 using R2API;
 using RoR2;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using static MonoMod.Cil.RuntimeILReferenceBag.FastDelegateInvokers;
 
 namespace GeneticsArtifact
 {
-    internal class GeneticMasterController : MonoBehaviour
+    public class GeneticMasterController : MonoBehaviour
     {
         public static List<GeneTracker> masterTrackers;
         public static List<GeneTracker> deadTrackers;
@@ -16,7 +17,8 @@ namespace GeneticsArtifact
 
         internal static float updateTimer = 0f, statusTimer = 0f;
 
-        public static bool rapidMutationActive, moonActive;
+        public static bool rapidMutationActive, moonActive, holdoutActive;
+        public static Dictionary<string, bool> customEventFlags;
         internal static float rapidTimer = 0f;
 
         internal static void Init()
@@ -25,6 +27,8 @@ namespace GeneticsArtifact
             deadTrackers = new List<GeneTracker>();
             livingBehaviours = new List<GeneBehaviour>();
             rapidMutationActive = ConfigMaster.rapidMutationType.Contains("Always");
+            customEventFlags = new Dictionary<string, bool>();
+            ClearRapidTrackers();
 
             On.RoR2.CharacterBody.Start += CharacterBody_Start;
             On.RoR2.HealthComponent.TakeDamage += HealthComponent_TakeDamage;
@@ -47,6 +51,7 @@ namespace GeneticsArtifact
                 behaviour.enabled = false;
             }
             PurgeMasters();
+            ClearRapidTrackers();
 
             On.RoR2.CharacterBody.Start -= CharacterBody_Start;
             On.RoR2.HealthComponent.TakeDamage -= HealthComponent_TakeDamage;
@@ -366,10 +371,18 @@ namespace GeneticsArtifact
             deadTrackers.Clear();
         }
 
+        private static void ClearRapidTrackers()
+        {
+            moonActive = false;
+            holdoutActive = false;
+            customEventFlags = customEventFlags.ToDictionary(x => x.Key, y => false);
+        }
+
         private static void Run_BeginGameOver(On.RoR2.Run.orig_BeginGameOver orig, Run self, GameEndingDef gameEndingDef)
         {
             orig(self, gameEndingDef);
             PurgeMasters();
+            ClearRapidTrackers();
         }
 
         private static void RunArtifactManager_SetArtifactEnabledServer(On.RoR2.RunArtifactManager.orig_SetArtifactEnabledServer orig, RunArtifactManager self, ArtifactDef artifactDef, bool newEnabled)
@@ -393,8 +406,15 @@ namespace GeneticsArtifact
         #endregion
 
         #region RapidMutation-EventTriggers
-        public static void UpdateRapidMutation(bool newValue)
+        public static void UpdateRapidMutation()
         {
+            bool newValue = false;
+            if((ConfigMaster.rapidMutationType.Contains("Moon") && moonActive) || 
+               (ConfigMaster.rapidMutationType.Contains("Event") && (holdoutActive || customEventFlags.ContainsValue(true))))
+            {
+                newValue = true;
+            }
+
             if (newValue != rapidMutationActive)
             {
                 Chat.SimpleChatMessage message;
@@ -415,34 +435,32 @@ namespace GeneticsArtifact
         private static void Stage_Start(On.RoR2.Stage.orig_Start orig, Stage self)
         {
             orig(self);
-            if (self.sceneDef.isFinalStage && ConfigMaster.rapidMutationType.Contains("Moon"))
+            if (self.sceneDef.isFinalStage)
             {
-                UpdateRapidMutation(true);
                 moonActive = true;
             }
             else
             {
-                UpdateRapidMutation(false);
                 moonActive = false;
             }
+            UpdateRapidMutation();
         }
 
         private static void HoldoutZoneController_OnEnable(On.RoR2.HoldoutZoneController.orig_OnEnable orig, HoldoutZoneController self)
         {
             orig(self);
-            if (ConfigMaster.rapidMutationType.Contains("Event"))
-            {
-                UpdateRapidMutation(true);
-            }
+            holdoutActive = true;
+            UpdateRapidMutation();
         }
 
         private static void HoldoutZoneController_OnDisable(On.RoR2.HoldoutZoneController.orig_OnDisable orig, HoldoutZoneController self)
         {
             orig(self);
-            if (ConfigMaster.rapidMutationType.Contains("Event") && !moonActive && InstanceTracker.GetInstancesList<HoldoutZoneController>().Count == 0)
+            if (InstanceTracker.GetInstancesList<HoldoutZoneController>().Count == 0)
             {
-                UpdateRapidMutation(false);
+                holdoutActive = false;
             }
+            UpdateRapidMutation();
         }
         #endregion
     }

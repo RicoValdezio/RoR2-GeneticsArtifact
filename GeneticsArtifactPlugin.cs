@@ -42,7 +42,7 @@ namespace GeneticsArtifact
 
         private void OnDisable()
         {
-            GeneticMasterController.Cleanup();
+            //GeneticMasterController.Cleanup();
         }
     }
 }
