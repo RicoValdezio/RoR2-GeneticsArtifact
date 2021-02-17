@@ -25,9 +25,11 @@ Known Issues/Planned Updates
 - Reimplement the size modifier once I figure out the networking
 - If you find a case of the -infinity health bug, type !geneticsbughunt into the discord chat
 - Make a video for devs to explain how to use the genetic system for their own mods
+	- The custom event flag system is loosely explained on the Git wiki
 
 Changelog
 -----------
+2.5.0 - Added new custom event flag system to allow mods to define their own "Rapid Mutation" events
 2.4.2 - Fixed the RogueWisp conflict, turns out that hook load order was the problem
 2.4.1 - Housekeeping update, now unregisters hooks on game close and a new explanation video
 2.4.0 - Added optional "Rapid Mutation" mode that can be triggered by Teleporter events, the final stage, or both (and a bit of polish)
