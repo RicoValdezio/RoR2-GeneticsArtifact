@@ -415,7 +415,7 @@ namespace GeneticsArtifact
                 newValue = true;
             }
 
-            if (newValue != rapidMutationActive)
+            if (newValue != rapidMutationActive && RunArtifactManager.instance.IsArtifactEnabled(ArtifactOfGenetics.def.artifactIndex))
             {
                 Chat.SimpleChatMessage message;
                 if (newValue)
