@@ -91,7 +91,7 @@ namespace GeneticsArtifact
                         GeneticsArtifactPlugin.geneticLogSource.LogInfo("Begin Genetic Master Status Log");
                         foreach (GeneTracker masterTracker in masterTrackers)
                         {
-                            GeneticsArtifactPlugin.geneticLogSource.LogInfo(masterTracker.GetGeneString());
+                            GeneticsArtifactPlugin.geneticLogSource.LogInfo(masterTracker.BuildGenePairMessage());
                         }
                         GeneticsArtifactPlugin.geneticLogSource.LogInfo("End Genetic Master Status Log");
                     } 

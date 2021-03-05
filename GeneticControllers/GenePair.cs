@@ -114,5 +114,10 @@ namespace GeneticsArtifact
                     break;
             }
         }
+
+        public string GetNameValueString()
+        {
+            return name + " " + value.ToString("N4");
+        }
     }
 }

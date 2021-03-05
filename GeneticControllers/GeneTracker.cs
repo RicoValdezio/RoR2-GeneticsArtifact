@@ -162,16 +162,13 @@ namespace GeneticsArtifact
             isLocked = false;
         }
 
-        public string GetGeneString()
+        public string BuildGenePairMessage()
         {
-            string message = "ID " + index.ToString("D2") + " | "
-                    + GetGeneValue("Health").ToString("N4") + " | "
-                    + GetGeneValue("Regen").ToString("N4") + " | "
-                    + GetGeneValue("MoveSpeed").ToString("N4") + " | "
-                    + GetGeneValue("Acceleration").ToString("N4") + " | "
-                    + GetGeneValue("Damage").ToString("N4") + " | "
-                    + GetGeneValue("AttackSpeed").ToString("N4") + " | "
-                    + GetGeneValue("Armor").ToString("N4");
+            string message = "ID " + index.ToString("D2");
+            foreach (GenePair gene in genePairs)
+            {
+                message += " | " + gene.GetNameValueString();
+            }
             return message;
         }
 

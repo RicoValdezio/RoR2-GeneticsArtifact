@@ -61,26 +61,13 @@ namespace GeneticsArtifact
             {
                 if (body.healthComponent.health < 0f)
                 {
-                    GeneticsArtifactPlugin.geneticLogSource.LogWarning(GetGeneString());
+                    GeneticsArtifactPlugin.geneticLogSource.LogWarning(tracker.BuildGenePairMessage());
                 }
                 else
                 {
-                    GeneticsArtifactPlugin.geneticLogSource.LogInfo(GetGeneString());
+                    GeneticsArtifactPlugin.geneticLogSource.LogInfo(tracker.BuildGenePairMessage());
                 }
             }
-        }
-
-        public string GetGeneString()
-        {
-            string message = "Body spawned with ID " + tracker.index.ToString("D2") + " | "
-                    + "Health " + tracker.GetGeneValue("Health").ToString("N4") + " " + body.maxHealth.ToString("N4") + " | "
-                    + "Regen " + tracker.GetGeneValue("Regen").ToString("N4") + " " + body.regen.ToString("N4") + " | "
-                    + "MoveSpeed " + tracker.GetGeneValue("MoveSpeed").ToString("N4") + " " + body.moveSpeed.ToString("N4") + " | "
-                    + "Damage " + tracker.GetGeneValue("Damage").ToString("N4") + " " + body.damage.ToString("N4") + " | "
-                    + "AttackSpeed " + tracker.GetGeneValue("AttackSpeed").ToString("N4") + " " + body.attackSpeed.ToString("N4") + " | "
-                    + "Armor " + tracker.GetGeneValue("Armor").ToString("N4") + " " + body.armor.ToString("N4") + " | "
-                    + "Level " + body.level.ToString();
-            return message;
         }
 
         private void Update()
