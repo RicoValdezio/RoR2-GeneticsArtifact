@@ -29,6 +29,7 @@ Known Issues/Planned Updates
 
 Changelog
 -----------
+2.5.2 - Switched config from values to binds, should allow hot-reloading now
 2.5.1 - Fixed chat bug where the rapid mutation messages would display even if the artifact was disabled
 2.5.0 - Added new custom event flag system to allow mods to define their own "Rapid Mutation" events
 2.4.2 - Fixed the RogueWisp conflict, turns out that hook load order was the problem
