@@ -32,7 +32,7 @@ namespace GeneticsArtifact
                     new GenePair("AttackSpeed", 1f, GeneBalanceType.Normal, ConfigMaster.attackSpeedMax, ConfigMaster.attackSpeedMin),
                     new GenePair("Armor", 1f, GeneBalanceType.Normal, ConfigMaster.armorMax, ConfigMaster.armorMin)
                 });
-                if (ConfigMaster.useSizeModifier)
+                if (ConfigMaster.useSizeModifier.Value)
                 {
                     genePairs.Add(new GenePair("Size", 1f, GeneBalanceType.Centered, ConfigMaster.sizeMax, ConfigMaster.sizeMin));
                 }
@@ -107,7 +107,7 @@ namespace GeneticsArtifact
         public void ApplyNewBalanceSystem()
         {
             //Start applying penalties until below the balanceLimit
-            while (DetermineCurrentBalance() > ConfigMaster.balanceLimit)
+            while (DetermineCurrentBalance() > ConfigMaster.balanceLimit.Value)
             {
                 //This is optimistic as it assumes that there is a high chance of hitting a decrease-able gene
                 genePairs[UnityEngine.Random.Range(0, genePairs.Count - 1)].ApplyBalancePenalty();
@@ -143,7 +143,7 @@ namespace GeneticsArtifact
                     {
                         if (!sumPairs.Any(x => x.name == childPair.name))
                         {
-                            sumPairs.Add(new GenePair(childPair.name, 0f, GeneBalanceType.Ignored, 0f, 0f, 0f, 0f));
+                            sumPairs.Add(new GenePair(childPair.name, 0f, GeneBalanceType.Ignored, childPair.maxValue, childPair.minValue));
                         }
                         sumPairs.Find(x => x.name == childPair.name).value += childPair.value * childTracker.score;
                     }

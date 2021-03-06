@@ -12,14 +12,14 @@ namespace GeneticsArtifact
         private void OnEnable()
         {
             body = gameObject.GetComponent<CharacterBody>();
-            if (ConfigMaster.trackerPerMonsterID)
+            if (ConfigMaster.trackerPerMonsterID.Value)
             {
                 tracker = new GeneTracker(gameObject.GetComponent<CharacterBody>().bodyIndex);
                 masterTracker = GeneticMasterController.masterTrackers.Find(x => x.index == tracker.index);
             }
             else
             {
-                masterTracker = GeneticMasterController.masterTrackers[Random.Range(0, ConfigMaster.maxTrackers - 1)];
+                masterTracker = GeneticMasterController.masterTrackers[Random.Range(0, ConfigMaster.maxTrackers.Value - 1)];
                 tracker = new GeneTracker(masterTracker.index);
             }
             GeneticMasterController.livingBehaviours.Add(this);
@@ -57,7 +57,7 @@ namespace GeneticsArtifact
 
             body.RecalculateStats();
 
-            if(ConfigMaster.spawnLogging || (ConfigMaster.accidentalDeathLogging && (body.maxHealth < 0f || float.IsNaN(body.maxHealth))))
+            if(ConfigMaster.spawnLogging.Value || (ConfigMaster.accidentalDeathLogging.Value && (body.maxHealth < 0f || float.IsNaN(body.maxHealth))))
             {
                 if (body.healthComponent.health < 0f)
                 {

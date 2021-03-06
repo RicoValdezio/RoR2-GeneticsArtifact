@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using BepInEx.Configuration;
+using UnityEngine;
 
 namespace GeneticsArtifact
 {
@@ -26,10 +27,10 @@ namespace GeneticsArtifact
     {
         public string name;
         public float value;
-        public float maxValue, minValue, mutValue, penValue;
+        public ConfigEntry<float> maxValue, minValue, mutValue, penValue;
         public GeneBalanceType balanceType;
 
-        public GenePair(string givenName, float givenValue, GeneBalanceType givenType, float givenMax, float givenMin)
+        public GenePair(string givenName, float givenValue, GeneBalanceType givenType, ConfigEntry<float> givenMax, ConfigEntry<float> givenMin)
         {
             name = givenName;
             value = givenValue;
@@ -40,7 +41,7 @@ namespace GeneticsArtifact
             penValue = ConfigMaster.balanceStep;
         }
 
-        public GenePair(string givenName, float givenValue, GeneBalanceType givenType, float givenMax, float givenMin, float givenMutationScale, float givenPenaltySize)
+        public GenePair(string givenName, float givenValue, GeneBalanceType givenType, ConfigEntry<float> givenMax, ConfigEntry<float> givenMin, ConfigEntry<float> givenMutationScale, ConfigEntry<float> givenPenaltySize)
         {
             name = givenName;
             value = givenValue;
@@ -56,7 +57,7 @@ namespace GeneticsArtifact
         /// </summary>
         public void Mutate()
         {
-            value = Mathf.Clamp(Random.Range(value * (1 - mutValue), value * (1 + mutValue)), minValue, maxValue);
+            value = Mathf.Clamp(Random.Range(value * (1 - mutValue.Value), value * (1 + mutValue.Value)), minValue.Value, maxValue.Value);
         }
 
         /// <summary>
@@ -64,7 +65,7 @@ namespace GeneticsArtifact
         /// </summary>
         public void UnclampedMutate()
         {
-            value = Random.Range(value * (1 - mutValue), value * (1 + mutValue));
+            value = Random.Range(value * (1 - mutValue.Value), value * (1 + mutValue.Value));
         }
 
         /// <summary>
@@ -72,7 +73,7 @@ namespace GeneticsArtifact
         /// </summary>
         public void MinMaxMutate()
         {
-            value = Random.Range(minValue, maxValue);
+            value = Random.Range(minValue.Value, maxValue.Value);
         }
 
         public float GetBalanceValue()
@@ -95,20 +96,20 @@ namespace GeneticsArtifact
             switch (balanceType)
             {
                 case GeneBalanceType.Normal:
-                    value = Mathf.Max(minValue, value - penValue);
+                    value = Mathf.Max(minValue.Value, value - penValue.Value);
                     break;
                 case GeneBalanceType.Centered:
                     if(value > 1f)
                     {
-                        value = Mathf.Max(1f, value - penValue);
+                        value = Mathf.Max(1f, value - penValue.Value);
                     }
                     else
                     {
-                        value = Mathf.Min(1f, value + penValue);
+                        value = Mathf.Min(1f, value + penValue.Value);
                     }
                     break;
                 case GeneBalanceType.Inverted:
-                    value = Mathf.Min(maxValue, value + penValue);
+                    value = Mathf.Min(maxValue.Value, value + penValue.Value);
                     break;
                 default: //GeneBalanceType.Ignored
                     break;
