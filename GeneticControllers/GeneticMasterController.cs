@@ -172,6 +172,14 @@ namespace GeneticsArtifact
                             break;
                         }
                     }
+
+                    //Handle infection if enabled (figure out how to access tracker in generic way)
+                    if (ConfigMaster.enableInfection.Value && 
+                        damageInfo.attacker?.GetComponent<GeneBehaviour>() is GeneBehaviour attackerBehaviour &&
+                        self.body?.gameObject?.GetComponent<GeneBehaviour>() is GeneBehaviour victimBehaviour)
+                    {
+                        victimBehaviour.tracker.InfectFromAttacker(attackerBehaviour.tracker);
+                    }
                 }
             }
         }

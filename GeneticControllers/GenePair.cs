@@ -76,6 +76,15 @@ namespace GeneticsArtifact
             value = Random.Range(minValue.Value, maxValue.Value);
         }
 
+        /// <summary>
+        /// Instant mutate towards a new value provided by attacker
+        /// </summary>
+        /// <param name="infectValue">Gene value of attacking tracker</param>
+        public void Infect(float infectValue)
+        {
+            value = Mathf.Clamp((value + infectValue) / 2, minValue.Value, maxValue.Value);
+        }
+
         public float GetBalanceValue()
         {
             switch (balanceType)

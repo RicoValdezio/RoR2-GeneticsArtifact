@@ -10,6 +10,7 @@ namespace GeneticsArtifact
         public static ConfigEntry<float> timeBetweenUpdates, timeBetweenStatusLogging;
         public static ConfigEntry<bool> enableMasterPause;
         public static ConfigEntry<string> rapidMutationType;
+        public static ConfigEntry<bool> enableInfection;
         #endregion
 
         #region GeneTracker

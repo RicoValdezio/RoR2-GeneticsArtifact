@@ -103,26 +103,6 @@ namespace GeneticsArtifact
             ApplyNewBalanceSystem();
         }
 
-        public void ApplyNewBalanceSystem()
-        {
-            //Start applying penalties until below the balanceLimit
-            while (DetermineCurrentBalance() > ConfigMaster.balanceLimit.Value)
-            {
-                //This is optimistic as it assumes that there is a high chance of hitting a decrease-able gene
-                genePairs[UnityEngine.Random.Range(0, genePairs.Count - 1)].ApplyBalancePenalty();
-            }
-        }
-
-        public float DetermineCurrentBalance()
-        {
-            float currentBalance = 1f;
-            foreach (GenePair gene in genePairs)
-            {
-                currentBalance *= gene.GetBalanceValue();
-            }
-            return currentBalance;
-        }
-
         public void MutateFromChildren()
         {
             List<GenePair> sumPairs = new List<GenePair>();
@@ -159,6 +139,35 @@ namespace GeneticsArtifact
             }
             //Unlock self to allow spawning
             isLocked = false;
+        }
+
+        public void InfectFromAttacker(GeneTracker attacker)
+        {
+            //Get values from attacker's GenePairs and pass infect to ours
+            foreach(GenePair gene in genePairs)
+            {
+                gene.Infect(attacker.GetGeneValue(gene.name));
+            }
+        }
+
+        public void ApplyNewBalanceSystem()
+        {
+            //Start applying penalties until below the balanceLimit
+            while (DetermineCurrentBalance() > ConfigMaster.balanceLimit.Value)
+            {
+                //This is optimistic as it assumes that there is a high chance of hitting a decrease-able gene
+                genePairs[UnityEngine.Random.Range(0, genePairs.Count - 1)].ApplyBalancePenalty();
+            }
+        }
+
+        public float DetermineCurrentBalance()
+        {
+            float currentBalance = 1f;
+            foreach (GenePair gene in genePairs)
+            {
+                currentBalance *= gene.GetBalanceValue();
+            }
+            return currentBalance;
         }
 
         public string BuildGenePairMessage()
