@@ -24,6 +24,18 @@ namespace GeneticsArtifact
             }
             GeneticMasterController.livingBehaviours.Add(this);
             ApplyMutation();
+
+            if (ConfigMaster.spawnLogging.Value || (ConfigMaster.accidentalDeathLogging.Value && (body.maxHealth < 0f || float.IsNaN(body.maxHealth))))
+            {
+                if (body.healthComponent.health < 0f)
+                {
+                    GeneticsArtifactPlugin.geneticLogSource.LogWarning(tracker.BuildGenePairMessage());
+                }
+                else
+                {
+                    GeneticsArtifactPlugin.geneticLogSource.LogInfo(tracker.BuildGenePairMessage());
+                }
+            }
         }
 
         private void OnDisable()
@@ -57,17 +69,7 @@ namespace GeneticsArtifact
 
             body.RecalculateStats();
 
-            if(ConfigMaster.spawnLogging.Value || (ConfigMaster.accidentalDeathLogging.Value && (body.maxHealth < 0f || float.IsNaN(body.maxHealth))))
-            {
-                if (body.healthComponent.health < 0f)
-                {
-                    GeneticsArtifactPlugin.geneticLogSource.LogWarning(tracker.BuildGenePairMessage());
-                }
-                else
-                {
-                    GeneticsArtifactPlugin.geneticLogSource.LogInfo(tracker.BuildGenePairMessage());
-                }
-            }
+            
         }
 
         private void Update()

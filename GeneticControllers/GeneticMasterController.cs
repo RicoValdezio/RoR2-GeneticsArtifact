@@ -148,6 +148,14 @@ namespace GeneticsArtifact
                     //Always add a behaviour to the body
                     self.gameObject.AddComponent<GeneBehaviour>();
                 }
+                else if (ConfigMaster.enableInfection.Value && self.teamComponent.teamIndex == TeamIndex.Player && self.master.playerCharacterMasterController)
+                {
+                    if (!self.master?.gameObject?.GetComponent<PlayerGeneBehaviour>())
+                    {
+                        self.master?.gameObject?.AddComponent<PlayerGeneBehaviour>();
+                    }
+                    self.master.gameObject.GetComponent<PlayerGeneBehaviour>().ApplyMutation();
+                }
             }
         }
 
@@ -173,12 +181,15 @@ namespace GeneticsArtifact
                         }
                     }
 
-                    //Handle infection if enabled (figure out how to access tracker in generic way)
-                    if (ConfigMaster.enableInfection.Value && 
-                        damageInfo.attacker?.GetComponent<GeneBehaviour>() is GeneBehaviour attackerBehaviour &&
-                        self.body?.gameObject?.GetComponent<GeneBehaviour>() is GeneBehaviour victimBehaviour)
+                    //Handle infection if enabled
+                    if (ConfigMaster.enableInfection.Value)
                     {
-                        victimBehaviour.tracker.InfectFromAttacker(attackerBehaviour.tracker);
+                        GeneTracker attackerTracker, victimTracker;
+                        if (GetAttackerTracker(damageInfo, out attackerTracker) && GetVictimTracker(self, out victimTracker))
+                        {
+                            victimTracker.InfectFromAttacker(attackerTracker);
+                            VictimApplyMutation(self);
+                        }
                     }
                 }
             }
@@ -471,5 +482,65 @@ namespace GeneticsArtifact
             UpdateRapidMutation();
         }
         #endregion
+
+        public static bool GetAttackerTracker(DamageInfo damageInfo, out GeneTracker tracker)
+        {
+            tracker = null;
+            if(damageInfo.attacker?.GetComponent<CharacterBody>() is CharacterBody attackerBody)
+            {
+                if (attackerBody.gameObject?.GetComponent<GeneBehaviour>() is GeneBehaviour geneBehaviour)
+                {
+                    tracker = geneBehaviour.tracker;
+                    return true;
+                }
+                else if (attackerBody.master?.gameObject?.GetComponent<PlayerGeneBehaviour>() is PlayerGeneBehaviour playerGeneBehaviour)
+                {
+                    tracker = playerGeneBehaviour.tracker;
+                    return true;
+                }
+            }
+            else if (damageInfo.inflictor?.GetComponent<CharacterBody>() is CharacterBody inflictorBody)
+            {
+                if (inflictorBody.gameObject?.GetComponent<GeneBehaviour>() is GeneBehaviour geneBehaviour)
+                {
+                    tracker = geneBehaviour.tracker;
+                    return true;
+                }
+                else if (inflictorBody.master?.gameObject?.GetComponent<PlayerGeneBehaviour>() is PlayerGeneBehaviour playerGeneBehaviour)
+                {
+                    tracker = playerGeneBehaviour.tracker;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static bool GetVictimTracker(HealthComponent healthComponent, out GeneTracker tracker)
+        {
+            tracker = null;
+            if(healthComponent.body?.gameObject?.GetComponent<GeneBehaviour>() is GeneBehaviour geneBehaviour)
+            {
+                tracker = geneBehaviour.tracker;
+                return true;
+            }
+            else if(healthComponent.body?.master?.gameObject?.GetComponent<PlayerGeneBehaviour>() is PlayerGeneBehaviour playerGeneBehaviour)
+            {
+                tracker = playerGeneBehaviour.tracker;
+                return true;
+            }
+            return false;
+        }
+
+        public static void VictimApplyMutation(HealthComponent healthComponent)
+        {
+            if (healthComponent.body?.gameObject?.GetComponent<GeneBehaviour>() is GeneBehaviour geneBehaviour)
+            {
+                geneBehaviour.ApplyMutation();
+            }
+            else if (healthComponent.body?.master?.gameObject?.GetComponent<PlayerGeneBehaviour>() is PlayerGeneBehaviour playerGeneBehaviour)
+            {
+                playerGeneBehaviour.ApplyMutation();
+            }
+        }
     }
 }

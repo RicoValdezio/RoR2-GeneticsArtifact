@@ -1,7 +1,7 @@
 ﻿using RoR2;
 using UnityEngine;
 
-namespace GeneticsArtifact.GeneticControllers
+namespace GeneticsArtifact
 {
     public class PlayerGeneBehaviour : MonoBehaviour
     {
@@ -14,6 +14,11 @@ namespace GeneticsArtifact.GeneticControllers
             if(master.GetBody() is CharacterBody body)
             {
                 tracker = new GeneTracker(body.bodyIndex, true);
+
+                if (ConfigMaster.spawnLogging.Value)
+                {
+                    GeneticsArtifactPlugin.geneticLogSource.LogInfo(tracker.BuildGenePairMessage());
+                }
             }
         }
 
@@ -34,11 +39,6 @@ namespace GeneticsArtifact.GeneticControllers
                 }
 
                 body.RecalculateStats();
-
-                if (ConfigMaster.spawnLogging.Value)
-                {
-                    GeneticsArtifactPlugin.geneticLogSource.LogInfo(tracker.BuildGenePairMessage());
-                }
             }
         }
     }
