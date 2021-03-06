@@ -26,7 +26,7 @@ namespace GeneticsArtifact
             masterTrackers = new List<GeneTracker>();
             deadTrackers = new List<GeneTracker>();
             livingBehaviours = new List<GeneBehaviour>();
-            rapidMutationActive = ConfigMaster.rapidMutationType.Contains("Always");
+            rapidMutationActive = ConfigMaster.rapidMutationType.Value.Contains("Always");
             customEventFlags = new Dictionary<string, bool>();
             ClearRapidTrackers();
 
@@ -71,7 +71,7 @@ namespace GeneticsArtifact
             {
                 #region Logging
                 updateTimer += Time.deltaTime;
-                if (updateTimer >= ConfigMaster.timeBetweenUpdates)
+                if (updateTimer >= ConfigMaster.timeBetweenUpdates.Value)
                 {
                     //If the specified time has passed, update the masters and purge the dead
                     updateTimer = 0f;
@@ -83,15 +83,15 @@ namespace GeneticsArtifact
                 }
 
                 //Status logging for those who have it enabled
-                if (ConfigMaster.statusLogging) {
+                if (ConfigMaster.statusLogging.Value) {
                     statusTimer += Time.deltaTime;
-                    if (statusTimer >= ConfigMaster.timeBetweenStatusLogging)
+                    if (statusTimer >= ConfigMaster.timeBetweenStatusLogging.Value)
                     {
                         statusTimer = 0f;
                         GeneticsArtifactPlugin.geneticLogSource.LogInfo("Begin Genetic Master Status Log");
                         foreach (GeneTracker masterTracker in masterTrackers)
                         {
-                            GeneticsArtifactPlugin.geneticLogSource.LogInfo(masterTracker.GetGeneString());
+                            GeneticsArtifactPlugin.geneticLogSource.LogInfo(masterTracker.BuildGenePairMessage());
                         }
                         GeneticsArtifactPlugin.geneticLogSource.LogInfo("End Genetic Master Status Log");
                     } 
@@ -129,18 +129,18 @@ namespace GeneticsArtifact
             {
                 //Always apply this to Monsters, optionally apply this to Player minions and Neutrals
                 if ((self.teamComponent.teamIndex == TeamIndex.Monster) ||
-                    (self.teamComponent.teamIndex == TeamIndex.Neutral && ConfigMaster.applyToNeutrals) ||
-                    (self.teamComponent.teamIndex == TeamIndex.Player && ConfigMaster.applyToMinions && !self.master.playerCharacterMasterController))
+                    (self.teamComponent.teamIndex == TeamIndex.Neutral && ConfigMaster.applyToNeutrals.Value) ||
+                    (self.teamComponent.teamIndex == TeamIndex.Player && ConfigMaster.applyToMinions.Value && !self.master.playerCharacterMasterController))
                 {
                     //If using a master per monster type and there isn't already a master for this type, add a master for this type
-                    if (ConfigMaster.trackerPerMonsterID && masterTrackers.Find(x => x.index == self.bodyIndex) == null)
+                    if (ConfigMaster.trackerPerMonsterID.Value && masterTrackers.Find(x => x.index == self.bodyIndex) == null)
                     {
                         masterTrackers.Add(new GeneTracker(self.bodyIndex, true));
                         //Chat.AddMessage("A new Master was made for bodyIndex: " + body.baseNameToken);
                     }
-                    else if(masterTrackers.Count < ConfigMaster.maxTrackers)
+                    else if(masterTrackers.Count < ConfigMaster.maxTrackers.Value)
                     {
-                        for (int x = masterTrackers.Count; x < ConfigMaster.maxTrackers; x++)
+                        for (int x = masterTrackers.Count; x < ConfigMaster.maxTrackers.Value; x++)
                         {
                             masterTrackers.Add(new GeneTracker(x, true));
                         }
@@ -392,7 +392,7 @@ namespace GeneticsArtifact
             if (artifactDef.artifactIndex == ArtifactOfGenetics.def.artifactIndex && !newEnabled)
             {
                 //If pausing is disabled, purge the masters and the dead
-                if (!ConfigMaster.enableMasterPause)
+                if (!ConfigMaster.enableMasterPause.Value)
                 {
                     GeneticsArtifactPlugin.geneticLogSource.LogInfo("Artifact has been disabled, purging all masters.");
                     PurgeMasters();
@@ -409,8 +409,8 @@ namespace GeneticsArtifact
         public static void UpdateRapidMutation()
         {
             bool newValue = false;
-            if((ConfigMaster.rapidMutationType.Contains("Moon") && moonActive) || 
-               (ConfigMaster.rapidMutationType.Contains("Event") && (holdoutActive || customEventFlags.ContainsValue(true))))
+            if((ConfigMaster.rapidMutationType.Value.Contains("Moon") && moonActive) || 
+               (ConfigMaster.rapidMutationType.Value.Contains("Event") && (holdoutActive || customEventFlags.ContainsValue(true))))
             {
                 newValue = true;
             }
