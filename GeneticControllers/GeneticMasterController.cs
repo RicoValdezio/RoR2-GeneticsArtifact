@@ -183,7 +183,7 @@ namespace GeneticsArtifact
                     }
 
                     //Handle infection if enabled
-                    if (ConfigMaster.enableInfection.Value)
+                    if (ConfigMaster.monsterInfection.Value || ConfigMaster.playerInfection.Value)
                     {
                         GeneTracker attackerTracker, victimTracker;
                         if (GetAttackerTracker(damageInfo, out attackerTracker) && GetVictimTracker(self, out victimTracker))
@@ -535,11 +535,11 @@ namespace GeneticsArtifact
 
         public static void VictimApplyMutation(HealthComponent healthComponent)
         {
-            if (healthComponent.body?.gameObject?.GetComponent<GeneBehaviour>() is GeneBehaviour geneBehaviour)
+            if (healthComponent.body?.gameObject?.GetComponent<GeneBehaviour>() is GeneBehaviour geneBehaviour && ConfigMaster.monsterInfection.Value)
             {
                 geneBehaviour.ApplyMutation();
             }
-            else if (healthComponent.body?.master?.gameObject?.GetComponent<PlayerGeneBehaviour>() is PlayerGeneBehaviour playerGeneBehaviour)
+            else if (healthComponent.body?.master?.gameObject?.GetComponent<PlayerGeneBehaviour>() is PlayerGeneBehaviour playerGeneBehaviour && ConfigMaster.playerInfection.Value)
             {
                 playerGeneBehaviour.ApplyMutation();
             }

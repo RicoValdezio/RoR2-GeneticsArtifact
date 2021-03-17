@@ -10,7 +10,7 @@ namespace GeneticsArtifact
         public static ConfigEntry<float> timeBetweenUpdates, timeBetweenStatusLogging;
         public static ConfigEntry<bool> enableMasterPause;
         public static ConfigEntry<string> rapidMutationType;
-        public static ConfigEntry<bool> enableInfection;
+        public static ConfigEntry<bool> monsterInfection, playerInfection;
         #endregion
 
         #region GeneTracker
@@ -64,7 +64,8 @@ namespace GeneticsArtifact
             enableMasterPause = GeneticsArtifactPlugin.Instance.Config.Bind(new ConfigDefinition("1. Master Settings", "Enable Master Pause"), true, new ConfigDescription("If set to true, all masters will be paused if the artifact is disabled during a run. If set to false, the masters will be destroyed.", new AcceptableValueList<bool>(true, false)));
 
             rapidMutationType = GeneticsArtifactPlugin.Instance.Config.Bind(new ConfigDefinition("5. Master Optional Settings", "Rapid Mutation Type"), "Never", new ConfigDescription("Determines if/when the rapid mutation mode is active.", new AcceptableValueList<string>("Never", "Always", "OnlyEvents", "OnlyMoon", "EventsAndMoon")));
-            enableInfection = GeneticsArtifactPlugin.Instance.Config.Bind(new ConfigDefinition("5. Master Optional Settings", "Enable Infection"), false, new ConfigDescription("Determines if players and monsters can infect each-other's genes.", new AcceptableValueList<bool>(true, false)));
+            monsterInfection = GeneticsArtifactPlugin.Instance.Config.Bind(new ConfigDefinition("5. Master Optional Settings", "Enable Infection for Monsters"), false, new ConfigDescription("Determines if monsters can be infected with each-other's genes.", new AcceptableValueList<bool>(true, false)));
+            playerInfection = GeneticsArtifactPlugin.Instance.Config.Bind(new ConfigDefinition("5. Master Optional Settings", "Enable Infection for Players"), false, new ConfigDescription("Determines if players can be infected with each-other's genes.", new AcceptableValueList<bool>(true, false)));
         }
     }
 }
