@@ -82,7 +82,7 @@ namespace GeneticsArtifact
         /// <param name="infectValue">Gene value of attacking tracker</param>
         public void Infect(float infectValue)
         {
-            value = Mathf.Clamp((value + infectValue) / 2, minValue.Value, maxValue.Value);
+            value = Mathf.Clamp(Random.Range(Mathf.Min(value, infectValue), Mathf.Max(value, infectValue)), minValue.Value, maxValue.Value);
         }
 
         public float GetBalanceValue()
@@ -92,7 +92,7 @@ namespace GeneticsArtifact
                 case GeneBalanceType.Normal:
                     return value;
                 case GeneBalanceType.Centered:
-                    return Mathf.Max(value / 1f, 1f / value);
+                    return Mathf.Max(value, 1f / value);
                 case GeneBalanceType.Inverted:
                     return 1f / value;
                 default: //GeneBalanceType.Ignored

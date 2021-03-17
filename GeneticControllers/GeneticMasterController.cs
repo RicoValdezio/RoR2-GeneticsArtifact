@@ -148,7 +148,8 @@ namespace GeneticsArtifact
                     //Always add a behaviour to the body
                     self.gameObject.AddComponent<GeneBehaviour>();
                 }
-                else if (ConfigMaster.enableInfection.Value && self.teamComponent.teamIndex == TeamIndex.Player && self.master.playerCharacterMasterController)
+                //Secretly add it to the player, used in Infection mode and maybe other stuff
+                else if (self.teamComponent.teamIndex == TeamIndex.Player && self.master.playerCharacterMasterController)
                 {
                     if (!self.master?.gameObject?.GetComponent<PlayerGeneBehaviour>())
                     {
@@ -483,6 +484,7 @@ namespace GeneticsArtifact
         }
         #endregion
 
+        #region Infection-Helpers
         public static bool GetAttackerTracker(DamageInfo damageInfo, out GeneTracker tracker)
         {
             tracker = null;
@@ -542,5 +544,6 @@ namespace GeneticsArtifact
                 playerGeneBehaviour.ApplyMutation();
             }
         }
+        #endregion
     }
 }
