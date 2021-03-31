@@ -31,6 +31,7 @@ Known Issues/Planned Updates
 
 Changelog
 -----------
+3.0.0 - Updated for Content Update March, generic mode is no longer supported, also we standalone now
 2.6.0 - Added new Infection mode (disabled by default) and some underlying improvements
 2.5.2 - Switched config from values to binds, should allow hot-reloading now
 2.5.1 - Fixed chat bug where the rapid mutation messages would display even if the artifact was disabled

@@ -1,4 +1,5 @@
 ﻿using RoR2;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace GeneticsArtifact
@@ -11,20 +12,24 @@ namespace GeneticsArtifact
         {
             def = ScriptableObject.CreateInstance<ArtifactDef>();
 
-            LanguageAPI.Add("GENE_NAME_TOKEN", "Artifact of Genetics");
-            LanguageAPI.Add("GENE_DESC_TOKEN", "Monsters' stats will change based on the performance of previous monsters.");
+            LanguageOverride.customLanguage.Add("GENE_NAME_TOKEN", "Artifact of Genetics");
+            LanguageOverride.customLanguage.Add("GENE_DESC_TOKEN", "Monsters' stats will change based on the performance of previous monsters.");
 
             def.nameToken = "GENE_NAME_TOKEN";
             def.descriptionToken = "GENE_DESC_TOKEN";
-            def.smallIconSelectedSprite = Resources.Load<Sprite>("@Genetics:Assets/Genetics/Selected.png");
-            def.smallIconDeselectedSprite = Resources.Load<Sprite>("@Genetics:Assets/Genetics/Unselected.png");
+            def.smallIconSelectedSprite = GeneticsArtifactPlugin.geneticAssetBundle.LoadAsset<Sprite>("Assets/Genetics/Selected.png");
+            def.smallIconDeselectedSprite = GeneticsArtifactPlugin.geneticAssetBundle.LoadAsset<Sprite>("Assets/Genetics/Unselected.png");
 
-            ArtifactCatalog.getAdditionalEntries += ArtifactCatalog_getAdditionalEntries;
+            On.RoR2.ContentManager.SetContentPacks += ContentManager_SetContentPacks;
         }
 
-        private static void ArtifactCatalog_getAdditionalEntries(System.Collections.Generic.List<ArtifactDef> obj)
+        private static void ContentManager_SetContentPacks(On.RoR2.ContentManager.orig_SetContentPacks orig, List<ContentPack> newContentPacks)
         {
-            obj.Add(def);
+            ContentPack pack = new ContentPack();
+            pack.artifactDefs = new List<ArtifactDef>{def}.ToArray();
+
+            newContentPacks.Add(pack);
+            orig(newContentPacks);
         }
     }
 }

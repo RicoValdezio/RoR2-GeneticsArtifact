@@ -12,16 +12,10 @@ namespace GeneticsArtifact
         private void OnEnable()
         {
             body = gameObject.GetComponent<CharacterBody>();
-            if (ConfigMaster.trackerPerMonsterID.Value)
-            {
-                tracker = new GeneTracker(gameObject.GetComponent<CharacterBody>().bodyIndex);
-                masterTracker = GeneticMasterController.masterTrackers.Find(x => x.index == tracker.index);
-            }
-            else
-            {
-                masterTracker = GeneticMasterController.masterTrackers[Random.Range(0, ConfigMaster.maxTrackers.Value - 1)];
-                tracker = new GeneTracker(masterTracker.index);
-            }
+
+            tracker = new GeneTracker(gameObject.GetComponent<CharacterBody>().bodyIndex);
+            masterTracker = GeneticMasterController.masterTrackers.Find(x => x.index == tracker.index);
+
             GeneticMasterController.livingBehaviours.Add(this);
             ApplyMutation();
 

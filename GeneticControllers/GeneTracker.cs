@@ -7,7 +7,7 @@ namespace GeneticsArtifact
 {
     public class GeneTracker : IDisposable
     {
-        public int index;
+        public BodyIndex index;
         public GeneTracker masterTracker;
 
         public List<GenePair> genePairs;
@@ -16,7 +16,7 @@ namespace GeneticsArtifact
 
         private bool disposedValue;
 
-        public GeneTracker(int refIndex, bool isMaster = false)
+        public GeneTracker(BodyIndex refIndex, bool isMaster = false)
         {
             index = refIndex;
             genePairs = new List<GenePair>();
@@ -172,7 +172,7 @@ namespace GeneticsArtifact
 
         public string BuildGenePairMessage()
         {
-            string message = "ID " + index.ToString("D2");
+            string message = "ID " + BodyCatalog.GetBodyName(index);
             foreach (GenePair gene in genePairs)
             {
                 message += " | " + gene.GetNameValueString();
