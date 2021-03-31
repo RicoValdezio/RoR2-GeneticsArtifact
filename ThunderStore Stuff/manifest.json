@@ -5,6 +5,6 @@
     "description": "A new artifact that adds a pseudo-genetic backend to the monster spawning system.",
     "dependencies": [
         "bbepis-BepInExPack-5.3.1",
-        "tristanmcpherson-R2API-2.5.14"
+        "XoXFaby-MMHOOK_Standalone-1.0.1"
     ]
 }

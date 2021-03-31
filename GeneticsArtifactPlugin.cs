@@ -1,17 +1,12 @@
 ﻿using BepInEx;
 using BepInEx.Logging;
-using R2API;
-using R2API.Utils;
 using System.Reflection;
 using UnityEngine;
 
 namespace GeneticsArtifact
 {
-    [BepInDependency("com.bepis.r2api", BepInDependency.DependencyFlags.HardDependency)]
-    [BepInDependency("Rein.RogueWisp", BepInDependency.DependencyFlags.SoftDependency)] //This is bad and I hate it that load order caused the bug
-    [R2APISubmoduleDependency(new string[] { "ResourcesAPI", "LanguageAPI" })]
     [BepInPlugin(ModGuid, ModName, ModVer)]
-    [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.EveryoneNeedSameModVersion)]
+    //Stripped the R2API network stuff, need to do that manually now
     public class GeneticsArtifactPlugin : BaseUnityPlugin
     {
         private const string ModVer = "2.6.0";
@@ -38,11 +33,6 @@ namespace GeneticsArtifact
                 AssetBundleResourcesProvider provider = new AssetBundleResourcesProvider("@Genetics", bundle);
                 ResourcesAPI.AddProvider(provider);
             }
-        }
-
-        private void OnDisable()
-        {
-            //GeneticMasterController.Cleanup();
         }
     }
 }
