@@ -341,3 +341,4 @@ healthchecksdb
 
 # The base RoR2 code
 Libs/Assembly-CSharp.dll
+Libs/ModLoader.dll

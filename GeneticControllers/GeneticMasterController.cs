@@ -1,6 +1,5 @@
 ﻿using Mono.Cecil.Cil;
 using MonoMod.Cil;
-using R2API;
 using RoR2;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,8 +39,8 @@ namespace GeneticsArtifact
             On.RoR2.HoldoutZoneController.OnEnable += HoldoutZoneController_OnEnable;
             On.RoR2.HoldoutZoneController.OnDisable += HoldoutZoneController_OnDisable;
 
-            LanguageAPI.Add("GENE_RAPID_ENABLE", "<style=cEvent>The world begins to grow unstable.</style>");
-            LanguageAPI.Add("GENE_RAPID_DISABLE", "<style=cEvent>The world adapts to its new normal.</style>");
+            LanguageOverride.customLanguage.Add("GENE_RAPID_ENABLE", "<style=cEvent>The world begins to grow unstable.</style>");
+            LanguageOverride.customLanguage.Add("GENE_RAPID_DISABLE", "<style=cEvent>The world adapts to its new normal.</style>");
         }
 
         internal static void Cleanup()
@@ -133,17 +132,10 @@ namespace GeneticsArtifact
                     (self.teamComponent.teamIndex == TeamIndex.Player && ConfigMaster.applyToMinions.Value && !self.master.playerCharacterMasterController))
                 {
                     //If using a master per monster type and there isn't already a master for this type, add a master for this type
-                    if (ConfigMaster.trackerPerMonsterID.Value && masterTrackers.Find(x => x.index == self.bodyIndex) == null)
+                    if (masterTrackers.Find(x => x.index == self.bodyIndex) == null)
                     {
                         masterTrackers.Add(new GeneTracker(self.bodyIndex, true));
                         //Chat.AddMessage("A new Master was made for bodyIndex: " + body.baseNameToken);
-                    }
-                    else if(masterTrackers.Count < ConfigMaster.maxTrackers.Value)
-                    {
-                        for (int x = masterTrackers.Count; x < ConfigMaster.maxTrackers.Value; x++)
-                        {
-                            masterTrackers.Add(new GeneTracker(x, true));
-                        }
                     }
                     //Always add a behaviour to the body
                     self.gameObject.AddComponent<GeneBehaviour>();

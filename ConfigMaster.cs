@@ -5,8 +5,7 @@ namespace GeneticsArtifact
     public class ConfigMaster
     {
         #region MasterController
-        public static ConfigEntry<int> maxTrackers;
-        public static ConfigEntry<bool> trackerPerMonsterID, applyToNeutrals, applyToMinions, statusLogging;
+        public static ConfigEntry<bool> applyToNeutrals, applyToMinions, statusLogging;
         public static ConfigEntry<float> timeBetweenUpdates, timeBetweenStatusLogging;
         public static ConfigEntry<bool> enableMasterPause;
         public static ConfigEntry<string> rapidMutationType;
@@ -28,8 +27,6 @@ namespace GeneticsArtifact
 
         public static void Init()
         {
-            maxTrackers = GeneticsArtifactPlugin.Instance.Config.Bind(new ConfigDefinition("1. Master Settings", "Maximum General Purpose Trackers"), 4, new ConfigDescription("If the Tracker Per Monster ID flag is false, this is the maximum number of genetic families that will exist during a run."));
-            trackerPerMonsterID = GeneticsArtifactPlugin.Instance.Config.Bind(new ConfigDefinition("1. Master Settings", "Tracker Per Monster ID"), true, new ConfigDescription("If set to true, this will create a genetic family for each monster type.", new AcceptableValueList<bool>(true, false)));
             timeBetweenUpdates = GeneticsArtifactPlugin.Instance.Config.Bind(new ConfigDefinition("1. Master Settings", "Tracker Update Rate"), 10f, new ConfigDescription("The number of seconds between genetic family updates. Increase this if you have performance issues."));
             
             useSizeModifier = GeneticsArtifactPlugin.Instance.Config.Bind(new ConfigDefinition("2. Tracker Settings", "Enable Size Modifer"), false, new ConfigDescription("If set to true, size will be tracked and modified. (Note: this is potentially bugged for clients.)", new AcceptableValueList<bool>(true, false)));
