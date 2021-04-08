@@ -25,8 +25,10 @@ namespace GeneticsArtifact
 
         private static void ContentManager_SetContentPacks(On.RoR2.ContentManager.orig_SetContentPacks orig, List<ContentPack> newContentPacks)
         {
-            ContentPack pack = new ContentPack();
-            pack.artifactDefs = new List<ArtifactDef>{def}.ToArray();
+            ContentPack pack = new ContentPack
+            {
+                artifactDefs = new List<ArtifactDef> { def }.ToArray()
+            };
 
             newContentPacks.Add(pack);
             orig(newContentPacks);
