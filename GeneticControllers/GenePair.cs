@@ -108,7 +108,7 @@ namespace GeneticsArtifact
                     value = Mathf.Max(minValue.Value, value - penValue.Value);
                     break;
                 case GeneBalanceType.Centered:
-                    if(value > 1f)
+                    if (value > 1f)
                     {
                         value = Mathf.Max(1f, value - penValue.Value);
                     }

@@ -40,7 +40,10 @@ namespace GeneticsArtifact
             if (!isMaster)
             {
                 masterTracker = GeneticMasterController.masterTrackers.Find(x => x.index == index);
-                MutateFromParent();
+            }
+            else
+            {
+                GeneticsArtifactPlugin.geneticLogSource.LogInfo("Initializing new master for " + BodyCatalog.GetBodyName(index));
             }
         }
 
@@ -132,7 +135,7 @@ namespace GeneticsArtifact
             //The actual averaging to determine new values
             if (!float.IsNaN(totalScore) && totalScore > 0)
             {
-                foreach(GenePair genePair in sumPairs)
+                foreach (GenePair genePair in sumPairs)
                 {
                     SetGeneValue(genePair.name, genePair.value / totalScore);
                 }
@@ -144,7 +147,7 @@ namespace GeneticsArtifact
         public void InfectFromAttacker(GeneTracker attacker)
         {
             //Get values from attacker's GenePairs and pass infect to ours
-            foreach(GenePair gene in genePairs)
+            foreach (GenePair gene in genePairs)
             {
                 gene.Infect(attacker.GetGeneValue(gene.name));
             }
