@@ -365,9 +365,10 @@ namespace GeneticsArtifact
 
         private static void Run_BeginGameOver(On.RoR2.Run.orig_BeginGameOver orig, Run self, GameEndingDef gameEndingDef)
         {
+            orig(self, gameEndingDef);
             PurgeMasters();
             ClearRapidTrackers();
-            orig(self, gameEndingDef);
+            UpdateRapidMutation();
         }
 
         private static void RunArtifactManager_SetArtifactEnabledServer(On.RoR2.RunArtifactManager.orig_SetArtifactEnabledServer orig, RunArtifactManager self, ArtifactDef artifactDef, bool newEnabled)
