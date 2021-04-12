@@ -1,6 +1,7 @@
 ﻿using BepInEx;
 using BepInEx.Logging;
 using RoR2;
+using RoR2.ContentManagement;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
@@ -10,9 +11,9 @@ namespace GeneticsArtifact
     [BepInPlugin(ModGuid, ModName, ModVer)]
     public class GeneticsArtifactPlugin : BaseUnityPlugin
     {
-        private const string ModVer = "3.1.0";
+        private const string ModVer = "3.2.0";
         private const string ModName = "Genetics";
-        private const string ModGuid = "com.RicoValdezio.ArtifactOfGenetics";
+        internal const string ModGuid = "com.RicoValdezio.ArtifactOfGenetics";
         public static GeneticsArtifactPlugin Instance;
         internal static ManualLogSource geneticLogSource;
         internal static AssetBundle geneticAssetBundle;
@@ -27,7 +28,14 @@ namespace GeneticsArtifact
             ConfigMaster.Init();
             ArtifactOfGenetics.Init();
             GeneticMasterController.Init();
+
             NetworkModCompatibilityHelper.networkModList = NetworkModCompatibilityHelper.networkModList.Append(ModGuid + ":" + ModVer);
+            ContentManager.collectContentPackProviders += ContentManager_collectContentPackProviders;
+        }
+
+        private void ContentManager_collectContentPackProviders(ContentManager.AddContentPackProviderDelegate addContentPackProvider)
+        {
+            addContentPackProvider(new GeneticsContentProvider());
         }
     }
 }

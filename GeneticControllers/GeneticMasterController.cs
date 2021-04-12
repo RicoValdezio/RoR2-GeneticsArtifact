@@ -32,12 +32,12 @@ namespace GeneticsArtifact
             On.RoR2.CharacterBody.Start += CharacterBody_Start;
             On.RoR2.HealthComponent.TakeDamage += HealthComponent_TakeDamage;
             IL.RoR2.CharacterBody.RecalculateStats += CharacterBody_RecalculateStats;
-            On.RoR2.Run.BeginGameOver += Run_BeginGameOver;
             On.RoR2.RunArtifactManager.SetArtifactEnabledServer += RunArtifactManager_SetArtifactEnabledServer;
 
             On.RoR2.Stage.Start += Stage_Start;
             On.RoR2.HoldoutZoneController.OnEnable += HoldoutZoneController_OnEnable;
             On.RoR2.HoldoutZoneController.OnDisable += HoldoutZoneController_OnDisable;
+            On.RoR2.Run.Start += Run_Start;
 
             LanguageOverride.customLanguage.Add("GENE_RAPID_ENABLE", "<style=cEvent>The world begins to grow unstable.</style>");
             LanguageOverride.customLanguage.Add("GENE_RAPID_DISABLE", "<style=cEvent>The world adapts to its new normal.</style>");
@@ -352,6 +352,7 @@ namespace GeneticsArtifact
 
         private static void PurgeMasters()
         {
+            GeneticsArtifactPlugin.geneticLogSource.LogInfo("Purging Existing Masters: " + masterTrackers.Count);
             masterTrackers.Clear();
             deadTrackers.Clear();
         }
@@ -363,12 +364,12 @@ namespace GeneticsArtifact
             customEventFlags = customEventFlags.ToDictionary(x => x.Key, y => false);
         }
 
-        private static void Run_BeginGameOver(On.RoR2.Run.orig_BeginGameOver orig, Run self, GameEndingDef gameEndingDef)
+        private static void Run_Start(On.RoR2.Run.orig_Start orig, Run self)
         {
-            orig(self, gameEndingDef);
-            PurgeMasters();
             ClearRapidTrackers();
             UpdateRapidMutation();
+            PurgeMasters();
+            orig(self);
         }
 
         private static void RunArtifactManager_SetArtifactEnabledServer(On.RoR2.RunArtifactManager.orig_SetArtifactEnabledServer orig, RunArtifactManager self, ArtifactDef artifactDef, bool newEnabled)
