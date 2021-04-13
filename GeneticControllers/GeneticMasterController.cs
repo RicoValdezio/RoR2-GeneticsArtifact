@@ -105,7 +105,7 @@ namespace GeneticsArtifact
         {
             orig(self);
             //If the artifact is enabled and has a master (is it alive or just a barrel?)
-            if (RunArtifactManager.instance.IsArtifactEnabled(ArtifactOfGenetics.def.artifactIndex) && self.masterObject)
+            if (RunArtifactManager.instance.IsArtifactEnabled(ArtifactOfGenetics.def.artifactIndex) && self.masterObject && !self.isPlayerControlled)
             {
                 //If the BodyIndex doesn't already have a master, make one
                 if (!masterTrackers.Any(x => x.index == self.bodyIndex))

@@ -63,6 +63,7 @@ namespace GeneticsArtifact
             rapidMutationType = GeneticsArtifactPlugin.Instance.Config.Bind(new ConfigDefinition("5. Master Optional Settings", "Rapid Mutation Type"), "Never", new ConfigDescription("Determines if/when the rapid mutation mode is active.", new AcceptableValueList<string>("Never", "Always", "OnlyEvents", "OnlyMoon", "EventsAndMoon")));
             monsterInfection = GeneticsArtifactPlugin.Instance.Config.Bind(new ConfigDefinition("5. Master Optional Settings", "Enable Infection for Monsters"), false, new ConfigDescription("Determines if monsters can be infected with each-other's genes.", new AcceptableValueList<bool>(true, false)));
             playerInfection = GeneticsArtifactPlugin.Instance.Config.Bind(new ConfigDefinition("5. Master Optional Settings", "Enable Infection for Players"), false, new ConfigDescription("Determines if players can be infected with each-other's genes.", new AcceptableValueList<bool>(true, false)));
+            playerInfection.Value = false; //Until further notice, this is disabled
         }
     }
 }

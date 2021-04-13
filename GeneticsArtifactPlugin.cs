@@ -11,7 +11,7 @@ namespace GeneticsArtifact
     [BepInPlugin(ModGuid, ModName, ModVer)]
     public class GeneticsArtifactPlugin : BaseUnityPlugin
     {
-        private const string ModVer = "3.2.0";
+        private const string ModVer = "3.2.1";
         private const string ModName = "Genetics";
         internal const string ModGuid = "com.RicoValdezio.ArtifactOfGenetics";
         public static GeneticsArtifactPlugin Instance;
