@@ -9,9 +9,10 @@ using UnityEngine;
 namespace GeneticsArtifact
 {
     [BepInPlugin(ModGuid, ModName, ModVer)]
+    [BepInDependency("PlasmaCore.CRCore3", BepInDependency.DependencyFlags.SoftDependency)]
     public class GeneticsArtifactPlugin : BaseUnityPlugin
     {
-        private const string ModVer = "3.2.1";
+        private const string ModVer = "3.2.2";
         private const string ModName = "Genetics";
         internal const string ModGuid = "com.RicoValdezio.ArtifactOfGenetics";
         public static GeneticsArtifactPlugin Instance;

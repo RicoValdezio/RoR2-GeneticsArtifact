@@ -31,6 +31,7 @@ Known Issues/Planned Updates
 
 Changelog
 -----------
+3.2.2 - Fixed a minor incompat with PlasmaCore3's Artifact of Void, Genetics will now load after Void
 3.2.1 - Temporarily disabling player genes due to conflicts with certain modded survivors
 3.2.0 - Updated for the ContentProvider update
 3.1.0 - Converted to a master-driven system instead of a body-driven one, also fixed a few end-of-game bugs with RapidMutation

@@ -395,6 +395,7 @@ namespace GeneticsArtifact
         #region RapidMutation-EventTriggers
         public static void UpdateRapidMutation()
         {
+            if (Run.instance == null) return;
             bool newValue = false;
             if ((ConfigMaster.rapidMutationType.Value.Contains("Moon") && moonActive) ||
                (ConfigMaster.rapidMutationType.Value.Contains("Event") && (holdoutActive || customEventFlags.ContainsValue(true))))
