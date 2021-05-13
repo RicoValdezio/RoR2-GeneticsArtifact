@@ -15,6 +15,7 @@ namespace GeneticsArtifact
             LanguageAPI.Add("GENETIC_ARTIFACT_NAME_TOKEN", "Artifact of Genetics");
             LanguageAPI.Add("GENETIC_ARTIFACT_DESCRIPTION_TOKEN", "Monsters will spawn with adjusted stats. Adjustments are determined by a genetic algorithm.");
 
+            def.cachedName = "GENETIC_ARTIFACT";
             def.nameToken = "GENETIC_ARTIFACT_NAME_TOKEN";
             def.descriptionToken = "GENETIC_ARTIFACT_DESCRIPTION_TOKEN";
             def.smallIconSelectedSprite = GeneticsArtifactPlugin.geneticAssetBundle.LoadAsset<Sprite>("Assets/Genetics/Selected.png");

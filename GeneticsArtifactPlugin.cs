@@ -26,6 +26,7 @@ namespace GeneticsArtifact
             geneticAssetBundle = AssetBundle.LoadFromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream("GeneticsArtifact.ArtifactResources.genetics"));
 
             ArtifactOfGenetics.Init();
+            GeneTokens.Init();
         }
     }
 }
