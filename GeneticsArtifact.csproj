@@ -31,6 +31,9 @@
     <Reference Include="MonoMod.Utils">
       <HintPath>Libs\MonoMod.Utils.dll</HintPath>
     </Reference>
+    <Reference Include="R2API">
+      <HintPath>Libs\R2API.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine">
       <HintPath>Libs\UnityEngine.dll</HintPath>
     </Reference>

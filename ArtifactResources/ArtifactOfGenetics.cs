@@ -1,4 +1,5 @@
-﻿using RoR2;
+﻿using R2API;
+using RoR2;
 using UnityEngine;
 
 namespace GeneticsArtifact
@@ -11,13 +12,16 @@ namespace GeneticsArtifact
         {
             def = ScriptableObject.CreateInstance<ArtifactDef>();
 
-            LanguageOverride.customLanguage.Add("GENE_NAME_TOKEN", "Artifact of Genetics");
-            LanguageOverride.customLanguage.Add("GENE_DESC_TOKEN", "Monsters' stats will change based on the performance of previous monsters.");
+            LanguageAPI.Add("GENETIC_ARTIFACT_NAME_TOKEN", "Artifact of Genetics");
+            LanguageAPI.Add("GENETIC_ARTIFACT_DESCRIPTION_TOKEN", "Monsters will spawn with adjusted stats. Adjustments are determined by a genetic algorithm.");
 
-            def.nameToken = "GENE_NAME_TOKEN";
-            def.descriptionToken = "GENE_DESC_TOKEN";
+            def.cachedName = "GENETIC_ARTIFACT";
+            def.nameToken = "GENETIC_ARTIFACT_NAME_TOKEN";
+            def.descriptionToken = "GENETIC_ARTIFACT_DESCRIPTION_TOKEN";
             def.smallIconSelectedSprite = GeneticsArtifactPlugin.geneticAssetBundle.LoadAsset<Sprite>("Assets/Genetics/Selected.png");
             def.smallIconDeselectedSprite = GeneticsArtifactPlugin.geneticAssetBundle.LoadAsset<Sprite>("Assets/Genetics/Unselected.png");
+
+            ArtifactAPI.Add(def);
         }
     }
 }
