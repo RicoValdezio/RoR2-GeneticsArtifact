@@ -52,12 +52,12 @@ namespace GeneticsArtifact
                 mutationAttempt.Add(stat, (float)decimal.Round((decimal)Mathf.Clamp(Random.Range(currentGenes[stat] * 0.9f, currentGenes[stat] * 0.9f), 0.01f, 10.00f), 2));
             }
             mutationAttempt = CorrectOvermutation(mutationAttempt);
-            Inventory tokensToGive = GeneTokenCalc.GetTokensToAdd(currentGenes, mutationAttempt);
-            characterBody.inventory.AddItemsFrom(tokensToGive);
+            Dictionary<ItemDef, int> itemsToGive = GeneTokenCalc.GetTokensToAdd(currentGenes, mutationAttempt);
+            foreach (KeyValuePair<ItemDef, int> pair in itemsToGive)
+            {
+                characterBody.inventory.GiveItem(pair.Key, pair.Value);
+            }
             currentGenes = mutationAttempt;
-#if DEBUG
-            GeneticsArtifactPlugin.geneticLogSource.LogInfo("Spawned " + BodyCatalog.GetBodyName(bodyIndex) + " with Genes : " + currentGenes.ToString() + " and ItemCount: " + tokensToGive.GetTotalItemCountOfTier(ItemTier.NoTier).ToString());
-#endif
         }
 
         private Dictionary<GeneStat, float> CorrectOvermutation(Dictionary<GeneStat, float> attempt)

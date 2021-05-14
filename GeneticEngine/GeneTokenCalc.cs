@@ -119,82 +119,63 @@ namespace GeneticsArtifact
         public static float GetGeneMultiplier(CharacterBody body, GeneStat statType)
         {
             float geneValue = 1;
-            geneValue += 1.00f * body.inventory?.GetItemCount(GeneTokens.tokenDict[statType][GeneMod.Plus100]) ?? 0f;
-            geneValue += 0.25f * body.inventory?.GetItemCount(GeneTokens.tokenDict[statType][GeneMod.Plus25]) ?? 0f;
-            geneValue += 0.05f * body.inventory?.GetItemCount(GeneTokens.tokenDict[statType][GeneMod.Plus5]) ?? 0f;
             geneValue += 0.01f * body.inventory?.GetItemCount(GeneTokens.tokenDict[statType][GeneMod.Plus1]) ?? 0f;
             geneValue -= 0.01f * body.inventory?.GetItemCount(GeneTokens.tokenDict[statType][GeneMod.Minus1]) ?? 0f;
-            geneValue -= 0.05f * body.inventory?.GetItemCount(GeneTokens.tokenDict[statType][GeneMod.Minus5]) ?? 0f;
-            geneValue -= 0.25f * body.inventory?.GetItemCount(GeneTokens.tokenDict[statType][GeneMod.Minus25]) ?? 0f;
             return geneValue;
         }
 
         /// <summary>
-        /// Builds a temporary Inventory that holds the items needed to reflect a gene change
+        /// Builds a ItemInfo[] that holds the items needed to reflect a gene change
         /// </summary>
         /// <param name="oldValues">The current multipliers that are to be replaced</param>
         /// <param name="newValues">The replacement multipliers </param>
-        /// <returns>An Inventory that contains only GeneTokens that can be added/copied to another Inventory</returns>
-        public static Inventory GetTokensToAdd(Dictionary<GeneStat, float> oldValues, Dictionary<GeneStat, float> newValues)
+        /// <returns>An ItemInfo[] that contains only GeneTokens that can be added/copied to another Inventory</returns>
+        public static Dictionary<ItemDef, int> GetTokensToAdd(Dictionary<GeneStat, float> oldValues, Dictionary<GeneStat, float> newValues)
         {
-            Inventory tokensToAdd = new Inventory();
+            Dictionary<ItemDef, int> tokensToGive = new Dictionary<ItemDef, int>();
+            Dictionary<GeneStat, float> diffValues = new Dictionary<GeneStat, float>();
             foreach (GeneStat stat in Enum.GetValues(typeof(GeneStat)))
             {
-                float diff = newValues[stat] - oldValues[stat];
-                while (diff != 0f)
-                {
-                    //This is a greedy approach to the change problem, it's not optimal but it's fast enough
-                    if (diff > 0)
-                    {
-                        if (diff > 1.00f)
-                        {
-                            tokensToAdd.GiveItem(GeneTokens.tokenDict[stat][GeneMod.Plus100]);
-                            diff -= 1.00f;
-                            continue;
-                        }
-                        else if (diff > 0.25f)
-                        {
-                            tokensToAdd.GiveItem(GeneTokens.tokenDict[stat][GeneMod.Plus25]);
-                            diff -= 0.25f;
-                            continue;
-                        }
-                        else if (diff > 0.05f)
-                        {
-                            tokensToAdd.GiveItem(GeneTokens.tokenDict[stat][GeneMod.Plus5]);
-                            diff -= 0.05f;
-                            continue;
-                        }
-                        else
-                        {
-                            tokensToAdd.GiveItem(GeneTokens.tokenDict[stat][GeneMod.Plus1]);
-                            diff -= 0.01f;
-                            continue;
-                        }
-                    }
-                    else
-                    {
-                        if (diff < -0.25f)
-                        {
-                            tokensToAdd.GiveItem(GeneTokens.tokenDict[stat][GeneMod.Minus25]);
-                            diff += 0.25f;
-                            continue;
-                        }
-                        else if (diff < -0.05f)
-                        {
-                            tokensToAdd.GiveItem(GeneTokens.tokenDict[stat][GeneMod.Minus5]);
-                            diff += 0.05f;
-                            continue;
-                        }
-                        else
-                        {
-                            tokensToAdd.GiveItem(GeneTokens.tokenDict[stat][GeneMod.Minus1]);
-                            diff += 0.01f;
-                            continue;
-                        }
-                    }
-                }
+                diffValues.Add(stat, newValues[stat] - oldValues[stat]);
             }
-            return tokensToAdd;
+
+            if (diffValues[GeneStat.MaxHealth] > 0)
+            {
+                tokensToGive.Add(GeneTokens.tokenDict[GeneStat.MaxHealth][GeneMod.Plus1], (int)(diffValues[GeneStat.MaxHealth] * 100));
+            }
+            else
+            {
+                tokensToGive.Add(GeneTokens.tokenDict[GeneStat.MaxHealth][GeneMod.Minus1], (int)(diffValues[GeneStat.MaxHealth] * -100));
+            }
+
+            if (diffValues[GeneStat.MoveSpeed] > 0)
+            {
+                tokensToGive.Add(GeneTokens.tokenDict[GeneStat.MoveSpeed][GeneMod.Plus1], (int)(diffValues[GeneStat.MoveSpeed] * 100));
+            }
+            else
+            {
+                tokensToGive.Add(GeneTokens.tokenDict[GeneStat.MoveSpeed][GeneMod.Minus1], (int)(diffValues[GeneStat.MoveSpeed] * -100));
+            }
+
+            if (diffValues[GeneStat.AttackSpeed] > 0)
+            {
+                tokensToGive.Add(GeneTokens.tokenDict[GeneStat.AttackSpeed][GeneMod.Plus1], (int)(diffValues[GeneStat.AttackSpeed] * 100));
+            }
+            else
+            {
+                tokensToGive.Add(GeneTokens.tokenDict[GeneStat.AttackSpeed][GeneMod.Minus1], (int)(diffValues[GeneStat.AttackSpeed] * -100));
+            }
+
+            if (diffValues[GeneStat.AttackDamage] > 0)
+            {
+                tokensToGive.Add(GeneTokens.tokenDict[GeneStat.AttackDamage][GeneMod.Plus1], (int)(diffValues[GeneStat.AttackDamage] * 100));
+            }
+            else
+            {
+                tokensToGive.Add(GeneTokens.tokenDict[GeneStat.AttackDamage][GeneMod.Minus1], (int)(diffValues[GeneStat.AttackDamage] * -100));
+            }
+
+            return tokensToGive;
         }
         #endregion
     }

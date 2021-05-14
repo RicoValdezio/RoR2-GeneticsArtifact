@@ -44,12 +44,7 @@ namespace GeneticsArtifact
 
     public enum GeneMod
     {
-        Plus100,
-        Plus25,
-        Plus5,
         Plus1,
-        Minus1,
-        Minus5,
-        Minus25
+        Minus1
     }
 }
