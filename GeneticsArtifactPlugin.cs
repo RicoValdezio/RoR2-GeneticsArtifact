@@ -27,6 +27,7 @@ namespace GeneticsArtifact
 
             ArtifactOfGenetics.Init();
             GeneTokens.Init();
+            GeneTokenCalc.RegisterHooks();
         }
     }
 }
