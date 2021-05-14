@@ -17,6 +17,7 @@ namespace GeneticsArtifact
             characterBody = gameObject.GetComponent<CharacterBody>();
             bodyIndex = characterBody.bodyIndex;
             currentGenes = new Dictionary<GeneStat, float>();
+            GeneEngineDriver.livingGenes.Add(this);
         }
 
         public void Update()
@@ -84,6 +85,13 @@ namespace GeneticsArtifact
             ScoreMe();
             GeneEngineDriver.livingGenes.Remove(this);
             GeneEngineDriver.deadGenes.Add(this);
+#if DEBUG
+            GeneticsArtifactPlugin.geneticLogSource.LogInfo(BodyCatalog.GetBodyName(bodyIndex) +
+                " died with: timeAlive = " + timeAlive.ToString("F2") +
+                ", timeEngaged = " + timeEngaged.ToString("F2") +
+                ", damageDealt = " + damageDealt.ToString("F2") +
+                ", and score = " + score.ToString("F2"));
+#endif
         }
 
         /// <summary>
