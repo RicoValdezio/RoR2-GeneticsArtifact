@@ -1,9 +1,9 @@
 ﻿using BepInEx;
 using BepInEx.Logging;
+using R2API;
+using R2API.Utils;
 using System.Reflection;
 using UnityEngine;
-using R2API.Utils;
-using R2API;
 
 namespace GeneticsArtifact
 {
@@ -28,6 +28,7 @@ namespace GeneticsArtifact
             ArtifactOfGenetics.Init();
             GeneTokens.Init();
             GeneTokenCalc.RegisterHooks();
+            GeneEngineDriver.RegisterHooks();
         }
     }
 }

@@ -119,13 +119,13 @@ namespace GeneticsArtifact
         public static float GetGeneMultiplier(CharacterBody body, GeneStat statType)
         {
             float geneValue = 1;
-            geneValue += 1.00f * body.inventory.GetItemCount(GeneTokens.tokenDict[statType][GeneMod.Plus100]);
-            geneValue += 0.25f * body.inventory.GetItemCount(GeneTokens.tokenDict[statType][GeneMod.Plus25]);
-            geneValue += 0.05f * body.inventory.GetItemCount(GeneTokens.tokenDict[statType][GeneMod.Plus5]);
-            geneValue += 0.01f * body.inventory.GetItemCount(GeneTokens.tokenDict[statType][GeneMod.Plus1]);
-            geneValue -= 0.01f * body.inventory.GetItemCount(GeneTokens.tokenDict[statType][GeneMod.Minus1]);
-            geneValue -= 0.05f * body.inventory.GetItemCount(GeneTokens.tokenDict[statType][GeneMod.Minus5]);
-            geneValue -= 0.25f * body.inventory.GetItemCount(GeneTokens.tokenDict[statType][GeneMod.Minus25]);
+            geneValue += 1.00f * body.inventory?.GetItemCount(GeneTokens.tokenDict[statType][GeneMod.Plus100]) ?? 0f;
+            geneValue += 0.25f * body.inventory?.GetItemCount(GeneTokens.tokenDict[statType][GeneMod.Plus25]) ?? 0f;
+            geneValue += 0.05f * body.inventory?.GetItemCount(GeneTokens.tokenDict[statType][GeneMod.Plus5]) ?? 0f;
+            geneValue += 0.01f * body.inventory?.GetItemCount(GeneTokens.tokenDict[statType][GeneMod.Plus1]) ?? 0f;
+            geneValue -= 0.01f * body.inventory?.GetItemCount(GeneTokens.tokenDict[statType][GeneMod.Minus1]) ?? 0f;
+            geneValue -= 0.05f * body.inventory?.GetItemCount(GeneTokens.tokenDict[statType][GeneMod.Minus5]) ?? 0f;
+            geneValue -= 0.25f * body.inventory?.GetItemCount(GeneTokens.tokenDict[statType][GeneMod.Minus25]) ?? 0f;
             return geneValue;
         }
 

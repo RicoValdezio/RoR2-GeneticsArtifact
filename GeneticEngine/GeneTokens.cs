@@ -1,8 +1,8 @@
-﻿using RoR2;
+﻿using R2API;
+using RoR2;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using R2API;
 
 namespace GeneticsArtifact
 {

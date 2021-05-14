@@ -1,6 +1,6 @@
-﻿using RoR2;
+﻿using R2API;
+using RoR2;
 using UnityEngine;
-using R2API;
 
 namespace GeneticsArtifact
 {
