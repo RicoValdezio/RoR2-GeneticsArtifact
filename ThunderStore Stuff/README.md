@@ -23,25 +23,28 @@ Known Issues/Planned Updates
 
 Changelog
 -----------
-Old changelog doesn't apply anymore so I'm redoing the structure
+4.0.1 - Whodunnit Bugfix
+- Removed caching that was causing some major conflicts with certain lobby mods
+  - This should fix not being able to start a run in most cases
+
 4.0.0 - Rewrite Edition 2: Expect Bugs
 - Reduced number of genes to 4 (Health, MoveSpeed, AttackSpeed, and AttackDamage)
-	- Regen and Armor either didn't apply to most monsters, or were used by the algorithm to "cheat-out" extra points in other stats
-	- Size never really worked they way I wanted, and balancing it doesn't make much sense
-	- The remaining stats should keep the algorithm learning and guessing, instead of just
+  - Regen and Armor either didn't apply to most monsters, or were used by the algorithm to "cheat-out" extra points in other stats
+  - Size never really worked they way I wanted, and balancing it doesn't make much sense
+  - The remaining stats should keep the algorithm learning and guessing, instead of just
 - Max and Min gene values have been greatly expanded (0.01 to 10.00, starting at 1.00)
-	- Max Product has also been adjusted (from 10 down to 1.5)
-	- This should prevent the algorithm from maxing multiple stats, instead pushing for a more balanced build
+  - Max Product has also been adjusted (from 10 down to 1.5)
+  - This should prevent the algorithm from maxing multiple stats, instead pushing for a more balanced build
 - Scoring algorithm has been adjusted to focus on time spent in combat instead of just dps
-	- Should prevent mega-tanks and glass-cannons, instead pushing for solid combatants
+  - Should prevent mega-tanks and glass-cannons, instead pushing for solid combatants
 - Learning algorithm has been revamped to use new scores and more data
-	- Instead of every 10 seconds, the learn only runs every 60 seconds or once enough data (40 monsters) is available
-	- This may seem significantly slower than before, but the extra data means that it can be "smarter" with it
+  - Instead of every 10 seconds, the learn only runs every 60 seconds or once enough data (40 monsters) is available
+  - This may seem significantly slower than before, but the extra data means that it can be "smarter" with it
 - Networking is now managed through hidden items
-	- Host is now the source of truth for the algorithm, no more work for clients
+  - Host is now the source of truth for the algorithm, no more work for clients
 - Rapid Mutation and Infection have been removed
-	- Infection was unstable at best and buggy more often than it was worth
-	- Rapid Mutation might come back if demand is high enough, but the new algorithm benefits from having more data
+  - Infection was unstable at best and buggy more often than it was worth
+  - Rapid Mutation might come back if demand is high enough, but the new algorithm benefits from having more data
 
 Installation
 ------------
