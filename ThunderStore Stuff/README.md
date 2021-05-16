@@ -23,11 +23,20 @@ Known Issues/Planned Updates
 
 Changelog
 -----------
+4.0.2 - DivByZero Bugfix
+```
+- Fixed a potential divide-by-zero error that could happen during the learning cycle
+  - This would only happen if a given BodyIndex had no scoring children
+```
+
 4.0.1 - Whodunnit Bugfix
+```
 - Removed caching that was causing some major conflicts with certain lobby mods
   - This should fix not being able to start a run in most cases
+```
 
 4.0.0 - Rewrite Edition 2: Expect Bugs
+```
 - Reduced number of genes to 4 (Health, MoveSpeed, AttackSpeed, and AttackDamage)
   - Regen and Armor either didn't apply to most monsters, or were used by the algorithm to "cheat-out" extra points in other stats
   - Size never really worked they way I wanted, and balancing it doesn't make much sense
@@ -45,6 +54,7 @@ Changelog
 - Rapid Mutation and Infection have been removed
   - Infection was unstable at best and buggy more often than it was worth
   - Rapid Mutation might come back if demand is high enough, but the new algorithm benefits from having more data
+```
 
 Installation
 ------------

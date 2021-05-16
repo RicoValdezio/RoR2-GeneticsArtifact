@@ -85,11 +85,6 @@ namespace GeneticsArtifact
             ScoreMe();
             GeneEngineDriver.livingGenes.Remove(this);
             GeneEngineDriver.deadGenes.Add(this);
-            //GeneticsArtifactPlugin.geneticLogSource.LogInfo(BodyCatalog.GetBodyName(bodyIndex) +
-            //    " died with: timeAlive = " + timeAlive.ToString("F2") +
-            //    ", timeEngaged = " + timeEngaged.ToString("F2") +
-            //    ", damageDealt = " + damageDealt.ToString("F2") +
-            //    ", and score = " + score.ToString("F2"));
         }
 
         /// <summary>

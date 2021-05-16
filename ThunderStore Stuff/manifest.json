@@ -1,6 +1,6 @@
 ﻿{
     "name": "GeneticArtifact",
-    "version_number": "4.0.1",
+    "version_number": "4.0.2",
     "website_url": "https://github.com/RicoValdezio/RoR2-GeneticsArtifact",
     "description": "Adds an artifact that emulates a genetic algorithm on monster stats.",
     "dependencies": [

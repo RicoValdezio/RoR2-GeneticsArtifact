@@ -21,17 +21,17 @@ namespace GeneticsArtifact
 
         public void MutateFromChildren()
         {
-            List<MonsterGeneBehaviour> children = GeneEngineDriver.deadGenes.Where(x => x.bodyIndex == bodyIndex).ToList();
-            float totalScore = 0f;
-            float totalValue = 0f;
+            List<MonsterGeneBehaviour> children = GeneEngineDriver.deadGenes.Where(x => x.bodyIndex == bodyIndex && x.score > 0).ToList();
             foreach (GeneStat stat in Enum.GetValues(typeof(GeneStat)))
             {
+                float totalScore = 0f;
+                float totalValue = 0f;
                 foreach (MonsterGeneBehaviour child in children)
                 {
                     totalValue += child.currentGenes[stat] * child.score;
                     totalScore += child.score;
                 }
-                templateGenes[stat] = totalValue / totalScore;
+                if(totalScore > 0) templateGenes[stat] = totalValue / totalScore;
             }
         }
     }
