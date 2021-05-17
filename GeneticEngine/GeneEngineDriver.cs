@@ -32,7 +32,8 @@ namespace GeneticsArtifact
             if (NetworkServer.active)
             {
                 if (RunArtifactManager.instance.IsArtifactEnabled(ArtifactOfGenetics.def) &&
-                    self.teamComponent.teamIndex == TeamIndex.Monster)
+                    self.teamComponent.teamIndex == TeamIndex.Monster &&
+                    self.inventory)
                 {
                     if (!masterGenes.Exists(x => x.bodyIndex == self.bodyIndex))
                     {

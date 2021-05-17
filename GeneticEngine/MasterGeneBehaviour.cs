@@ -31,7 +31,7 @@ namespace GeneticsArtifact
                     totalValue += child.currentGenes[stat] * child.score;
                     totalScore += child.score;
                 }
-                if(totalScore > 0) templateGenes[stat] = totalValue / totalScore;
+                if (totalScore > 0) templateGenes[stat] = totalValue / totalScore;
             }
         }
     }
