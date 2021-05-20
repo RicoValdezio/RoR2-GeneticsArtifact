@@ -23,16 +23,18 @@ namespace GeneticsArtifact
         private static void Run_Start(On.RoR2.Run.orig_Start orig, Run self)
         {
             orig(self);
-            self.gameObject.AddComponent<GeneEngineDriver>();
+            if (NetworkServer.active && RunArtifactManager.instance.IsArtifactEnabled(ArtifactOfGenetics.def))
+            {
+                self.gameObject.AddComponent<GeneEngineDriver>();
+            }
         }
 
         private static void CharacterBody_Start(On.RoR2.CharacterBody.orig_Start orig, CharacterBody self)
         {
             orig(self);
-            if (NetworkServer.active)
+            if (NetworkServer.active && RunArtifactManager.instance.IsArtifactEnabled(ArtifactOfGenetics.def))
             {
-                if (RunArtifactManager.instance.IsArtifactEnabled(ArtifactOfGenetics.def) &&
-                    self.teamComponent.teamIndex == TeamIndex.Monster &&
+                if (self.teamComponent.teamIndex == TeamIndex.Monster &&
                     self.inventory)
                 {
                     if (!masterGenes.Exists(x => x.bodyIndex == self.bodyIndex))
@@ -53,17 +55,29 @@ namespace GeneticsArtifact
         private static void HealthComponent_TakeDamage(On.RoR2.HealthComponent.orig_TakeDamage orig, HealthComponent self, DamageInfo damageInfo)
         {
             orig(self, damageInfo);
-            if (NetworkServer.active)
+            if (NetworkServer.active && RunArtifactManager.instance.IsArtifactEnabled(ArtifactOfGenetics.def))
             {
-                if (damageInfo.attacker?.GetComponent<CharacterBody>() is CharacterBody attackerBody)
+                if (damageInfo.attacker is GameObject attackerObject)
                 {
-                    MonsterGeneBehaviour attackerGene = livingGenes.Find(x => x.characterBody == attackerBody);
-                    if (attackerGene) attackerGene.damageDealt += damageInfo.damage;
+                    if (attackerObject != null && attackerObject.GetComponent<CharacterBody>() is CharacterBody attackerBody)
+                    {
+                        if (attackerBody != null)
+                        {
+                            MonsterGeneBehaviour attackerGene = livingGenes.Find(x => x.characterBody == attackerBody);
+                            if (attackerGene != null) attackerGene.damageDealt += damageInfo.damage;
+                        }
+                    }
                 }
-                else if (damageInfo.inflictor?.GetComponent<CharacterBody>() is CharacterBody inflictorBody)
+                else if (damageInfo.inflictor is GameObject inflictorObject)
                 {
-                    MonsterGeneBehaviour inflictorGene = livingGenes.Find(x => x.characterBody == inflictorBody);
-                    if (inflictorGene) inflictorGene.damageDealt += damageInfo.damage;
+                    if (inflictorObject != null && inflictorObject.GetComponent<CharacterBody>() is CharacterBody inflictorBody)
+                    {
+                        if (inflictorBody != null)
+                        {
+                            MonsterGeneBehaviour inflictorGene = livingGenes.Find(x => x.characterBody == inflictorBody);
+                            if (inflictorGene != null) inflictorGene.damageDealt += damageInfo.damage;
+                        }
+                    }
                 }
             }
         }

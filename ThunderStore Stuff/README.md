@@ -25,6 +25,12 @@ Known Issues/Planned Updates
 Changelog
 -----------
 ```
+4.0.4
+- Adjusted TakeDamage hook to avoid certain nullrefs
+  - This should prevent Glacial Wisps from infinitely exploding when they die
+- Adjusted learning algorithm to round to 2 digits before spawning new bodies
+  - Should prevent fringe cases where items are given when they shouldn`t be
+
 4.0.3
 - Algorithm will no longer attempt to give genes to bodies that lack inventories (Barrels, Pots, Vagrant Bombs, Urchins, etc.)
   - This would cause nullrefs for these bodies when it tried to allocate their genes
@@ -42,7 +48,7 @@ Changelog
 - Reduced number of genes to 4 (Health, MoveSpeed, AttackSpeed, and AttackDamage)
   - Regen and Armor either didn`t apply to most monsters, or were used by the algorithm to "cheat-out" extra points in other stats
   - Size never really worked they way I wanted, and balancing it doesn`t make much sense
-  - The remaining stats should keep the algorithm learning and guessing, instead of just
+  - The remaining stats should keep the algorithm learning and guessing, instead of just sticking with one stat
 - Max and Min gene values have been greatly expanded (0.01 to 10.00, starting at 1.00)
   - Max Product has also been adjusted (from 10 down to 1.5)
   - This should prevent the algorithm from maxing multiple stats, instead pushing for a more balanced build
