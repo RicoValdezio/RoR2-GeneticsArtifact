@@ -15,17 +15,10 @@ namespace GeneticsArtifact
 
         private static void RecalculateStatsAPI_GetStatCoefficients(CharacterBody sender, RecalculateStatsAPI.StatHookEventArgs args)
         {
-            args.healthMultAdd += 0.01f * sender.inventory?.GetItemCount(GeneTokens.tokenDict[GeneStat.MaxHealth][GeneMod.Plus1]) ?? 0f;
-            args.healthMultAdd -= 0.01f * sender.inventory?.GetItemCount(GeneTokens.tokenDict[GeneStat.MaxHealth][GeneMod.Minus1]) ?? 0f;
-
-            args.moveSpeedMultAdd += 0.01f * sender.inventory?.GetItemCount(GeneTokens.tokenDict[GeneStat.MoveSpeed][GeneMod.Plus1]) ?? 0f;
-            args.moveSpeedMultAdd -= 0.01f * sender.inventory?.GetItemCount(GeneTokens.tokenDict[GeneStat.MoveSpeed][GeneMod.Minus1]) ?? 0f;
-
-            args.attackSpeedMultAdd += 0.01f * sender.inventory?.GetItemCount(GeneTokens.tokenDict[GeneStat.AttackSpeed][GeneMod.Plus1]) ?? 0f;
-            args.attackSpeedMultAdd -= 0.01f * sender.inventory?.GetItemCount(GeneTokens.tokenDict[GeneStat.AttackSpeed][GeneMod.Minus1]) ?? 0f;
-
-            args.damageMultAdd += 0.01f * sender.inventory?.GetItemCount(GeneTokens.tokenDict[GeneStat.AttackDamage][GeneMod.Plus1]) ?? 0f;
-            args.damageMultAdd -= 0.01f * sender.inventory?.GetItemCount(GeneTokens.tokenDict[GeneStat.AttackDamage][GeneMod.Minus1]) ?? 0f;
+            args.healthMultAdd += GetGeneMultiplier(sender, GeneStat.MaxHealth) - 1f;
+            args.moveSpeedMultAdd += GetGeneMultiplier(sender, GeneStat.MoveSpeed) - 1f;
+            args.attackSpeedMultAdd += GetGeneMultiplier(sender, GeneStat.AttackSpeed) - 1f;
+            args.damageMultAdd += GetGeneMultiplier(sender, GeneStat.AttackDamage) - 1f;
         }
         #endregion
 
