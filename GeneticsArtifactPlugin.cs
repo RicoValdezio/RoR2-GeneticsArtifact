@@ -9,11 +9,11 @@ namespace GeneticsArtifact
 {
     [BepInPlugin(ModGuid, ModName, ModVer)]
     [BepInDependency("com.bepis.r2api", BepInDependency.DependencyFlags.HardDependency)]
-    [R2APISubmoduleDependency(nameof(LanguageAPI), nameof(ArtifactAPI), nameof(ItemAPI))]
+    [R2APISubmoduleDependency(nameof(LanguageAPI), nameof(ArtifactAPI), nameof(ItemAPI), nameof(RecalculateStatsAPI))]
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.EveryoneNeedSameModVersion)]
     public class GeneticsArtifactPlugin : BaseUnityPlugin
     {
-        public const string ModVer = "4.0.4";
+        public const string ModVer = "4.0.5";
         public const string ModName = "Genetics";
         public const string ModGuid = "com.RicoValdezio.ArtifactOfGenetics";
         public static GeneticsArtifactPlugin Instance;

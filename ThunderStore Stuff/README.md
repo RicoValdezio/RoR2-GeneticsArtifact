@@ -25,6 +25,10 @@ Known Issues/Planned Updates
 Changelog
 -----------
 ```
+4.0.5
+- Rebuilt the hidden item stats using RecalculateStatsAPI from R2API v3.0.43
+  - This should help prevent future conflicts with other stat-adjusting mods
+
 4.0.4
 - Adjusted TakeDamage hook to avoid certain nullrefs
   - This should prevent Glacial Wisps from infinitely exploding when they die

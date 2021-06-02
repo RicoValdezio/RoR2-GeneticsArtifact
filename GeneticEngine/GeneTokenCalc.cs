@@ -1,5 +1,4 @@
-﻿using Mono.Cecil.Cil;
-using MonoMod.Cil;
+﻿using R2API;
 using RoR2;
 using System;
 using System.Collections.Generic;
@@ -11,101 +10,22 @@ namespace GeneticsArtifact
         #region Hooks
         public static void RegisterHooks()
         {
-            IL.RoR2.CharacterBody.RecalculateStats += CharacterBody_RecalculateStats_GeneTokens;
+            RecalculateStatsAPI.GetStatCoefficients += RecalculateStatsAPI_GetStatCoefficients;
         }
 
-        private static void CharacterBody_RecalculateStats_GeneTokens(ILContext il)
+        private static void RecalculateStatsAPI_GetStatCoefficients(CharacterBody sender, RecalculateStatsAPI.StatHookEventArgs args)
         {
-            ILCursor c = new ILCursor(il);
-            bool found = false;
+            args.healthMultAdd += 0.01f * sender.inventory?.GetItemCount(GeneTokens.tokenDict[GeneStat.MaxHealth][GeneMod.Plus1]) ?? 0f;
+            args.healthMultAdd -= 0.01f * sender.inventory?.GetItemCount(GeneTokens.tokenDict[GeneStat.MaxHealth][GeneMod.Minus1]) ?? 0f;
 
-            found = c.TryGotoNext(
-                        x => x.MatchLdfld<CharacterBody>("baseMaxHealth"),
-                        x => x.MatchLdarg(0),
-                        x => x.MatchLdfld<CharacterBody>("levelMaxHealth"))
-                    && c.TryGotoNext(
-                        x => x.MatchAdd());
-            if (found)
-            {
-                c.GotoNext(x => x.MatchStloc(out _));
-                c.Emit(OpCodes.Ldarg_0);
-                c.EmitDelegate<Func<float, CharacterBody, float>>((origHealth, body) =>
-                {
-                    return origHealth * GetGeneMultiplier(body, GeneStat.MaxHealth);
-                });
-            }
-            else
-            {
-                GeneticsArtifactPlugin.geneticLogSource.LogError("Health Hook Failed to Register");
-            }
-            c.Index = 0;
-            found = false;
+            args.moveSpeedMultAdd += 0.01f * sender.inventory?.GetItemCount(GeneTokens.tokenDict[GeneStat.MoveSpeed][GeneMod.Plus1]) ?? 0f;
+            args.moveSpeedMultAdd -= 0.01f * sender.inventory?.GetItemCount(GeneTokens.tokenDict[GeneStat.MoveSpeed][GeneMod.Minus1]) ?? 0f;
 
-            found = c.TryGotoNext(
-                    x => x.MatchLdfld<CharacterBody>("baseMoveSpeed"),
-                    x => x.MatchLdarg(0),
-                    x => x.MatchLdfld<CharacterBody>("levelMoveSpeed"))
-                && c.TryGotoNext(
-                    x => x.MatchAdd());
-            if (found)
-            {
-                c.GotoNext(x => x.MatchStloc(out _));
-                c.Emit(OpCodes.Ldarg_0);
-                c.EmitDelegate<Func<float, CharacterBody, float>>((origMoveSpeed, body) =>
-                {
-                    return origMoveSpeed * GetGeneMultiplier(body, GeneStat.MoveSpeed);
-                });
-            }
-            else
-            {
-                GeneticsArtifactPlugin.geneticLogSource.LogError("MoveSpeed Hook Failed to Register");
-            }
-            c.Index = 0;
-            found = false;
+            args.attackSpeedMultAdd += 0.01f * sender.inventory?.GetItemCount(GeneTokens.tokenDict[GeneStat.AttackSpeed][GeneMod.Plus1]) ?? 0f;
+            args.attackSpeedMultAdd -= 0.01f * sender.inventory?.GetItemCount(GeneTokens.tokenDict[GeneStat.AttackSpeed][GeneMod.Minus1]) ?? 0f;
 
-            found = c.TryGotoNext(
-                    x => x.MatchLdfld<CharacterBody>("baseDamage"),
-                    x => x.MatchLdarg(0),
-                    x => x.MatchLdfld<CharacterBody>("levelDamage"))
-                && c.TryGotoNext(
-                    x => x.MatchAdd());
-            if (found)
-            {
-                c.GotoNext(x => x.MatchStloc(out _));
-                c.Emit(OpCodes.Ldarg_0);
-                c.EmitDelegate<Func<float, CharacterBody, float>>((origDamage, body) =>
-                {
-                    return origDamage * GetGeneMultiplier(body, GeneStat.AttackDamage);
-                });
-            }
-            else
-            {
-                GeneticsArtifactPlugin.geneticLogSource.LogError("Damage Hook Failed to Register");
-            }
-            c.Index = 0;
-            found = false;
-
-            found = c.TryGotoNext(
-                    x => x.MatchLdfld<CharacterBody>("baseAttackSpeed"),
-                    x => x.MatchLdarg(0),
-                    x => x.MatchLdfld<CharacterBody>("levelAttackSpeed"))
-                && c.TryGotoNext(
-                    x => x.MatchAdd());
-            if (found)
-            {
-                c.GotoNext(x => x.MatchStloc(out _));
-                c.Emit(OpCodes.Ldarg_0);
-                c.EmitDelegate<Func<float, CharacterBody, float>>((origAttackSpeed, body) =>
-                {
-                    return origAttackSpeed * GetGeneMultiplier(body, GeneStat.AttackSpeed);
-                });
-            }
-            else
-            {
-                GeneticsArtifactPlugin.geneticLogSource.LogError("AttackSpeed Hook Failed to Register");
-            }
-            c.Index = 0;
-            found = false;
+            args.damageMultAdd += 0.01f * sender.inventory?.GetItemCount(GeneTokens.tokenDict[GeneStat.AttackDamage][GeneMod.Plus1]) ?? 0f;
+            args.damageMultAdd -= 0.01f * sender.inventory?.GetItemCount(GeneTokens.tokenDict[GeneStat.AttackDamage][GeneMod.Minus1]) ?? 0f;
         }
         #endregion
 
@@ -141,7 +61,7 @@ namespace GeneticsArtifact
 
             foreach (GeneStat stat in Enum.GetValues(typeof(GeneStat)))
             {
-                if(diffValues[stat] > 0)
+                if (diffValues[stat] > 0)
                 {
                     tokensToGive.Add(GeneTokens.tokenDict[stat][GeneMod.Plus1], (int)(diffValues[stat] * 100));
                 }
