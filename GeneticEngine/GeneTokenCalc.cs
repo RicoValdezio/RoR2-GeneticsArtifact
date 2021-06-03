@@ -15,10 +15,10 @@ namespace GeneticsArtifact
 
         private static void RecalculateStatsAPI_GetStatCoefficients(CharacterBody sender, RecalculateStatsAPI.StatHookEventArgs args)
         {
-            args.healthMultAdd += GetGeneMultiplier(sender, GeneStat.MaxHealth) - 1f;
-            args.moveSpeedMultAdd += GetGeneMultiplier(sender, GeneStat.MoveSpeed) - 1f;
-            args.attackSpeedMultAdd += GetGeneMultiplier(sender, GeneStat.AttackSpeed) - 1f;
-            args.damageMultAdd += GetGeneMultiplier(sender, GeneStat.AttackDamage) - 1f;
+            args.baseHealthAdd += GetStatValueToAdd(sender, GeneStat.MaxHealth);
+            args.baseMoveSpeedAdd += GetStatValueToAdd(sender, GeneStat.MoveSpeed);
+            args.baseAttackSpeedAdd += GetStatValueToAdd(sender, GeneStat.AttackSpeed);
+            args.baseDamageAdd += GetStatValueToAdd(sender, GeneStat.AttackDamage);
         }
         #endregion
 
@@ -35,6 +35,34 @@ namespace GeneticsArtifact
             geneValue += 0.01f * body.inventory?.GetItemCount(GeneTokens.tokenDict[statType][GeneMod.Plus1]) ?? 0f;
             geneValue -= 0.01f * body.inventory?.GetItemCount(GeneTokens.tokenDict[statType][GeneMod.Minus1]) ?? 0f;
             return geneValue;
+        }
+
+        /// <summary>
+        /// Used to determine the float value that needs to be added to the baseStatAdd value
+        /// </summary>
+        /// <param name="body">The body in question, will be passed to GetGeneMultiplier</param>
+        /// <param name="statType">The stat being checked</param>
+        /// <returns>The stat modifier, this is to be added to the base stat</returns>
+        public static float GetStatValueToAdd(CharacterBody body, GeneStat statType)
+        {
+            float baseStatValue = 0f;
+            switch (statType)
+            {
+                case GeneStat.MaxHealth:
+                    baseStatValue = body.baseMaxHealth + (body.levelMaxHealth * body.level);
+                    break;
+                case GeneStat.MoveSpeed:
+                    baseStatValue = body.baseMoveSpeed + (body.levelMoveSpeed * body.level);
+                    break;
+                case GeneStat.AttackSpeed:
+                    baseStatValue = body.baseAttackSpeed + (body.levelAttackSpeed * body.level);
+                    break;
+                case GeneStat.AttackDamage:
+                    baseStatValue = body.baseDamage + (body.levelDamage * body.level);
+                    break;
+            }
+            float modStatValue = baseStatValue * GetGeneMultiplier(body, statType);
+            return modStatValue - baseStatValue;
         }
 
         /// <summary>
