@@ -25,6 +25,10 @@ Known Issues/Planned Updates
 Changelog
 -----------
 ```
+4.0.6
+- Adjusted/fixed the math in the RecalculateStatsAPI stat hook
+  - Stat modifications should work like all non-4.0.5 versions now
+
 4.0.5
 - Rebuilt the hidden item stats using RecalculateStatsAPI from R2API v3.0.43
   - This should help prevent future conflicts with other stat-adjusting mods
