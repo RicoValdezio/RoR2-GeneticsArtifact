@@ -50,7 +50,15 @@ namespace GeneticsArtifact
             Dictionary<GeneStat, float> mutationAttempt = new Dictionary<GeneStat, float>();
             foreach (GeneStat stat in currentGenes.Keys)
             {
-                mutationAttempt.Add(stat, (float)decimal.Round((decimal)Mathf.Clamp(Random.Range(currentGenes[stat] * 0.9f, currentGenes[stat] * 0.9f), 0.01f, 10.00f), 2));
+                //If it isn't the Bulwark, use the normal bounds
+                if(Stage.instance.sceneDef.baseSceneName != "artifactworld")
+                {
+                    mutationAttempt.Add(stat, (float)decimal.Round((decimal)Mathf.Clamp(Random.Range(currentGenes[stat] * 0.9f, currentGenes[stat] * 1.1f), 0.01f, 10.00f), 2));
+                }
+                else //If it is the Bulwark, use 5x the normal bounds
+                {
+                    mutationAttempt.Add(stat, (float)decimal.Round((decimal)Mathf.Clamp(Random.Range(currentGenes[stat] * 0.2f, currentGenes[stat] * 5.0f), 0.01f, 10.00f), 2));
+                }
             }
             mutationAttempt = CorrectOvermutation(mutationAttempt);
             Dictionary<ItemDef, int> itemsToGive = GeneTokenCalc.GetTokensToAdd(currentGenes, mutationAttempt);
