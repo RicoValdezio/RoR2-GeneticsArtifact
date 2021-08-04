@@ -1,7 +1,5 @@
 ﻿using R2API;
-using R2API.ScriptableObjects;
 using RoR2;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace GeneticsArtifact
@@ -9,7 +7,7 @@ namespace GeneticsArtifact
     public class ArtifactOfGenetics
     {
         public static ArtifactDef def;
-        public static ArtifactCode code;
+        //public static ArtifactCode code;
 
         internal static void Init()
         {
@@ -26,12 +24,12 @@ namespace GeneticsArtifact
 
             ArtifactAPI.Add(def);
 
-            code = ScriptableObject.CreateInstance<ArtifactCode>();
-            code.ArtifactCompounds = new List<int> { ArtifactCodeAPI.CompoundValues.Triangle, ArtifactCodeAPI.CompoundValues.Diamond, ArtifactCodeAPI.CompoundValues.Triangle,
-                                                     ArtifactCodeAPI.CompoundValues.Empty,    ArtifactCodeAPI.CompoundValues.Square,  ArtifactCodeAPI.CompoundValues.Empty,
-                                                     ArtifactCodeAPI.CompoundValues.Triangle, ArtifactCodeAPI.CompoundValues.Diamond, ArtifactCodeAPI.CompoundValues.Triangle};
+            //code = ScriptableObject.CreateInstance<ArtifactCode>();
+            //code.ArtifactCompounds = new List<int> { ArtifactCodeAPI.CompoundValues.Triangle, ArtifactCodeAPI.CompoundValues.Diamond, ArtifactCodeAPI.CompoundValues.Triangle,
+            //                                         ArtifactCodeAPI.CompoundValues.Empty,    ArtifactCodeAPI.CompoundValues.Square,  ArtifactCodeAPI.CompoundValues.Empty,
+            //                                         ArtifactCodeAPI.CompoundValues.Triangle, ArtifactCodeAPI.CompoundValues.Diamond, ArtifactCodeAPI.CompoundValues.Triangle};
 
-            ArtifactCodeAPI.Add(def, code);
+            //ArtifactCodeAPI.Add(def, code);
         }
     }
 }

@@ -51,7 +51,7 @@ namespace GeneticsArtifact
             foreach (GeneStat stat in currentGenes.Keys)
             {
                 //If it isn't the Bulwark, use the normal bounds
-                if(Stage.instance.sceneDef.baseSceneName != "artifactworld")
+                if (Stage.instance.sceneDef.baseSceneName != "artifactworld")
                 {
                     mutationAttempt.Add(stat, (float)decimal.Round((decimal)Mathf.Clamp(Random.Range(currentGenes[stat] * 0.9f, currentGenes[stat] * 1.1f), 0.01f, 10.00f), 2));
                 }

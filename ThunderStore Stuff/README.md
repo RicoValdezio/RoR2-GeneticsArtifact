@@ -21,10 +21,16 @@ Known Issues/Planned Updates
 ------------
 - A feedback system (visual or other) to let the player know how the mutations are trending
 - 4.0.0 hasn't been stress-tested, if you find a breaking bug let me know in the #tech-support channel
+- Once the next R2API update comes out and adds ArtifactCodeAPI, I`m going to make a model and challenge for it
 
 Changelog
 -----------
 ```
+4.0.7
+- Fixed the random assignment math that`s been broken since 4.0.0 (oops)
+  - Monsters now have the chance to get stronger instead of just atrophying away
+  - Random range is now 90%-110% instead of 90%-90%
+
 4.0.6
 - Adjusted/fixed the math in the RecalculateStatsAPI stat hook
   - Stat modifications should work like all non-4.0.5 versions now
