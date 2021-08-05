@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 3489824736
+CRC: 403896854
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 04acb04dfd84ecc181407a7d841031bd
+    Hash: 3bc5240aa010c455eb7ea6ec38129993
   TypeTreeHash:
     serializedVersion: 2
     Hash: 21747e4ee48f36c7a65f9afbfd77f392
@@ -30,5 +30,6 @@ ClassTypes:
 Assets:
 - Assets/Genetics/PickupGene.prefab
 - Assets/Genetics/Selected.png
+- Assets/Genetics/CompoundGene.prefab
 - Assets/Genetics/Unselected.png
 Dependencies: []
