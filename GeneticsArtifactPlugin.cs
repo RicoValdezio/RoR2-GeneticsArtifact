@@ -9,7 +9,7 @@ namespace GeneticsArtifact
 {
     [BepInPlugin(ModGuid, ModName, ModVer)]
     [BepInDependency("com.bepis.r2api", BepInDependency.DependencyFlags.HardDependency)]
-    [R2APISubmoduleDependency(nameof(LanguageAPI), nameof(ArtifactAPI), nameof(ItemAPI), nameof(RecalculateStatsAPI)/*, nameof(ArtifactCodeAPI)*/)]
+    [R2APISubmoduleDependency(nameof(LanguageAPI), nameof(ArtifactAPI), nameof(ItemAPI), nameof(RecalculateStatsAPI), nameof(ArtifactCodeAPI))]
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.EveryoneNeedSameModVersion)]
     public class GeneticsArtifactPlugin : BaseUnityPlugin
     {
