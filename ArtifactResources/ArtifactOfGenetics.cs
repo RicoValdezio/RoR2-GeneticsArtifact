@@ -31,7 +31,7 @@ namespace GeneticsArtifact
 
             artifactCode = ScriptableObject.CreateInstance<ArtifactCode>();
             artifactCode.ArtifactCompounds = new List<int> { ArtifactCodeAPI.CompoundValues.Triangle, ArtifactCodeAPI.CompoundValues.Diamond, ArtifactCodeAPI.CompoundValues.Triangle,
-                                                             ArtifactCodeAPI.CompoundValues.Empty,    geneArtifactCompoundDef.value,          ArtifactCodeAPI.CompoundValues.Empty,
+                                                             ArtifactCodeAPI.CompoundValues.Circle,   geneArtifactCompoundDef.value,          ArtifactCodeAPI.CompoundValues.Circle,
                                                              ArtifactCodeAPI.CompoundValues.Triangle, ArtifactCodeAPI.CompoundValues.Diamond, ArtifactCodeAPI.CompoundValues.Triangle};
             ArtifactCodeAPI.AddCode(artifactDef, artifactCode);
         }

@@ -50,15 +50,10 @@ namespace GeneticsArtifact
             Dictionary<GeneStat, float> mutationAttempt = new Dictionary<GeneStat, float>();
             foreach (GeneStat stat in currentGenes.Keys)
             {
-                //If it isn't the Bulwark, use the normal bounds
-                if (Stage.instance.sceneDef.baseSceneName != "artifactworld")
-                {
-                    mutationAttempt.Add(stat, (float)decimal.Round((decimal)Mathf.Clamp(Random.Range(currentGenes[stat] * 0.9f, currentGenes[stat] * 1.1f), 0.01f, 10.00f), 2));
-                }
-                else //If it is the Bulwark, use 5x the normal bounds
-                {
-                    mutationAttempt.Add(stat, (float)decimal.Round((decimal)Mathf.Clamp(Random.Range(currentGenes[stat] * 0.2f, currentGenes[stat] * 5.0f), 0.01f, 10.00f), 2));
-                }
+                //Bulwark mutation is 20%-500% - base is 90%-110%
+                mutationAttempt.Add(stat, Stage.instance.sceneDef.baseSceneName == "artifactworld" ?
+                                          (float)decimal.Round((decimal)Mathf.Clamp(Random.Range(currentGenes[stat] * 0.2f, currentGenes[stat] * 5.0f), 0.01f, 10.00f), 2) :
+                                          (float)decimal.Round((decimal)Mathf.Clamp(Random.Range(currentGenes[stat] * 0.9f, currentGenes[stat] * 1.1f), 0.01f, 10.00f), 2));
             }
             mutationAttempt = CorrectOvermutation(mutationAttempt);
             Dictionary<ItemDef, int> itemsToGive = GeneTokenCalc.GetTokensToAdd(currentGenes, mutationAttempt);
@@ -67,6 +62,13 @@ namespace GeneticsArtifact
                 characterBody.inventory.GiveItem(pair.Key, pair.Value);
             }
             currentGenes = mutationAttempt;
+#if DEBUG
+            GeneticsArtifactPlugin.geneticLogSource.LogInfo(Stage.instance.sceneDef.baseSceneName + " " +
+                                                            currentGenes[GeneStat.MaxHealth].ToString() + " " + 
+                                                            currentGenes[GeneStat.MoveSpeed].ToString() + " " + 
+                                                            currentGenes[GeneStat.AttackSpeed].ToString() + " " + 
+                                                            currentGenes[GeneStat.AttackDamage].ToString());
+#endif
         }
 
         private Dictionary<GeneStat, float> CorrectOvermutation(Dictionary<GeneStat, float> attempt)

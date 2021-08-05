@@ -16,16 +16,24 @@ Video Explanations
 	https://youtu.be/V4uxtHPvQKY
 2.4.1 - "Rapid Mutation" overview (outdated, this functionality hasn't been re-added yet)
 	https://youtu.be/odUNUfmcHg4
+4.1.0 - Challenge Portal Promo
+	
 
 Known Issues/Planned Updates
 ------------
 - A feedback system (visual or other) to let the player know how the mutations are trending
 - 4.0.0 hasn't been stress-tested, if you find a breaking bug let me know in the #tech-support channel
-- Once the next R2API update comes out and adds ArtifactCodeAPI, I`m going to make a model and challenge for it
+- The challenge portal code introduced in 4.1.0 will eventually be changed and hidden, once I decide how to do that
 
 Changelog
 -----------
 ```
+4.1.0
+- Added portal code, compound, and challenge for the artifact (thanks to ArtifactCodeAPI)
+  - The Genetics challenge will not be required to unlock it for new runs, but...
+  - The challenge will instead provide a dramatic mutation rate while in the Bulwark (20%-500% instead of base 90%-110%)
+  - Portal code - in left-right top-bottom order - is TDTCGCTDT
+
 4.0.7
 - Fixed the random assignment math that`s been broken since 4.0.0 (oops)
   - Monsters now have the chance to get stronger instead of just atrophying away
