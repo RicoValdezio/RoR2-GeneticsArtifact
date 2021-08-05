@@ -22,7 +22,7 @@ namespace GeneticsArtifact
             def.descriptionToken = "GENETIC_ARTIFACT_DESCRIPTION_TOKEN";
             def.smallIconSelectedSprite = GeneticsArtifactPlugin.geneticAssetBundle.LoadAsset<Sprite>("Assets/Genetics/Selected.png");
             def.smallIconDeselectedSprite = GeneticsArtifactPlugin.geneticAssetBundle.LoadAsset<Sprite>("Assets/Genetics/Unselected.png");
-            def.pickupModelPrefab = GeneticsArtifactPlugin.geneticAssetBundle.LoadAsset<GameObject>("Assets/Genetics/Model.prefab");
+            def.pickupModelPrefab = GeneticsArtifactPlugin.geneticAssetBundle.LoadAsset<GameObject>("Assets/Genetics/PickupGene.prefab");
 
             ArtifactAPI.Add(def);
 
