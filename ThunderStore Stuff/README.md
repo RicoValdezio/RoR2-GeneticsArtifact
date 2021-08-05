@@ -17,7 +17,7 @@ Video Explanations
 2.4.1 - "Rapid Mutation" overview (outdated, this functionality hasn't been re-added yet)
 	https://youtu.be/odUNUfmcHg4
 4.1.0 - Challenge Portal Promo
-	
+	https://youtu.be/wCFA7I3Oblk
 
 Known Issues/Planned Updates
 ------------
