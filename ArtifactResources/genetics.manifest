@@ -1,0 +1,35 @@
+ManifestFileVersion: 0
+CRC: 1959274096
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 16851166c30030fff40e9a45eb31c5da
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 21747e4ee48f36c7a65f9afbfd77f392
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+Assets:
+- Assets/Genetics/PickupGene.prefab
+- Assets/Genetics/Selected.png
+- Assets/Genetics/CompoundGene.prefab
+- Assets/Genetics/Unselected.png
+Dependencies: []
