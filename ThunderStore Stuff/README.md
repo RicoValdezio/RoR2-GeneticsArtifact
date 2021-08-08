@@ -1,8 +1,8 @@
 ﻿Basic Description
 ------------
-This mod adds a genetics system to the monsters, with every stat being able to mutate in specific ways
-The core stats that are affected are: Health, MoveSpeed, Damage, and AttackSpeed
-The goal of the system detailed below is to allow the game to adapt to the player, and in turn force the player to adapt to it
+- This mod adds a genetics system to the monsters, with every stat being able to mutate in specific ways
+- The core stats that are affected are: Health, MoveSpeed, Damage, and AttackSpeed
+- The goal of the system detailed below is to allow the game to adapt to the player, and in turn force the player to adapt to it
 
 How it Works
 ------------
@@ -12,12 +12,12 @@ How it Works
 
 Video Explanations
 ------------
-1.4.5 - 30-minute overview (outdated, but still semi-accurate)
-	https://youtu.be/V4uxtHPvQKY
-2.4.1 - "Rapid Mutation" overview (outdated, this functionality hasn't been re-added yet)
-	https://youtu.be/odUNUfmcHg4
-4.1.0 - Challenge Portal Promo
-	https://youtu.be/wCFA7I3Oblk
+- 1.4.5 - 30-minute overview (outdated, but still semi-accurate)
+	- https://youtu.be/V4uxtHPvQKY
+- 2.4.1 - "Rapid Mutation" overview (outdated, this functionality hasn't been re-added yet)
+	- https://youtu.be/odUNUfmcHg4
+- 4.1.0 - Challenge Portal Promo
+	- https://youtu.be/wCFA7I3Oblk
 
 Known Issues/Planned Updates
 ------------
