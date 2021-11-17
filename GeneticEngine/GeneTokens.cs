@@ -9,11 +9,14 @@ namespace GeneticsArtifact
     public class GeneTokens
     {
         public static Dictionary<GeneStat, Dictionary<GeneMod, ItemDef>> tokenDict;
+        public static ItemDef blockerDef;
 
         public static void Init()
         {
             LanguageAPI.Add("GENETIC_EMPTY_TOKEN", "This is better than null I guess");
             tokenDict = new Dictionary<GeneStat, Dictionary<GeneMod, ItemDef>>();
+
+            //GeneToken Items
             foreach (GeneStat stat in Enum.GetValues(typeof(GeneStat)))
             {
                 tokenDict.Add(stat, new Dictionary<GeneMod, ItemDef>());
@@ -39,6 +42,24 @@ namespace GeneticsArtifact
                     tokenDict[stat].Add(mod, def);
                 }
             }
+
+            //GeneBlocker Item
+            blockerDef = ScriptableObject.CreateInstance<ItemDef>();
+
+            blockerDef.name = "GENETOKEN_BLOCKER";
+            blockerDef.nameToken = "GENETIC_EMPTY_TOKEN";
+            blockerDef.pickupToken = "GENETIC_EMPTY_TOKEN";
+            blockerDef.descriptionToken = "GENETIC_EMPTY_TOKEN";
+            blockerDef.loreToken = "GENETIC_EMPTY_TOKEN";
+            blockerDef.pickupIconSprite = null;
+            blockerDef.pickupModelPrefab = null;
+            blockerDef.tags = new ItemTag[] { ItemTag.CannotCopy, ItemTag.CannotSteal };
+            blockerDef.tier = ItemTier.NoTier;
+            blockerDef.hidden = true;
+            blockerDef.canRemove = false;
+
+            CustomItem blockerItem = new CustomItem(blockerDef, new ItemDisplayRuleDict());
+            ItemAPI.Add(blockerItem);
         }
     }
 

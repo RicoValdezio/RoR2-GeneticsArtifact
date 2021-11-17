@@ -15,10 +15,13 @@ namespace GeneticsArtifact
 
         private static void RecalculateStatsAPI_GetStatCoefficients(CharacterBody sender, RecalculateStatsAPI.StatHookEventArgs args)
         {
-            args.baseHealthAdd += GetStatValueToAdd(sender, GeneStat.MaxHealth);
-            args.baseMoveSpeedAdd += GetStatValueToAdd(sender, GeneStat.MoveSpeed);
-            args.baseAttackSpeedAdd += GetStatValueToAdd(sender, GeneStat.AttackSpeed);
-            args.baseDamageAdd += GetStatValueToAdd(sender, GeneStat.AttackDamage);
+            if (sender.inventory?.GetItemCount(GeneTokens.blockerDef) == 0)
+            {
+                args.baseHealthAdd += GetStatValueToAdd(sender, GeneStat.MaxHealth);
+                args.baseMoveSpeedAdd += GetStatValueToAdd(sender, GeneStat.MoveSpeed);
+                args.baseAttackSpeedAdd += GetStatValueToAdd(sender, GeneStat.AttackSpeed);
+                args.baseDamageAdd += GetStatValueToAdd(sender, GeneStat.AttackDamage);
+            }
         }
         #endregion
 
