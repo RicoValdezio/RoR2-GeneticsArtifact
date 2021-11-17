@@ -61,7 +61,7 @@ namespace GeneticsArtifact
                 {
                     if (attackerObject != null && attackerObject.GetComponent<CharacterBody>() is CharacterBody attackerBody)
                     {
-                        if (attackerBody != null)
+                        if (attackerBody != null && attackerBody.inventory?.GetItemCount(GeneTokens.blockerDef) == 0)
                         {
                             MonsterGeneBehaviour attackerGene = livingGenes.Find(x => x.characterBody == attackerBody);
                             if (attackerGene != null) attackerGene.damageDealt += damageInfo.damage;
@@ -72,7 +72,7 @@ namespace GeneticsArtifact
                 {
                     if (inflictorObject != null && inflictorObject.GetComponent<CharacterBody>() is CharacterBody inflictorBody)
                     {
-                        if (inflictorBody != null)
+                        if (inflictorBody != null && inflictorBody.inventory?.GetItemCount(GeneTokens.blockerDef) == 0)
                         {
                             MonsterGeneBehaviour inflictorGene = livingGenes.Find(x => x.characterBody == inflictorBody);
                             if (inflictorGene != null) inflictorGene.damageDealt += damageInfo.damage;

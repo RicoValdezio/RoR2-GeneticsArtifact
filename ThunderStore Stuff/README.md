@@ -28,6 +28,10 @@ Known Issues/Planned Updates
 Changelog
 -----------
 ```
+4.2.0
+- Added a GeneBlocker item for use in GeneticVariantsPatch that prevents stat mutations from effecting the holder
+  - This item also prevents the holder from scoring points and participating in the fitness evaluation
+
 4.1.0
 - Added portal code, compound, and challenge for the artifact (thanks to ArtifactCodeAPI)
   - The Genetics challenge will not be required to unlock it for new runs, but...
