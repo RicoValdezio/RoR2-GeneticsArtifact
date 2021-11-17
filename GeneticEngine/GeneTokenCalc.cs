@@ -15,7 +15,7 @@ namespace GeneticsArtifact
 
         private static void RecalculateStatsAPI_GetStatCoefficients(CharacterBody sender, RecalculateStatsAPI.StatHookEventArgs args)
         {
-            if (sender.inventory.GetItemCount(GeneTokens.blockerDef) == 0)
+            if (sender.inventory?.GetItemCount(GeneTokens.blockerDef) == 0)
             {
                 args.baseHealthAdd += GetStatValueToAdd(sender, GeneStat.MaxHealth);
                 args.baseMoveSpeedAdd += GetStatValueToAdd(sender, GeneStat.MoveSpeed);
