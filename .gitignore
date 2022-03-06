@@ -342,3 +342,5 @@ healthchecksdb
 # The base RoR2 code
 Libs/Assembly-CSharp.dll
 Libs/ModLoader.dll
+/Libs/RoR2.dll
+/Libs/com.unity.multiplayer-hlapi.Runtime.dll

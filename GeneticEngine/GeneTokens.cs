@@ -38,6 +38,7 @@ namespace GeneticsArtifact
 
                     CustomItem item = new CustomItem(def, new ItemDisplayRuleDict());
                     ItemAPI.Add(item);
+                    //ContentAddition.AddItemDef(def);
 
                     tokenDict[stat].Add(mod, def);
                 }
@@ -60,6 +61,7 @@ namespace GeneticsArtifact
 
             CustomItem blockerItem = new CustomItem(blockerDef, new ItemDisplayRuleDict());
             ItemAPI.Add(blockerItem);
+            //ContentAddition.AddItemDef(blockerDef);
         }
     }
 

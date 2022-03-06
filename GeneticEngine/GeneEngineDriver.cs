@@ -34,6 +34,11 @@ namespace GeneticsArtifact
             orig(self);
             if (NetworkServer.active && RunArtifactManager.instance.IsArtifactEnabled(ArtifactOfGenetics.artifactDef))
             {
+                if (instance == null) //Emergency Catch for Bulwark Edge Case
+                {
+                    Run.instance.gameObject.AddComponent<GeneEngineDriver>();
+                    GeneticsArtifactPlugin.geneticLogSource.LogWarning("GeneEngineDriver Emergency Activation! Wasn't ready for a body yet.");
+                }
                 if (self.teamComponent.teamIndex == TeamIndex.Monster &&
                     self.inventory)
                 {

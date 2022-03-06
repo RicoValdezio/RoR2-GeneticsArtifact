@@ -28,6 +28,10 @@ Known Issues/Planned Updates
 Changelog
 -----------
 ```
+4.3.0
+- Updated for SOTV and new R2API build
+  - Also fixed a fringe case nullref bug that could happen in the Bulwark
+
 4.2.0
 - Added a GeneBlocker item for use in GeneticVariantsPatch that prevents stat mutations from effecting the holder
   - This item also prevents the holder from scoring points and participating in the fitness evaluation

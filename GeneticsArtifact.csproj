@@ -19,6 +19,9 @@
     <Reference Include="BepInEx">
       <HintPath>Libs\BepInEx.dll</HintPath>
     </Reference>
+    <Reference Include="com.unity.multiplayer-hlapi.Runtime">
+      <HintPath>Libs\com.unity.multiplayer-hlapi.Runtime.dll</HintPath>
+    </Reference>
     <Reference Include="MMHOOK_Assembly-CSharp">
       <HintPath>Libs\MMHOOK_Assembly-CSharp.dll</HintPath>
     </Reference>
@@ -34,6 +37,9 @@
     <Reference Include="R2API">
       <HintPath>Libs\R2API.dll</HintPath>
     </Reference>
+    <Reference Include="RoR2">
+      <HintPath>Libs\RoR2.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine">
       <HintPath>Libs\UnityEngine.dll</HintPath>
     </Reference>
@@ -42,9 +48,6 @@
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>Libs\UnityEngine.CoreModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.Networking">
-      <HintPath>Libs\UnityEngine.Networking.dll</HintPath>
     </Reference>
   </ItemGroup>
 

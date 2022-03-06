@@ -1,4 +1,5 @@
 ﻿using R2API;
+using R2API.ScriptableObjects;
 using RoR2;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,7 +23,8 @@ namespace GeneticsArtifact
             artifactDef.smallIconSelectedSprite = GeneticsArtifactPlugin.geneticAssetBundle.LoadAsset<Sprite>("Assets/Genetics/Selected.png");
             artifactDef.smallIconDeselectedSprite = GeneticsArtifactPlugin.geneticAssetBundle.LoadAsset<Sprite>("Assets/Genetics/Unselected.png");
             artifactDef.pickupModelPrefab = GeneticsArtifactPlugin.geneticAssetBundle.LoadAsset<GameObject>("Assets/Genetics/PickupGene.prefab");
-            ArtifactAPI.Add(artifactDef);
+            //ArtifactAPI.Add(artifactDef);
+            ContentAddition.AddArtifactDef(artifactDef);
 
             geneArtifactCompoundDef = ScriptableObject.CreateInstance<ArtifactCompoundDef>();
             geneArtifactCompoundDef.modelPrefab = GeneticsArtifactPlugin.geneticAssetBundle.LoadAsset<GameObject>("Assets/Genetics/CompoundGene.prefab");
@@ -33,6 +35,7 @@ namespace GeneticsArtifact
             artifactCode.ArtifactCompounds = new List<int> { ArtifactCodeAPI.CompoundValues.Triangle, ArtifactCodeAPI.CompoundValues.Diamond, ArtifactCodeAPI.CompoundValues.Triangle,
                                                              ArtifactCodeAPI.CompoundValues.Circle,   geneArtifactCompoundDef.value,          ArtifactCodeAPI.CompoundValues.Circle,
                                                              ArtifactCodeAPI.CompoundValues.Triangle, ArtifactCodeAPI.CompoundValues.Diamond, ArtifactCodeAPI.CompoundValues.Triangle};
+
             ArtifactCodeAPI.AddCode(artifactDef, artifactCode);
         }
     }

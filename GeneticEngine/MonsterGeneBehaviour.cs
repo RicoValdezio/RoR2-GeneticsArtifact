@@ -64,6 +64,7 @@ namespace GeneticsArtifact
             currentGenes = mutationAttempt;
 #if DEBUG
             GeneticsArtifactPlugin.geneticLogSource.LogInfo(Stage.instance.sceneDef.baseSceneName + " " +
+                                                            characterBody.name + " " +
                                                             currentGenes[GeneStat.MaxHealth].ToString() + " " + 
                                                             currentGenes[GeneStat.MoveSpeed].ToString() + " " + 
                                                             currentGenes[GeneStat.AttackSpeed].ToString() + " " + 
