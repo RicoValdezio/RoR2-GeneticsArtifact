@@ -32,11 +32,14 @@ namespace GeneticsArtifact
             ArtifactCodeAPI.AddCompound(geneArtifactCompoundDef);
 
             artifactCode = ScriptableObject.CreateInstance<ArtifactCode>();
-            artifactCode.ArtifactCompounds = new List<int> { ArtifactCodeAPI.CompoundValues.Triangle, ArtifactCodeAPI.CompoundValues.Diamond, ArtifactCodeAPI.CompoundValues.Triangle,
-                                                             ArtifactCodeAPI.CompoundValues.Circle,   geneArtifactCompoundDef.value,          ArtifactCodeAPI.CompoundValues.Circle,
-                                                             ArtifactCodeAPI.CompoundValues.Triangle, ArtifactCodeAPI.CompoundValues.Diamond, ArtifactCodeAPI.CompoundValues.Triangle};
+            artifactCode.topRow    = new Vector3Int(ArtifactCodeAPI.CompoundValues.Triangle, ArtifactCodeAPI.CompoundValues.Diamond, ArtifactCodeAPI.CompoundValues.Triangle);
+            artifactCode.middleRow = new Vector3Int(ArtifactCodeAPI.CompoundValues.Circle,   geneArtifactCompoundDef.value,          ArtifactCodeAPI.CompoundValues.Circle);
+            artifactCode.bottomRow = new Vector3Int(ArtifactCodeAPI.CompoundValues.Triangle, ArtifactCodeAPI.CompoundValues.Diamond, ArtifactCodeAPI.CompoundValues.Triangle);
 
             ArtifactCodeAPI.AddCode(artifactDef, artifactCode);
+#if DEBUG
+            GeneticsArtifactPlugin.geneticLogSource.LogWarning("Generated Code is: " + artifactCode.GetHashCode().ToString());
+#endif
         }
     }
 }

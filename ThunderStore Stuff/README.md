@@ -28,6 +28,10 @@ Known Issues/Planned Updates
 Changelog
 -----------
 ```
+4.3.1
+- Converted to the new ArtifactCodeAPI methods since they work now
+- (Probably some other R2API fixed stuff)
+
 4.3.0
 - Updated for SOTV and new R2API build
   - Also fixed a fringe case nullref bug that could happen in the Bulwark
