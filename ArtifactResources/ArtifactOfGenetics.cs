@@ -22,7 +22,6 @@ namespace GeneticsArtifact
             artifactDef.smallIconSelectedSprite = GeneticsArtifactPlugin.geneticAssetBundle.LoadAsset<Sprite>("Assets/Genetics/Selected.png");
             artifactDef.smallIconDeselectedSprite = GeneticsArtifactPlugin.geneticAssetBundle.LoadAsset<Sprite>("Assets/Genetics/Unselected.png");
             artifactDef.pickupModelPrefab = GeneticsArtifactPlugin.geneticAssetBundle.LoadAsset<GameObject>("Assets/Genetics/PickupGene.prefab");
-            //ArtifactAPI.Add(artifactDef);
             ContentAddition.AddArtifactDef(artifactDef);
 
             geneArtifactCompoundDef = ScriptableObject.CreateInstance<ArtifactCompoundDef>();

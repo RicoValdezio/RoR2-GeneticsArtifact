@@ -29,8 +29,9 @@ Changelog
 -----------
 ```
 4.3.1
+- Fix for Patch 1.2.3 since there are items in here
 - Converted to the new ArtifactCodeAPI methods since they work now
-- (Probably some other R2API fixed stuff)
+- Also converted items to ContentAddition methods, expect harmless warnings
 
 4.3.0
 - Updated for SOTV and new R2API build
