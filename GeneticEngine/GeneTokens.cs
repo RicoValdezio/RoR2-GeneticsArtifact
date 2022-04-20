@@ -36,9 +36,7 @@ namespace GeneticsArtifact
                     def.hidden = true;
                     def.canRemove = false;
 
-                    CustomItem item = new CustomItem(def, new ItemDisplayRuleDict());
-                    ItemAPI.Add(item);
-                    //ContentAddition.AddItemDef(def);
+                    ContentAddition.AddItemDef(def);
 
                     tokenDict[stat].Add(mod, def);
                 }
@@ -59,9 +57,7 @@ namespace GeneticsArtifact
             blockerDef.hidden = true;
             blockerDef.canRemove = false;
 
-            CustomItem blockerItem = new CustomItem(blockerDef, new ItemDisplayRuleDict());
-            ItemAPI.Add(blockerItem);
-            //ContentAddition.AddItemDef(blockerDef);
+            ContentAddition.AddItemDef(blockerDef);
         }
     }
 
