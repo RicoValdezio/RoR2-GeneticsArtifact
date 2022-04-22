@@ -102,15 +102,31 @@ namespace GeneticsArtifact
         {
             if (!NetworkServer.active) return;
             timeSinceLastLearning += Time.deltaTime;
-            //Every 20 seconds or every 10 deaths
-            if (timeSinceLastLearning >= 60f || deadGenes.Count >= 40)
+            switch (ConfigManager.governorType.Value)
             {
-                foreach (MasterGeneBehaviour master in masterGenes)
-                {
-                    master.MutateFromChildren();
-                }
-                deadGenes.Clear();
+                case (int)GovernorType.TimeOnly:
+                    if (timeSinceLastLearning >= (float)ConfigManager.timeLimit.Value) Learn();
+                    break;
+                case (int)GovernorType.DeathsOnly:
+                    if (deadGenes.Count >= ConfigManager.deathLimit.Value) Learn();
+                    break;
+                default:
+                    if (timeSinceLastLearning >= (float)ConfigManager.timeLimit.Value || deadGenes.Count >= ConfigManager.deathLimit.Value) Learn();
+                    break;
             }
+        }
+
+        public void Learn()
+        {
+#if DEBUG
+            GeneticsArtifactPlugin.geneticLogSource.LogInfo("Running Learn with Timer: " + timeSinceLastLearning + " and Deaths: " + deadGenes.Count);
+#endif
+            foreach (MasterGeneBehaviour master in masterGenes)
+            {
+                master.MutateFromChildren();
+            }
+            deadGenes.Clear();
+            timeSinceLastLearning = 0f;
         }
     }
 }

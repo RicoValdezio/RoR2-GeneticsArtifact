@@ -1,10 +1,10 @@
 ﻿{
     "name": "GeneticArtifact",
-    "version_number": "4.3.1",
+    "version_number": "4.3.2",
     "website_url": "https://github.com/RicoValdezio/RoR2-GeneticsArtifact",
     "description": "Adds an artifact that emulates a genetic algorithm on monster stats.",
     "dependencies": [
-        "bbepis-BepInExPack-5.4.1900",
-        "tristanmcpherson-R2API-4.0.11"
+        "bbepis-BepInExPack-5.4.1905",
+        "tristanmcpherson-R2API-4.3.5"
     ]
 }
