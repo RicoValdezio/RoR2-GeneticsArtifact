@@ -22,8 +22,8 @@
     <Reference Include="com.unity.multiplayer-hlapi.Runtime">
       <HintPath>Libs\com.unity.multiplayer-hlapi.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="MMHOOK_Assembly-CSharp">
-      <HintPath>Libs\MMHOOK_Assembly-CSharp.dll</HintPath>
+    <Reference Include="MMHOOK_RoR2">
+      <HintPath>Libs\MMHOOK_RoR2.dll</HintPath>
     </Reference>
     <Reference Include="ModLoader">
       <HintPath>Libs\ModLoader.dll</HintPath>

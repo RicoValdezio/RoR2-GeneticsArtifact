@@ -1,4 +1,5 @@
 ﻿using R2API;
+using R2API.Utils;
 using RoR2;
 using System;
 using System.Collections.Generic;
@@ -32,13 +33,11 @@ namespace GeneticsArtifact
                     def.pickupIconSprite = null;
                     def.pickupModelPrefab = null;
                     def.tags = new ItemTag[] { ItemTag.CannotCopy, ItemTag.CannotSteal };
-                    def.tier = ItemTier.NoTier;
+                    def.SetFieldValue<ItemTier>("deprecatedTier", ItemTier.NoTier);
                     def.hidden = true;
                     def.canRemove = false;
 
-                    CustomItem item = new CustomItem(def, new ItemDisplayRuleDict());
-                    ItemAPI.Add(item);
-                    //ContentAddition.AddItemDef(def);
+                    ContentAddition.AddItemDef(def);
 
                     tokenDict[stat].Add(mod, def);
                 }
@@ -55,13 +54,11 @@ namespace GeneticsArtifact
             blockerDef.pickupIconSprite = null;
             blockerDef.pickupModelPrefab = null;
             blockerDef.tags = new ItemTag[] { ItemTag.CannotCopy, ItemTag.CannotSteal };
-            blockerDef.tier = ItemTier.NoTier;
+            blockerDef.SetFieldValue<ItemTier>("deprecatedTier", ItemTier.NoTier);
             blockerDef.hidden = true;
             blockerDef.canRemove = false;
 
-            CustomItem blockerItem = new CustomItem(blockerDef, new ItemDisplayRuleDict());
-            ItemAPI.Add(blockerItem);
-            //ContentAddition.AddItemDef(blockerDef);
+            ContentAddition.AddItemDef(blockerDef);
         }
     }
 

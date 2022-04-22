@@ -28,6 +28,11 @@ Known Issues/Planned Updates
 Changelog
 -----------
 ```
+4.3.1
+- Fix for Patch 1.2.3 since there are items in here
+- Converted to the new ArtifactCodeAPI methods since they work now
+- Also converted items to ContentAddition methods, expect harmless warnings
+
 4.3.0
 - Updated for SOTV and new R2API build
   - Also fixed a fringe case nullref bug that could happen in the Bulwark
