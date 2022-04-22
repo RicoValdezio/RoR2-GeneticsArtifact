@@ -26,6 +26,8 @@ namespace GeneticsArtifact
             geneticLogSource = Instance.Logger;
             geneticAssetBundle = AssetBundle.LoadFromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream("GeneticsArtifact.ArtifactResources.genetics"));
 
+            ConfigManager.Init(Config);
+
             ArtifactOfGenetics.Init();
             GeneTokens.Init();
             GeneTokenCalc.RegisterHooks();
