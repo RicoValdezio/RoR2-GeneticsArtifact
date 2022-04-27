@@ -18,6 +18,8 @@ Video Explanations
 	- https://youtu.be/odUNUfmcHg4
 - 4.1.0 - Challenge Portal Promo
 	- https://youtu.be/wCFA7I3Oblk
+- 4.4.0 - 5-minute overview for 4.X versions
+    - https://youtu.be/MZ9iuUv4RU4
 
 Known Issues/Planned Updates
 ------------
@@ -29,6 +31,11 @@ Known Issues/Planned Updates
 Changelog
 -----------
 ```
+4.4.0
+- Added mode that allows stat modifications to apply even if the artifact is disabled
+  - This means no sudden drops in difficulty if you disable it mid-run
+  - There`s a config option for this, and it`s disabled by default (ie the old behaviour)
+
 4.3.2
 - Re-Added a configuration file for this
   - Tweak-able values include: when and how the algorithm decides to learn, mutation rates and limits
