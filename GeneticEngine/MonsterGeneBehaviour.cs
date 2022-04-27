@@ -55,8 +55,12 @@ namespace GeneticsArtifact
             {
                 //Bulwark mutation is 20%-500% - base is 90%-110%
                 mutationAttempt.Add(stat, Stage.instance.sceneDef.baseSceneName == "artifactworld" ?
-                                          (float)decimal.Round((decimal)Mathf.Clamp(Random.Range(currentGenes[stat] * 0.2f, currentGenes[stat] * 5.0f), 0.01f, 10.00f), 2) :
-                                          (float)decimal.Round((decimal)Mathf.Clamp(Random.Range(currentGenes[stat] * 0.9f, currentGenes[stat] * 1.1f), 0.01f, 10.00f), 2));
+                                          (float)decimal.Round((decimal)Mathf.Clamp(Random.Range(currentGenes[stat] * (1 - ConfigManager.geneVarianceLimit.Value * 5), 
+                                                                                                 currentGenes[stat] * (1 + ConfigManager.geneVarianceLimit.Value * 5)), 
+                                                                                    ConfigManager.geneFloor.Value, ConfigManager.geneCap.Value), 2) :
+                                          (float)decimal.Round((decimal)Mathf.Clamp(Random.Range(currentGenes[stat] * (1 - ConfigManager.geneVarianceLimit.Value), 
+                                                                                                 currentGenes[stat] * (1 + ConfigManager.geneVarianceLimit.Value)), 
+                                                                                    ConfigManager.geneFloor.Value, ConfigManager.geneCap.Value), 2));
             }
             mutationAttempt = CorrectOvermutation(mutationAttempt);
             Dictionary<ItemDef, int> itemsToGive = GeneTokenCalc.GetTokensToAdd(currentGenes, mutationAttempt);
@@ -78,7 +82,7 @@ namespace GeneticsArtifact
         private Dictionary<GeneStat, float> CorrectOvermutation(Dictionary<GeneStat, float> attempt)
         {
             Dictionary<GeneStat, float> correction = attempt;
-            while (CalculateGeneProduct(correction) > 1.5f)
+            while (CalculateGeneProduct(correction) > ConfigManager.geneProductLimit.Value)
             {
                 correction[correction.Aggregate((x, y) => x.Value > y.Value ? x : y).Key] -= 0.05f;
             }

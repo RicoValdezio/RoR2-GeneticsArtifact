@@ -24,14 +24,20 @@ Known Issues/Planned Updates
 - A feedback system (visual or other) to let the player know how the mutations are trending
 - 4.0.0 hasn't been stress-tested, if you find a breaking bug let me know in the #tech-support channel
 - The challenge portal code introduced in 4.1.0 will eventually be changed and hidden, once I decide how to do that
+- I will make a video that explains the new architecture for 4.4.0, I promise (it'll include lasting mutation effects)
 
 Changelog
 -----------
 ```
+4.3.2
+- Re-Added a configuration file for this
+  - Tweak-able values include: when and how the algorithm decides to learn, mutation rates and limits
+  - Safety limits might be a bit strict for now, but I want testing a feedback before lifting them
+
 4.3.1
 - Fix for Patch 1.2.3 since there are items in here
-- Converted to the new ArtifactCodeAPI methods since they work now
-- Also converted items to ContentAddition methods, expect harmless warnings
+  - Converted to the new ArtifactCodeAPI methods since they work now
+  - Also converted items to ContentAddition methods, expect harmless warnings
 
 4.3.0
 - Updated for SOTV and new R2API build
