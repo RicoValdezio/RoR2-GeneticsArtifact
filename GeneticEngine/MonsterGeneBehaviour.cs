@@ -36,7 +36,10 @@ namespace GeneticsArtifact
             MutateSelf();
         }
 
-        private void CopyFromMaster()
+        /// <summary>
+        /// Grabs a copy of the master genes without mutating
+        /// </summary>
+        public void CopyFromMaster()
         {
             MasterGeneBehaviour master = GeneEngineDriver.masterGenes.Find(x => x.bodyIndex == bodyIndex);
             currentGenes = new Dictionary<GeneStat, float>(master.templateGenes);
@@ -66,14 +69,6 @@ namespace GeneticsArtifact
                 characterBody.inventory.GiveItem(pair.Key, pair.Value);
             }
             currentGenes = mutationAttempt;
-#if DEBUG
-            GeneticsArtifactPlugin.geneticLogSource.LogInfo(Stage.instance.sceneDef.baseSceneName + " " +
-                                                            characterBody.name + " " +
-                                                            currentGenes[GeneStat.MaxHealth].ToString() + " " + 
-                                                            currentGenes[GeneStat.MoveSpeed].ToString() + " " + 
-                                                            currentGenes[GeneStat.AttackSpeed].ToString() + " " + 
-                                                            currentGenes[GeneStat.AttackDamage].ToString());
-#endif
         }
 
         private Dictionary<GeneStat, float> CorrectOvermutation(Dictionary<GeneStat, float> attempt)
@@ -91,6 +86,16 @@ namespace GeneticsArtifact
             float product = 1f;
             foreach (float value in testValues.Values) product *= value;
             return product;
+        }
+
+        public void LogDebugInfo()
+        {
+            GeneticsArtifactPlugin.geneticLogSource.LogInfo(Stage.instance.sceneDef.baseSceneName + " " +
+                                                            characterBody.name + " " +
+                                                            currentGenes[GeneStat.MaxHealth].ToString() + " " +
+                                                            currentGenes[GeneStat.MoveSpeed].ToString() + " " +
+                                                            currentGenes[GeneStat.AttackSpeed].ToString() + " " +
+                                                            currentGenes[GeneStat.AttackDamage].ToString());
         }
         #endregion
 

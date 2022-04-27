@@ -32,7 +32,8 @@ namespace GeneticsArtifact
         private static void CharacterBody_Start(On.RoR2.CharacterBody.orig_Start orig, CharacterBody self)
         {
             orig(self);
-            if (NetworkServer.active && RunArtifactManager.instance.IsArtifactEnabled(ArtifactOfGenetics.artifactDef))
+            if (NetworkServer.active && 
+               (RunArtifactManager.instance.IsArtifactEnabled(ArtifactOfGenetics.artifactDef) || ConfigManager.maintainIfDisabled.Value))
             {
                 if (instance == null) //Emergency Catch for Bulwark Edge Case
                 {
@@ -52,7 +53,11 @@ namespace GeneticsArtifact
                     }
 
                     MonsterGeneBehaviour geneBehaviour = self.gameObject.AddComponent<MonsterGeneBehaviour>();
-                    geneBehaviour.MutateFromMaster();
+                    if (RunArtifactManager.instance.IsArtifactEnabled(ArtifactOfGenetics.artifactDef)) geneBehaviour.MutateFromMaster();
+                    else geneBehaviour.CopyFromMaster();
+#if DEBUG
+                    geneBehaviour.LogDebugInfo();
+#endif
                 }
             }
         }
