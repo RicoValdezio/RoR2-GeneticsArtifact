@@ -13,7 +13,7 @@ namespace GeneticsArtifact
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.EveryoneNeedSameModVersion)]
     public class GeneticsArtifactPlugin : BaseUnityPlugin
     {
-        public const string ModVer = "4.3.1";
+        public const string ModVer = "4.3.2";
         public const string ModName = "Genetics";
         public const string ModGuid = "com.RicoValdezio.ArtifactOfGenetics";
         public static GeneticsArtifactPlugin Instance;
@@ -25,6 +25,8 @@ namespace GeneticsArtifact
             if (Instance == null) Instance = this;
             geneticLogSource = Instance.Logger;
             geneticAssetBundle = AssetBundle.LoadFromStream(Assembly.GetExecutingAssembly().GetManifestResourceStream("GeneticsArtifact.ArtifactResources.genetics"));
+
+            ConfigManager.Init(Config);
 
             ArtifactOfGenetics.Init();
             GeneTokens.Init();
