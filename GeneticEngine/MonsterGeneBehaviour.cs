@@ -36,7 +36,10 @@ namespace GeneticsArtifact
             MutateSelf();
         }
 
-        private void CopyFromMaster()
+        /// <summary>
+        /// Grabs a copy of the master genes without mutating
+        /// </summary>
+        public void CopyFromMaster()
         {
             MasterGeneBehaviour master = GeneEngineDriver.masterGenes.Find(x => x.bodyIndex == bodyIndex);
             currentGenes = new Dictionary<GeneStat, float>(master.templateGenes);
