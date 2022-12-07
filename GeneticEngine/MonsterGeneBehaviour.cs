@@ -106,7 +106,7 @@ namespace GeneticsArtifact
             }
         }
 
-        public void AdaptToNewGenes(Dictionary<GeneStat, float> newGenes)
+        private void AdaptToNewGenes(Dictionary<GeneStat, float> newGenes)
         {
             Dictionary<ItemDef, int> itemsToGive = GeneTokenCalc.GetTokensToAdd(currentGenes, newGenes);
             foreach (KeyValuePair<ItemDef, int> pair in itemsToGive)
