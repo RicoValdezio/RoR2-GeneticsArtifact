@@ -24,13 +24,16 @@ Video Explanations
 Known Issues/Planned Updates
 ------------
 - A feedback system (visual or other) to let the player know how the mutations are trending
-- 4.0.0 hasn't been stress-tested, if you find a breaking bug let me know in the #tech-support channel
-- The challenge portal code introduced in 4.1.0 will eventually be changed and hidden, once I decide how to do that
-- I will make a video that explains the new architecture for 4.4.0, I promise (it'll include lasting mutation effects)
+- I need to make some actual documentation/architecture to explain how it works from a dev point-of-view
 
 Changelog
 -----------
 ```
+4.4.1
+- This is mostly a dev-focused update without any new content/algorithms
+  - Added public events for most of the vital operations in the genetic engine
+  - These will allow devs to subscribe to the engine stages if they want to mess with stats of their own
+
 4.4.0
 - Added mode that allows stat modifications to apply even if the artifact is disabled
   - This means no sudden drops in difficulty if you disable it mid-run
