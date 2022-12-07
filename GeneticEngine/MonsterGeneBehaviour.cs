@@ -18,7 +18,7 @@ namespace GeneticsArtifact
         {
             characterBody = gameObject.GetComponent<CharacterBody>();
             bodyIndex = characterBody.bodyIndex;
-            currentGenes = new Dictionary<GeneStat, float>();
+            InitializeCurrentGenes();
             GeneEngineDriver.livingGenes.Add(this);
         }
 
@@ -44,7 +44,7 @@ namespace GeneticsArtifact
         public void CopyFromMaster()
         {
             MasterGeneBehaviour master = GeneEngineDriver.masterGenes.Find(x => x.bodyIndex == bodyIndex);
-            currentGenes = new Dictionary<GeneStat, float>(master.templateGenes);
+            AdaptToNewGenes(master.templateGenes);
         }
 
         /// <summary>
@@ -65,11 +65,7 @@ namespace GeneticsArtifact
                                                                                     ConfigManager.geneFloor.Value, ConfigManager.geneCap.Value), 2));
             }
             mutationAttempt = CorrectOvermutation(mutationAttempt);
-            Dictionary<ItemDef, int> itemsToGive = GeneTokenCalc.GetTokensToAdd(currentGenes, mutationAttempt);
-            foreach (KeyValuePair<ItemDef, int> pair in itemsToGive)
-            {
-                characterBody.inventory.GiveItem(pair.Key, pair.Value);
-            }
+            AdaptToNewGenes(mutationAttempt);
             currentGenes = mutationAttempt;
             MoGBPostMutationEvent?.Invoke(this, new EventArgs());
         }
@@ -99,6 +95,25 @@ namespace GeneticsArtifact
                                                             currentGenes[GeneStat.MoveSpeed].ToString() + " " +
                                                             currentGenes[GeneStat.AttackSpeed].ToString() + " " +
                                                             currentGenes[GeneStat.AttackDamage].ToString());
+        }
+
+        private void InitializeCurrentGenes()
+        {
+            currentGenes = new Dictionary<GeneStat, float>();
+            foreach (GeneStat stat in Enum.GetValues(typeof(GeneStat)))
+            {
+                currentGenes.Add(stat, 1f);
+            }
+        }
+
+        public void AdaptToNewGenes(Dictionary<GeneStat, float> newGenes)
+        {
+            Dictionary<ItemDef, int> itemsToGive = GeneTokenCalc.GetTokensToAdd(currentGenes, newGenes);
+            foreach (KeyValuePair<ItemDef, int> pair in itemsToGive)
+            {
+                characterBody.inventory.GiveItem(pair.Key, pair.Value);
+            }
+            currentGenes = newGenes;
         }
         #endregion
 
