@@ -1,4 +1,5 @@
 ﻿using RoR2;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -11,6 +12,7 @@ namespace GeneticsArtifact
         public static List<MasterGeneBehaviour> masterGenes;
         public static List<MonsterGeneBehaviour> livingGenes, deadGenes;
         public static float timeSinceLastLearning = 0f;
+        public event EventHandler GEDPostLearningEvent;
 
         #region Hooks
         public static void RegisterHooks()
@@ -132,6 +134,7 @@ namespace GeneticsArtifact
             }
             deadGenes.Clear();
             timeSinceLastLearning = 0f;
+            GEDPostLearningEvent?.Invoke(this, new EventArgs());
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using RoR2;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -11,6 +12,7 @@ namespace GeneticsArtifact
         public Dictionary<GeneStat, float> currentGenes;
         public CharacterBody characterBody;
         public float timeAlive = 0f, timeEngaged = 0f, damageDealt = 0f, score = 0f;
+        public event EventHandler MoGBPostMutationEvent, MoGBPostScoringEvent;
 
         public void Awake()
         {
@@ -55,11 +57,11 @@ namespace GeneticsArtifact
             {
                 //Bulwark mutation is 20%-500% - base is 90%-110%
                 mutationAttempt.Add(stat, Stage.instance.sceneDef.baseSceneName == "artifactworld" ?
-                                          (float)decimal.Round((decimal)Mathf.Clamp(Random.Range(currentGenes[stat] * (1 - ConfigManager.geneVarianceLimit.Value * 5), 
-                                                                                                 currentGenes[stat] * (1 + ConfigManager.geneVarianceLimit.Value * 5)), 
+                                          (float)decimal.Round((decimal)Mathf.Clamp(UnityEngine.Random.Range(currentGenes[stat] * (1 - ConfigManager.geneVarianceLimit.Value * 5), 
+                                                                                                             currentGenes[stat] * (1 + ConfigManager.geneVarianceLimit.Value * 5)), 
                                                                                     ConfigManager.geneFloor.Value, ConfigManager.geneCap.Value), 2) :
-                                          (float)decimal.Round((decimal)Mathf.Clamp(Random.Range(currentGenes[stat] * (1 - ConfigManager.geneVarianceLimit.Value), 
-                                                                                                 currentGenes[stat] * (1 + ConfigManager.geneVarianceLimit.Value)), 
+                                          (float)decimal.Round((decimal)Mathf.Clamp(UnityEngine.Random.Range(currentGenes[stat] * (1 - ConfigManager.geneVarianceLimit.Value), 
+                                                                                                             currentGenes[stat] * (1 + ConfigManager.geneVarianceLimit.Value)), 
                                                                                     ConfigManager.geneFloor.Value, ConfigManager.geneCap.Value), 2));
             }
             mutationAttempt = CorrectOvermutation(mutationAttempt);
@@ -69,6 +71,7 @@ namespace GeneticsArtifact
                 characterBody.inventory.GiveItem(pair.Key, pair.Value);
             }
             currentGenes = mutationAttempt;
+            MoGBPostMutationEvent?.Invoke(this, new EventArgs());
         }
 
         private Dictionary<GeneStat, float> CorrectOvermutation(Dictionary<GeneStat, float> attempt)
@@ -120,6 +123,7 @@ namespace GeneticsArtifact
                 float engageQuotient = timeEngaged / timeAlive;
                 score = damageDealt * engageQuotient;
             }
+            MoGBPostScoringEvent?.Invoke(this, new EventArgs());
             return score;
         }
         #endregion

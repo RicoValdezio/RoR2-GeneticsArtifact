@@ -9,6 +9,7 @@ namespace GeneticsArtifact
     {
         public BodyIndex bodyIndex;
         public Dictionary<GeneStat, float> templateGenes;
+        public event EventHandler MaGBPostCreationEvent, MaGBPostMutationEvent;
 
         public void Init()
         {
@@ -17,6 +18,7 @@ namespace GeneticsArtifact
             {
                 templateGenes.Add(stat, 1f);
             }
+            MaGBPostCreationEvent?.Invoke(this, new EventArgs());
         }
 
         public void MutateFromChildren()
@@ -33,6 +35,7 @@ namespace GeneticsArtifact
                 }
                 if (totalScore > 0) templateGenes[stat] = (float)decimal.Round((decimal)(totalValue / totalScore), 2);
             }
+            MaGBPostMutationEvent?.Invoke(this, new EventArgs());
         }
     }
 }

@@ -11,7 +11,6 @@ namespace GeneticsArtifact
     [BepInDependency("com.bepis.r2api", BepInDependency.DependencyFlags.HardDependency)]
     [R2APISubmoduleDependency(nameof(ContentAddition), nameof(ItemAPI), nameof(LanguageAPI), nameof(RecalculateStatsAPI), nameof(ArtifactCodeAPI))]
     [NetworkCompatibility(CompatibilityLevel.EveryoneMustHaveMod, VersionStrictness.EveryoneNeedSameModVersion)]
-    [BepInIncompatibility("com.xoxfaby.BetterUI")]
     public class GeneticsArtifactPlugin : BaseUnityPlugin
     {
         public const string ModVer = "4.4.0";
