@@ -113,6 +113,20 @@ namespace GeneticsArtifact
             {
                 characterBody.inventory.GiveItem(pair.Key, pair.Value);
             }
+#if DEBUG
+            GeneticsArtifactPlugin.geneticLogSource.LogInfo(Stage.instance.sceneDef.baseSceneName + " " +
+                                                            characterBody.name + Environment.NewLine +
+                                                            "Old Genes: " +
+                                                            currentGenes[GeneStat.MaxHealth].ToString() + " " +
+                                                            currentGenes[GeneStat.MoveSpeed].ToString() + " " +
+                                                            currentGenes[GeneStat.AttackSpeed].ToString() + " " +
+                                                            currentGenes[GeneStat.AttackDamage].ToString() + Environment.NewLine +
+                                                            "New Genes: " +
+                                                            newGenes[GeneStat.MaxHealth].ToString() + " " +
+                                                            newGenes[GeneStat.MoveSpeed].ToString() + " " +
+                                                            newGenes[GeneStat.AttackSpeed].ToString() + " " +
+                                                            newGenes[GeneStat.AttackDamage].ToString());
+#endif
             currentGenes = newGenes;
         }
         #endregion

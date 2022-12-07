@@ -30,9 +30,11 @@ Changelog
 -----------
 ```
 4.4.1
-- This is mostly a dev-focused update without any new content/algorithms
-  - Added public events for most of the vital operations in the genetic engine
-  - These will allow devs to subscribe to the engine stages if they want to mess with stats of their own
+- Bugfix for the token calculation and application methods
+  - Stat modifications should more accurately and consistently represent the monster`s genes
+  - Previously was bugged to represent the difference from the master copy instead sometimes
+- Also added public events to most major steps in the genetic engine, for dev usage
+  - These include: master copy creation and mutation, monster copy mutation and scoring, and global engine learning
 
 4.4.0
 - Added mode that allows stat modifications to apply even if the artifact is disabled
