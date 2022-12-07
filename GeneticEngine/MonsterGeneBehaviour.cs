@@ -66,7 +66,6 @@ namespace GeneticsArtifact
             }
             mutationAttempt = CorrectOvermutation(mutationAttempt);
             AdaptToNewGenes(mutationAttempt);
-            currentGenes = mutationAttempt;
             MoGBPostMutationEvent?.Invoke(this, new EventArgs());
         }
 
