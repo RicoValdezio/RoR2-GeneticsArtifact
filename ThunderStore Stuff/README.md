@@ -29,6 +29,13 @@ Known Issues/Planned Updates
 Changelog
 -----------
 ```
+4.5.0
+- Gene-specific cap and floor overrides are back, and without config bloat this time
+  - Two new config options, one to opt into using the overrides and the other to actually define them
+  - Override syntax is "Gene1,FloorForGene1,CapForGene1|Gene2,FloorForGene2,CapForGene2"
+    - Current valid Gene names are MaxHealth, MoveSpeed, AttackSpeed, and AttackDamage
+	- Floors/caps need to be parseable into floats, and should follow the same rules as shared floor/cap
+
 4.4.1
 - Bugfix for the token calculation and application methods
   - Stat modifications should more accurately and consistently represent the monster`s genes

@@ -52,18 +52,7 @@ namespace GeneticsArtifact
         /// </summary>
         public void MutateSelf()
         {
-            Dictionary<GeneStat, float> mutationAttempt = new Dictionary<GeneStat, float>();
-            foreach (GeneStat stat in currentGenes.Keys)
-            {
-                //Bulwark mutation is 20%-500% - base is 90%-110%
-                mutationAttempt.Add(stat, Stage.instance.sceneDef.baseSceneName == "artifactworld" ?
-                                          (float)decimal.Round((decimal)Mathf.Clamp(UnityEngine.Random.Range(currentGenes[stat] * (1 - ConfigManager.geneVarianceLimit.Value * 5), 
-                                                                                                             currentGenes[stat] * (1 + ConfigManager.geneVarianceLimit.Value * 5)), 
-                                                                                    ConfigManager.geneFloor.Value, ConfigManager.geneCap.Value), 2) :
-                                          (float)decimal.Round((decimal)Mathf.Clamp(UnityEngine.Random.Range(currentGenes[stat] * (1 - ConfigManager.geneVarianceLimit.Value), 
-                                                                                                             currentGenes[stat] * (1 + ConfigManager.geneVarianceLimit.Value)), 
-                                                                                    ConfigManager.geneFloor.Value, ConfigManager.geneCap.Value), 2));
-            }
+            Dictionary<GeneStat, float> mutationAttempt = GenerateMutationAttempt();
             mutationAttempt = CorrectOvermutation(mutationAttempt);
             AdaptToNewGenes(mutationAttempt);
             MoGBPostMutationEvent?.Invoke(this, new EventArgs());
@@ -127,6 +116,28 @@ namespace GeneticsArtifact
                                                             newGenes[GeneStat.AttackDamage].ToString());
 #endif
             currentGenes = newGenes;
+        }
+
+        private Dictionary<GeneStat, float> GenerateMutationAttempt()
+        {
+            Dictionary<GeneStat, float> mutationAttempt = new Dictionary<GeneStat, float>();
+            float diffScalar = ConfigManager.geneVarianceLimit.Value * (Stage.instance.sceneDef.baseSceneName == "artifactworld" ? 5 : 1);
+
+            foreach (GeneStat stat in currentGenes.Keys)
+            {
+                float currentValue = currentGenes[stat];
+                if(ConfigManager.enableGeneLimitOverrides.Value && GeneEngineDriver.geneLimitOverrides.ContainsKey(stat))
+                {
+                    mutationAttempt.Add(stat, (float)decimal.Round((decimal)Mathf.Clamp(UnityEngine.Random.Range(currentValue * (1 - diffScalar), currentValue * (1 + diffScalar)),
+                                                                                        GeneEngineDriver.geneLimitOverrides[stat].Item1, GeneEngineDriver.geneLimitOverrides[stat].Item2), 2));
+                }
+                else
+                {
+                    mutationAttempt.Add(stat, (float)decimal.Round((decimal)Mathf.Clamp(UnityEngine.Random.Range(currentValue * (1 - diffScalar), currentValue * (1 + diffScalar)),
+                                                                                        ConfigManager.geneFloor.Value, ConfigManager.geneCap.Value), 2));
+                }
+            }
+            return mutationAttempt;
         }
         #endregion
 
