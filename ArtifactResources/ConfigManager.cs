@@ -29,7 +29,7 @@ namespace GeneticsArtifact
             geneVarianceLimit = configFile.Bind<float>(new ConfigDefinition("Mutation Variables", "Gene Variation Limit"), 0.1f, new ConfigDescription("How much a monster can differ from it`s master as a percent: 0.1 is 10% (Bulwark will be 5x this)", new AcceptableValueRange<float>(0.01f, 1f)));
 
             enableGeneLimitOverrides = configFile.Bind<bool>(new ConfigDefinition("Mutation Override Variables", "Enable Mutation Overrides"), false, new ConfigDescription("Should the mutation overrides be applied, use with caution", new AcceptableValueList<bool>(true, false)));
-            geneLimitOverrides = configFile.Bind<string>(new ConfigDefinition("Mutation Override Variables", "Gene Limit Overrides"), "", new ConfigDescription("Format is as follows: GeneName1,Floor1,Cap1|GeneName2,Floor2,Cap2 where GeneName is in (MaxHealth,MoveSpeed,AttackSpeed,AttackDamage) and Floor and Cap are parseable numerics"));
+            geneLimitOverrides = configFile.Bind<string>(new ConfigDefinition("Mutation Override Variables", "Gene Limit Overrides"), "MoveSpeed,0.5,2|InvalidName,0.8,NaN", new ConfigDescription("Format is as follows: GeneName1,Floor1,Cap1|GeneName2,Floor2,Cap2 where GeneName is in (MaxHealth,MoveSpeed,AttackSpeed,AttackDamage) and Floor and Cap are parseable numerics"));
         }
     }
 
