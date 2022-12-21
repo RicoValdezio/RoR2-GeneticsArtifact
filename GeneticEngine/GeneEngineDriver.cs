@@ -13,6 +13,7 @@ namespace GeneticsArtifact
         public static List<MonsterGeneBehaviour> livingGenes, deadGenes;
         public static float timeSinceLastLearning = 0f;
         public event EventHandler GEDPostLearningEvent;
+        public static Dictionary<GeneStat, (float, float)> geneLimitOverrides;
 
         #region Hooks
         public static void RegisterHooks()
@@ -34,7 +35,7 @@ namespace GeneticsArtifact
         private static void CharacterBody_Start(On.RoR2.CharacterBody.orig_Start orig, CharacterBody self)
         {
             orig(self);
-            if (NetworkServer.active && 
+            if (NetworkServer.active &&
                (RunArtifactManager.instance.IsArtifactEnabled(ArtifactOfGenetics.artifactDef) || ConfigManager.maintainIfDisabled.Value))
             {
                 if (instance == null) //Emergency Catch for Bulwark Edge Case
@@ -103,6 +104,7 @@ namespace GeneticsArtifact
             masterGenes = new List<MasterGeneBehaviour>();
             livingGenes = new List<MonsterGeneBehaviour>();
             deadGenes = new List<MonsterGeneBehaviour>();
+            RegenerateGeneLimitOverrides();
         }
 
         public void Update()
@@ -135,6 +137,32 @@ namespace GeneticsArtifact
             deadGenes.Clear();
             timeSinceLastLearning = 0f;
             GEDPostLearningEvent?.Invoke(this, new EventArgs());
+        }
+
+        public void RegenerateGeneLimitOverrides()
+        {
+            geneLimitOverrides = new Dictionary<GeneStat, (float, float)>();
+
+            if (!ConfigManager.enableGeneLimitOverrides.Value) return;
+            if (!String.IsNullOrEmpty(ConfigManager.geneLimitOverrides.Value))
+            {
+                string[] splitOverrides = ConfigManager.geneLimitOverrides.Value.Trim().Split('|');
+                foreach(string oOption in splitOverrides)
+                {
+                    string[] oSplit = oOption.Split(',');
+                    GeneStat stat;
+                    if(Enum.TryParse<GeneStat>(oSplit[0], true, out stat))
+                    {
+                        try
+                        {
+                            geneLimitOverrides.Add(stat, (float.Parse(oSplit[1]), float.Parse(oSplit[2]));
+                            continue;
+                        }
+                        catch { }
+                    }
+                    GeneticsArtifactPlugin.geneticLogSource.LogWarning("Skipping Invalid GeneOverride: " + oOption);
+                }
+            }
         }
     }
 }
