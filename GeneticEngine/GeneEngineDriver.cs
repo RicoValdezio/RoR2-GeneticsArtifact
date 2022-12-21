@@ -137,6 +137,7 @@ namespace GeneticsArtifact
             deadGenes.Clear();
             timeSinceLastLearning = 0f;
             GEDPostLearningEvent?.Invoke(this, new EventArgs());
+            RegenerateGeneLimitOverrides();
         }
 
         public void RegenerateGeneLimitOverrides()
