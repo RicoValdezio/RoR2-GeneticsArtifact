@@ -147,15 +147,19 @@ namespace GeneticsArtifact
             if (!String.IsNullOrEmpty(ConfigManager.geneLimitOverrides.Value))
             {
                 string[] splitOverrides = ConfigManager.geneLimitOverrides.Value.Trim().Split('|');
-                foreach(string oOption in splitOverrides)
+                foreach (string oOption in splitOverrides)
                 {
                     string[] oSplit = oOption.Split(',');
                     GeneStat stat;
-                    if(Enum.TryParse<GeneStat>(oSplit[0], true, out stat))
+                    float floor, cap;
+                    if (Enum.TryParse<GeneStat>(oSplit[0], true, out stat) &&
+                        float.TryParse(oSplit[1], out floor) && floor <= 1 &&
+                        float.TryParse(oSplit[2], out cap) && cap >= 1)
                     {
                         try
                         {
-                            geneLimitOverrides.Add(stat, (float.Parse(oSplit[1]), float.Parse(oSplit[2])));
+                            geneLimitOverrides.Add(stat, (floor, cap));
+                            GeneticsArtifactPlugin.geneticLogSource.LogInfo("Adding Valid GeneOverride: " + oOption);
                             continue;
                         }
                         catch { }

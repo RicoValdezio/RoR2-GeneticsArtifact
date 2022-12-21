@@ -129,12 +129,12 @@ namespace GeneticsArtifact
                 if(ConfigManager.enableGeneLimitOverrides.Value && GeneEngineDriver.geneLimitOverrides.ContainsKey(stat))
                 {
                     mutationAttempt.Add(stat, (float)decimal.Round((decimal)Mathf.Clamp(UnityEngine.Random.Range(currentValue * (1 - diffScalar), currentValue * (1 + diffScalar)),
-                                                                                        GeneEngineDriver.geneLimitOverrides[stat].Item1, GeneEngineDriver.geneLimitOverrides[stat].Item2)));
+                                                                                        GeneEngineDriver.geneLimitOverrides[stat].Item1, GeneEngineDriver.geneLimitOverrides[stat].Item2), 2));
                 }
                 else
                 {
                     mutationAttempt.Add(stat, (float)decimal.Round((decimal)Mathf.Clamp(UnityEngine.Random.Range(currentValue * (1 - diffScalar), currentValue * (1 + diffScalar)),
-                                                                                        ConfigManager.geneFloor.Value, ConfigManager.geneCap.Value)));
+                                                                                        ConfigManager.geneFloor.Value, ConfigManager.geneCap.Value), 2));
                 }
             }
             return mutationAttempt;
