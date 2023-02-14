@@ -25,10 +25,15 @@ Known Issues/Planned Updates
 ------------
 - A feedback system (visual or other) to let the player know how the mutations are trending
 - I need to make some actual documentation/architecture to explain how it works from a dev point-of-view
+- Is GeneticsVariantsPatch coming back? Maybe? Depends on how hard Nebby reworked VarianceAPI
 
 Changelog
 -----------
 ```
+4.5.1
+- No new functionality, just refactored to use the Nuget packages instead of local libraries
+  - Should make remote development much easier if I ever need to do that
+  
 4.5.0
 - Gene-specific cap and floor overrides are back, and without config bloat this time
   - Two new config options, one to opt into using the overrides and the other to actually define them
