@@ -9,46 +9,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Libs\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Assembly-CSharp">
-      <HintPath>Libs\Assembly-CSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="BepInEx">
-      <HintPath>Libs\BepInEx.dll</HintPath>
-    </Reference>
-    <Reference Include="com.unity.multiplayer-hlapi.Runtime">
-      <HintPath>Libs\com.unity.multiplayer-hlapi.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="MMHOOK_RoR2">
-      <HintPath>Libs\MMHOOK_RoR2.dll</HintPath>
-    </Reference>
-    <Reference Include="ModLoader">
-      <HintPath>Libs\ModLoader.dll</HintPath>
-    </Reference>
-    <Reference Include="Mono.Cecil">
-      <HintPath>Libs\Mono.Cecil.dll</HintPath>
-    </Reference>
-    <Reference Include="MonoMod.Utils">
-      <HintPath>Libs\MonoMod.Utils.dll</HintPath>
-    </Reference>
-    <Reference Include="R2API">
-      <HintPath>Libs\R2API.dll</HintPath>
-    </Reference>
-    <Reference Include="RoR2">
-      <HintPath>Libs\RoR2.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine">
-      <HintPath>Libs\UnityEngine.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.AssetBundleModule">
-      <HintPath>Libs\UnityEngine.AssetBundleModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.CoreModule">
-      <HintPath>Libs\UnityEngine.CoreModule.dll</HintPath>
-    </Reference>
+    <PackageReference Include="R2API.ArtifactCode" Version="1.0.0" />
+    <PackageReference Include="R2API.ContentManagement" Version="1.0.1" />
+    <PackageReference Include="R2API.Core" Version="5.0.4" />
+    <PackageReference Include="R2API.Items" Version="1.0.1" />
+    <PackageReference Include="R2API.Language" Version="1.0.0" />
+    <PackageReference Include="R2API.RecalculateStats" Version="1.1.0" />
   </ItemGroup>
 
 </Project>

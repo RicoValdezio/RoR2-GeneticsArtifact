@@ -25,10 +25,15 @@ Known Issues/Planned Updates
 ------------
 - A feedback system (visual or other) to let the player know how the mutations are trending
 - I need to make some actual documentation/architecture to explain how it works from a dev point-of-view
+- Is GeneticsVariantsPatch coming back? Maybe? Depends on how hard Nebby reworked VarianceAPI
 
 Changelog
 -----------
 ```
+4.4.2
+- No new functionality, just refactored to use the Nuget packages instead of local libraries
+  - Should make remote development much easier if I ever need to do that
+
 4.4.1
 - Bugfix for the token calculation and application methods
   - Stat modifications should more accurately and consistently represent the monster`s genes
