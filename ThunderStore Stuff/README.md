@@ -30,7 +30,7 @@ Known Issues/Planned Updates
 Changelog
 -----------
 ```
-4.4.2
+4.5.1
 - No new functionality, just refactored to use the Nuget packages instead of local libraries
   - Should make remote development much easier if I ever need to do that
 
