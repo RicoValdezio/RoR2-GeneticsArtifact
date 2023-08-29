@@ -94,7 +94,11 @@ namespace GeneticsArtifact
             }
         }
 
-        private void AdaptToNewGenes(Dictionary<GeneStat, float> newGenes)
+        /// <summary>
+        /// Mutates to a specific list of genes, and grants items to reflect this
+        /// </summary>
+        /// <param name="newGenes">The new list of genes to adapt to, MUST include ALL GeneStat pairs in currentGenes</param>
+        public void AdaptToNewGenes(Dictionary<GeneStat, float> newGenes)
         {
             Dictionary<ItemDef, int> itemsToGive = GeneTokenCalc.GetTokensToAdd(currentGenes, newGenes);
             foreach (KeyValuePair<ItemDef, int> pair in itemsToGive)
