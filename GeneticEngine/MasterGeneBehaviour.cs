@@ -21,6 +21,9 @@ namespace GeneticsArtifact
             MaGBPostCreationEvent?.Invoke(this, new EventArgs());
         }
 
+        /// <summary>
+        /// Grabs all recently killed children and adjusts template based on their scores
+        /// </summary>
         public void MutateFromChildren()
         {
             List<MonsterGeneBehaviour> children = GeneEngineDriver.deadGenes.Where(x => x.bodyIndex == bodyIndex && x.score > 0).ToList();

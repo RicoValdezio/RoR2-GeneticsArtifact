@@ -40,6 +40,7 @@ namespace GeneticsArtifact
 
         /// <summary>
         /// Grabs a copy of the master genes without mutating
+        /// Does NOT trigger RecalculateStats!
         /// </summary>
         public void CopyFromMaster()
         {
@@ -49,6 +50,7 @@ namespace GeneticsArtifact
 
         /// <summary>
         /// Mutates its genes once, and applies penalties if overmutated
+        /// Does NOT trigger RecalculateStats!
         /// </summary>
         public void MutateSelf()
         {
@@ -94,7 +96,12 @@ namespace GeneticsArtifact
             }
         }
 
-        private void AdaptToNewGenes(Dictionary<GeneStat, float> newGenes)
+        /// <summary>
+        /// Mutates to a specific list of genes and grants items to reflect this
+        /// Does NOT trigger RecalculateStats!
+        /// </summary>
+        /// <param name="newGenes">The new list of genes to adapt to, MUST include ALL GeneStat pairs in currentGenes</param>
+        public void AdaptToNewGenes(Dictionary<GeneStat, float> newGenes)
         {
             Dictionary<ItemDef, int> itemsToGive = GeneTokenCalc.GetTokensToAdd(currentGenes, newGenes);
             foreach (KeyValuePair<ItemDef, int> pair in itemsToGive)
