@@ -56,7 +56,11 @@ namespace GeneticsArtifact
                     }
 
                     MonsterGeneBehaviour geneBehaviour = self.gameObject.AddComponent<MonsterGeneBehaviour>();
-                    if (RunArtifactManager.instance.IsArtifactEnabled(ArtifactOfGenetics.artifactDef)) geneBehaviour.MutateFromMaster();
+                    if (RunArtifactManager.instance.IsArtifactEnabled(ArtifactOfGenetics.artifactDef))
+                    {
+                        geneBehaviour.MutateFromMaster();
+                        geneBehaviour.characterBody.RecalculateStats(); // Single explicit call to make sure
+                    }
                     else geneBehaviour.CopyFromMaster();
 #if DEBUG
                     geneBehaviour.LogDebugInfo();
