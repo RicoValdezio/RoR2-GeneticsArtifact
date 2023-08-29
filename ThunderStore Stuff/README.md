@@ -27,6 +27,7 @@ Known Issues/Planned Updates
 - I need to make some actual documentation/architecture to explain how it works from a dev point-of-view
 - Is GeneticsVariantsPatch coming back? Yep! Check it out here: https://thunderstore.io/package/Rico/GeneticVariantsPatch/
 - Is there anything else to add? Maybe. I'm considering making a patch for Artifacts of Doom and Risk of Chaos (\*wink\*)
+- Are you a dev who has questions? Make an issue on GitHub and flag it as a question, I'm always happy to help
 
 Changelog
 -----------
@@ -36,8 +37,7 @@ Changelog
   - Should`ve done this a long time ago, but now devs can force specific mutations ad-hoc
   - Monster copy methods do not trigger RecalculateStats on their own, to avoid duplicated effort
 - Added explicit RecalculateStats call on monster copy first generation
-  - Monster spawn already does this iirc, but duplicated to guarantee genes take effect
-
+  - Monster spawn already does this iirc, but this guarantees genes take effect in fringe cases
 
 4.5.1
 - No new functionality, just refactored to use the Nuget packages instead of local libraries
