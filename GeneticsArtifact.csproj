@@ -10,11 +10,17 @@
 
   <ItemGroup>
     <PackageReference Include="R2API.ArtifactCode" Version="1.0.1" />
-    <PackageReference Include="R2API.ContentManagement" Version="1.0.2" />
-    <PackageReference Include="R2API.Core" Version="5.0.10" />
+    <PackageReference Include="R2API.ContentManagement" Version="1.0.4" />
+    <PackageReference Include="R2API.Core" Version="5.0.12" />
     <PackageReference Include="R2API.Items" Version="1.0.3" />
     <PackageReference Include="R2API.Language" Version="1.0.1" />
-    <PackageReference Include="R2API.RecalculateStats" Version="1.2.0" />
+    <PackageReference Include="R2API.RecalculateStats" Version="1.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="RiskOfOptions">
+      <HintPath>lib\RiskOfOptions.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
