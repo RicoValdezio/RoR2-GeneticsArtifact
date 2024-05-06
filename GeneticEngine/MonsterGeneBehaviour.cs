@@ -133,7 +133,7 @@ namespace GeneticsArtifact
             foreach (GeneStat stat in currentGenes.Keys)
             {
                 float currentValue = currentGenes[stat];
-                if(ConfigManager.enableGeneLimitOverrides.Value && GeneEngineDriver.geneLimitOverrides.ContainsKey(stat))
+                if (ConfigManager.enableGeneLimitOverrides.Value && GeneEngineDriver.geneLimitOverrides.ContainsKey(stat))
                 {
                     mutationAttempt.Add(stat, (float)decimal.Round((decimal)Mathf.Clamp(UnityEngine.Random.Range(currentValue * (1 - diffScalar), currentValue * (1 + diffScalar)),
                                                                                         GeneEngineDriver.geneLimitOverrides[stat].Item1, GeneEngineDriver.geneLimitOverrides[stat].Item2), 2));

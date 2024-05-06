@@ -39,7 +39,7 @@ namespace GeneticsArtifact
             GeneTokens.Init();
             GeneTokenCalc.RegisterHooks();
             GeneEngineDriver.RegisterHooks();
-            
+
             foreach (PluginInfo plugin in Chainloader.PluginInfos.Values) { if (plugin.Metadata.GUID.Equals("com.rune580.riskofoptions")) { RiskOfOptionsCompat.Init(); break; } }
         }
     }
