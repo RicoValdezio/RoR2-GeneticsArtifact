@@ -338,3 +338,6 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+
+# Local Library Folder for Dependencies not hosted in Nuget
+/lib

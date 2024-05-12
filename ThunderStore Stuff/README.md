@@ -32,6 +32,11 @@ Known Issues/Planned Updates
 Changelog
 -----------
 ```
+4.5.3
+- Added compatibility for RiskOfOptions
+  - Gone are the days of restarting the game to update a config value
+  - (Technically already could do this with DebugToolkit and saving over the config file)
+
 4.5.2
 - Publicized the monster copy adaption method, for dev usage
   - Should`ve done this a long time ago, but now devs can force specific mutations ad-hoc
